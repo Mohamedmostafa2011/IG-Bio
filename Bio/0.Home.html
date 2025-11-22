@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IG-bio | The Ultimate IGCSE Biology Resource</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Brand Colors */
+            --primary: #2563eb; /* Royal Blue */
+            --primary-dark: #1e40af;
+            --accent: #f59e0b; /* Amber */
+            --success: #10b981;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Hero Section --- */
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 5rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative circle in background */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-family: 'Lora', serif;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .cta-btn:hover {
+            background: transparent;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* --- Features Section --- */
+        .features {
+            max-width: 1200px;
+            margin: -50px auto 3rem auto; /* Overlap header */
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: 0.3s;
+            border-top: 5px solid var(--primary);
+        }
+
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15); }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 { margin-bottom: 0.5rem; color: var(--primary-dark); }
+        .feature-card p { font-size: 0.95rem; color: var(--text-light); }
+
+        /* --- Chapter Grid Section --- */
+        .chapters-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 { font-size: 2.5rem; color: var(--text); margin-bottom: 10px; }
+        .section-header p { color: var(--text-light); font-size: 1.1rem; }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 3rem auto;
+            position: relative;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border-radius: 50px;
+            border: 2px solid #e2e8f0;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: 0.3s;
+        }
+        
+        .search-bar:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        /* Grid */
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            transition: 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+        }
+
+        .chapter-num {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .chapter-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+
+        .chapter-icon {
+            align-self: flex-end;
+            font-size: 1.5rem;
+            color: var(--bg); /* Hidden initially */
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-top: auto;
+            transition: 0.3s;
+        }
+
+        .chapter-card:hover .chapter-icon { background: var(--primary-dark); }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-top: 5rem;
+        }
+        
+        footer p { font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .features { grid-template-columns: 1fr; margin-top: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header>
+        <div class="hero-content">
+            <h1>IG-bio</h1>
+            <p>The Ultimate A* Guide for CIE 0610 Biology. <br>Audio Lectures, Smart Notes, Mind Maps & Quizzes for every chapter.</p>
+            <a href="#chapters" class="cta-btn">Start Learning <i class="fa-solid fa-arrow-down"></i></a>
+        </div>
+    </header>
+
+    <!-- FEATURES SECTION -->
+    <div class="features">
+        <div class="feature-card">
+            <i class="fa-solid fa-headphones feature-icon"></i>
+            <h3>Audio Lectures</h3>
+            <p>Listen to detailed explanations of complex concepts. Download transcripts as PDFs for offline revision.</p>
+        </div>
+        <div class="feature-card" style="border-top-color: #10b981;">
+            <i class="fa-solid fa-book-open feature-icon" style="color: #10b981;"></i>
+            <h3>Smart Notes</h3>
+            <p>Concise, bullet-pointed notes focusing on key syllabus definitions. Downloadable as topic-specific PDFs.</p>
+        </div>
+        <div class="feature-card" style="border-top-color: #f59e0b;">
+            <i class="fa-solid fa-sitemap feature-icon" style="color: #f59e0b;"></i>
+            <h3>Visual Mind Maps</h3>
+            <p>High-resolution visual hierarchies to help you memorize connections. Scrollable and downloadable.</p>
+        </div>
+        <div class="feature-card" style="border-top-color: #ef4444;">
+            <i class="fa-solid fa-clipboard-check feature-icon" style="color: #ef4444;"></i>
+            <h3>Exam Quizzes</h3>
+            <p>50-question MCQ challenges for every chapter with instant feedback and detailed model answers.</p>
+        </div>
+    </div>
+
+    <!-- CHAPTERS GRID -->
+    <section class="chapters-section" id="chapters">
+        <div class="section-header">
+            <h2>Course Content</h2>
+            <p>Select a chapter to begin your mastery.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search for a topic (e.g., Enzymes, Plants)..." onkeyup="filterChapters()">
+        </div>
+
+        <div class="chapter-grid" id="grid">
+            
+            <!-- 1 -->
+            <a href="1.Classification of Living Organisms .html" class="chapter-card">
+                <div class="chapter-num">Chapter 1</div>
+                <div class="chapter-title">Characteristics of Living Organisms</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 2 -->
+            <a href="2.Organisation of the organisms.html" class="chapter-card">
+                <div class="chapter-num">Chapter 2</div>
+                <div class="chapter-title">Organization of the Organism</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 3 -->
+            <a href="3.Movements in & out of cells.html" class="chapter-card">
+                <div class="chapter-num">Chapter 3</div>
+                <div class="chapter-title">Movement In & Out of Cells</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 4 -->
+            <a href="4.Biological Molecules.html" class="chapter-card">
+                <div class="chapter-num">Chapter 4</div>
+                <div class="chapter-title">Biological Molecules</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 5 -->
+            <a href="5.Enzymes.html" class="chapter-card">
+                <div class="chapter-num">Chapter 5</div>
+                <div class="chapter-title">Enzymes</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 6 -->
+            <a href="6.Plant Nutrition.html" class="chapter-card">
+                <div class="chapter-num">Chapter 6</div>
+                <div class="chapter-title">Plant Nutrition</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 7 -->
+            <a href="7.Human Nutrition.html" class="chapter-card">
+                <div class="chapter-num">Chapter 7</div>
+                <div class="chapter-title">Human Nutrition</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 8 -->
+            <a href="8.Transport in Plants.html" class="chapter-card">
+                <div class="chapter-num">Chapter 8</div>
+                <div class="chapter-title">Transport in Plants</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 9 -->
+            <a href="9.Transport in humans.html" class="chapter-card">
+                <div class="chapter-num">Chapter 9</div>
+                <div class="chapter-title">Transport in Animals</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 10 -->
+            <a href="10.Disease and Immunity.html" class="chapter-card">
+                <div class="chapter-num">Chapter 10</div>
+                <div class="chapter-title">Diseases and Immunity</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 11 -->
+            <a href="11.Respiration and Gas Exchange.html" class="chapter-card">
+                <div class="chapter-num">Chapter 11</div>
+                <div class="chapter-title">Gas Exchange and Respiration</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 12 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 12</div>
+                <div class="chapter-title">Excretion in Humans</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 13 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 13</div>
+                <div class="chapter-title">Coordination and Response</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 14 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 14</div>
+                <div class="chapter-title">Drugs</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 15 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 15</div>
+                <div class="chapter-title">Reproduction</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 16 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 16</div>
+                <div class="chapter-title">Inheritance</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 17 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 17</div>
+                <div class="chapter-title">Variation and Selection</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 18 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 18</div>
+                <div class="chapter-title">Organisms and their Environment</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 19 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 19</div>
+                <div class="chapter-title">Human Influences on Ecosystems</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- 20 -->
+            <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+                <div class="chapter-num">Chapter 20</div>
+                <div class="chapter-title">Biotechnology & Genetic Eng.</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 IG-bio. Designed for CIE IGCSE Syllabus 0610.</p>
+        <p style="font-size:0.8rem; opacity:0.7; margin-top:10px;">Content is for educational purposes. Ensure to cross-reference with official syllabus guides.</p>
+    </footer>
+
+    <script>
+        function filterChapters() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const grid = document.getElementById('grid');
+            const cards = grid.getElementsByClassName('chapter-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].getElementsByClassName('chapter-title')[0];
+                let num = cards[i].getElementsByClassName('chapter-num')[0];
+                
+                if (title.innerText.toUpperCase().indexOf(filter) > -1 || num.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
