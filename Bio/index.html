@@ -433,6 +433,42 @@
         </div>
     </section>
 
+    <!-- DIVIDER -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+        <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 4rem 0;">
+    </div>
+
+    <!-- GENERAL TOPICS SECTION -->
+    <section class="chapters-section" id="general-topics">
+        <div class="section-header">
+            <h2>General Topics</h2>
+            <p>Additional resources and broader biological concepts.</p>
+        </div>
+
+        <!-- Search Bar for Topics -->
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="topicSearchInput" class="search-bar" placeholder="Search general topics..." onkeyup="filterTopics()">
+        </div>
+
+        <div class="chapter-grid" id="topicGrid">
+            
+            <!-- TEMPLATE BOX (Copy and paste this block to add more) -->
+            <a href="#" class="chapter-card">
+                <!-- Styling to center title since there is no chapter number -->
+                <div class="chapter-title" style="margin-top: auto; margin-bottom: auto;">Title Topic</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- Example of a second box (Delete if not needed) -->
+            <a href="#" class="chapter-card">
+                <div class="chapter-title" style="margin-top: auto; margin-bottom: auto;">Title Topic</div>
+                <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+        </div>
+    </section>
+    
     <footer>
         <p>&copy; 2023 IG-bio. Designed for CIE IGCSE Syllabus 0610.</p>
         <p style="font-size:0.8rem; opacity:0.7; margin-top:10px;">Content is for educational purposes. Ensure to cross-reference with official syllabus guides.</p>
@@ -456,7 +492,25 @@
                 }
             }
         }
+                function filterTopics() {
+            const input = document.getElementById('topicSearchInput');
+            const filter = input.value.toUpperCase();
+            const grid = document.getElementById('topicGrid');
+            const cards = grid.getElementsByClassName('chapter-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                // We only check the title class here as there are no numbers
+                let title = cards[i].getElementsByClassName('chapter-title')[0];
+                
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
     </script>
 
 </body>
 </html>
+
