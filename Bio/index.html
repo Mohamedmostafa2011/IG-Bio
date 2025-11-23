@@ -555,10 +555,29 @@
                 }
             }
         }
+
+            function filterGames() {
+            const input = document.getElementById('gameSearchInput');
+            const filter = input.value.toUpperCase();
+            const grid = document.getElementById('gameGrid');
+            const cards = grid.getElementsByClassName('chapter-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].getElementsByClassName('chapter-title')[0];
+                
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+        
     </script>
 
 </body>
 </html>
+
 
 
 
