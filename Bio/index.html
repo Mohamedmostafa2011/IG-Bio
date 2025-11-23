@@ -290,6 +290,47 @@
         .btn-games { background: var(--success); border-color: var(--success); }
         .btn-games:hover { color: var(--success); background: transparent; }
         
+	/* --- AUTH MODAL --- */
+#authModal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+    z-index: 2000; display: none; justify-content: center; align-items: center;
+}
+
+.auth-box {
+    background: white; padding: 2rem; border-radius: 15px;
+    width: 100%; max-width: 400px; text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.auth-input {
+    width: 100%; padding: 12px; margin: 10px 0;
+    border: 2px solid #e2e8f0; border-radius: 8px; font-family: inherit;
+}
+
+/* --- USER DASHBOARD --- */
+#userDashboard {
+    background: white; padding: 20px; margin: 20px auto; max-width: 1200px;
+    border-radius: 12px; border-left: 5px solid var(--success);
+    display: none; /* Hidden until logged in */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    justify-content: space-between; align-items: center;
+}
+
+.progress-container { flex: 1; margin: 0 20px; }
+.progress-bar-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--success); width: 0%; transition: 0.5s; }
+
+/* --- PROGRESS CHECKBOX ON CARDS --- */
+.chapter-card { position: relative; } /* Ensure parent is relative */
+
+.progress-check {
+    position: absolute; top: 15px; right: 15px;
+    width: 25px; height: 25px; cursor: pointer;
+    accent-color: var(--success); z-index: 10;
+    transform: scale(1.5);
+}
+
     </style>
 </head>
 <body>
@@ -299,11 +340,46 @@
             <li><a href="#chapters"><i class="fa-solid fa-book"></i> Chapters</a></li>
             <li><a href="#general-topics"><i class="fa-solid fa-layer-group"></i> General Topics</a></li>
             <li><a href="#edu-games"><i class="fa-solid fa-gamepad"></i> Edu-Games</a></li>
+            <li><a href="#" onclick="openAuth()" id="navAuthBtn" style="color:var(--primary);">Sign In</a></li>
         </ul>
     </nav>
     
     <!-- HERO SECTION -->
     <header>
+<!-- USER DASHBOARD (Visible only when logged in) -->
+<div id="userDashboard">
+    <div>
+        <h3 id="welcomeMsg" style="margin:0;">Welcome back!</h3>
+        <small style="color:#64748b;">Keep track of your revision.</small>
+    </div>
+    <div class="progress-container">
+        <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
+            <span>Progress</span>
+            <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+    <button onclick="logout()" style="background:#ef4444; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">Log Out</button>
+</div>
+
+<!-- AUTH MODAL POPUP -->
+<div id="authModal">
+    <div class="auth-box">
+        <h2 id="authTitle" style="color:var(--text);">Sign In</h2>
+        <input type="text" id="username" class="auth-input" placeholder="Username">
+        <input type="password" id="password" class="auth-input" placeholder="Password">
+        
+        <button onclick="handleAuthAction()" class="cta-btn" style="width:100%; margin-top:10px;" id="authActionBtn">Login</button>
+        
+        <p style="margin-top:15px; font-size:0.9rem; cursor:pointer; color:var(--primary);" onclick="toggleAuthMode()" id="authToggle">
+            Need an account? Create one
+        </p>
+        <p style="margin-top:10px; font-size:0.8rem; color:red; display:none;" id="authError"></p>
+        <button onclick="closeAuth()" style="background:transparent; border:none; color:#999; margin-top:10px; cursor:pointer;">Close</button>
+    </div>
+</div>
         <div class="hero-content">
             <h1>IG-bio</h1>
             <p>The Ultimate A* Guide for CIE 0610 Biology. <br>Audio Lectures, Smart Notes, Mind Maps & Quizzes for every chapter.</p>
@@ -363,20 +439,23 @@
             
             <!-- 1 -->
             <a href="1.Classification of Living Organisms .html" class="chapter-card">
-                <div class="chapter-num">Chapter 1</div>
+                <input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch1')">
+	        <div class="chapter-num">Chapter 1</div>
                 <div class="chapter-title">Characteristics of Living Organisms</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
             </a>
 
             <!-- 2 -->
             <a href="2.Organisation of the organisms.html" class="chapter-card">
-                <div class="chapter-num">Chapter 2</div>
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch2')">
+		<div class="chapter-num">Chapter 2</div>
                 <div class="chapter-title">Organization of the Organism</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
             </a>
 
             <!-- 3 -->
             <a href="3.Movements in & out of cells.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch3')">
                 <div class="chapter-num">Chapter 3</div>
                 <div class="chapter-title">Movement In & Out of Cells</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -384,6 +463,7 @@
 
             <!-- 4 -->
             <a href="4.Biological Molecules.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch4')">
                 <div class="chapter-num">Chapter 4</div>
                 <div class="chapter-title">Biological Molecules</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -391,6 +471,7 @@
 
             <!-- 5 -->
             <a href="5.Enzymes.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch5')">
                 <div class="chapter-num">Chapter 5</div>
                 <div class="chapter-title">Enzymes</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -398,6 +479,7 @@
 
             <!-- 6 -->
             <a href="6.Plant Nutrition.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch6')">
                 <div class="chapter-num">Chapter 6</div>
                 <div class="chapter-title">Plant Nutrition</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -405,6 +487,7 @@
 
             <!-- 7 -->
             <a href="7.Human Nutrition.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch7')">
                 <div class="chapter-num">Chapter 7</div>
                 <div class="chapter-title">Human Nutrition</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -412,6 +495,7 @@
 
             <!-- 8 -->
             <a href="8.Transport in Plants.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch8')">
                 <div class="chapter-num">Chapter 8</div>
                 <div class="chapter-title">Transport in Plants</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -419,6 +503,7 @@
 
             <!-- 9 -->
             <a href="9.Transport in humans.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch9')">
                 <div class="chapter-num">Chapter 9</div>
                 <div class="chapter-title">Transport in Animals</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -426,6 +511,7 @@
 
             <!-- 10 -->
             <a href="10.Disease and Immunity.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch10')">
                 <div class="chapter-num">Chapter 10</div>
                 <div class="chapter-title">Diseases and Immunity</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -433,6 +519,7 @@
 
             <!-- 11 -->
             <a href="11.Respiration and Gas Exchange.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch11')">
                 <div class="chapter-num">Chapter 11</div>
                 <div class="chapter-title">Gas Exchange and Respiration</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -440,6 +527,7 @@
 
             <!-- 12 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch12')">
                 <div class="chapter-num">Chapter 12</div>
                 <div class="chapter-title">Coordination and Response</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -447,6 +535,7 @@
 
             <!-- 13 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch13')">
                 <div class="chapter-num">Chapter 13</div>
                 <div class="chapter-title">Excretion And Homeostasis</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -454,6 +543,7 @@
 
             <!-- 14 -->
             <a href="14.Reproduction In Plants.html" class="chapter-card">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch14')">
                 <div class="chapter-num">Chapter 14</div>
                 <div class="chapter-title">Reproduction In Plants</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -461,6 +551,7 @@
 
             <!-- 15 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch15')">
                 <div class="chapter-num">Chapter 15</div>
                 <div class="chapter-title">Reproduction In Humans</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -468,6 +559,7 @@
 
             <!-- 16 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch16')">
                 <div class="chapter-num">Chapter 16</div>
                 <div class="chapter-title">Chromosomes, Genes and Proteins</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -475,6 +567,7 @@
 
             <!-- 17 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch17')">
                 <div class="chapter-num">Chapter 17</div>
                 <div class="chapter-title">Variation and Selection</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -482,6 +575,7 @@
 
             <!-- 18 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch18')">
                 <div class="chapter-num">Chapter 18</div>
                 <div class="chapter-title">Organisms and their Environment</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -489,6 +583,7 @@
 
             <!-- 19 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch19')">
                 <div class="chapter-num">Chapter 19</div>
                 <div class="chapter-title">Human Influences on Ecosystems</div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -496,6 +591,7 @@
 
             <!-- 20 -->
             <a href="#" class="chapter-card" onclick="alert('This chapter is under construction!'); return false;">
+		<input type="checkbox" class="progress-check" onclick="handleCheckboxClick(event, this, 'ch20')">
                 <div class="chapter-num">Chapter 20</div>
                 <div class="chapter-title">Biotechnology & Genetic Modification </div>
                 <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
@@ -592,58 +688,200 @@
     </footer>
 
     <script>
-        function filterChapters() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toUpperCase();
-            const grid = document.getElementById('grid');
-            const cards = grid.getElementsByClassName('chapter-card');
+// --- AUTH SYSTEM ---
+let currentUser = null;
+let isSignupMode = false;
 
-            for (let i = 0; i < cards.length; i++) {
-                let title = cards[i].getElementsByClassName('chapter-title')[0];
-                let num = cards[i].getElementsByClassName('chapter-num')[0];
-                
-                if (title.innerText.toUpperCase().indexOf(filter) > -1 || num.innerText.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "flex";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
+// 1. FORCE LOGIN ON LOAD
+window.onload = function() {
+    // Initialize DB if needed
+    if (!localStorage.getItem('IGBIO_DB')) {
+        localStorage.setItem('IGBIO_DB', JSON.stringify({}));
+    }
+
+    // Check session
+    const sessionUser = localStorage.getItem('IGBIO_Session');
+    
+    if(sessionUser) {
+        loginUser(sessionUser);
+    } else {
+        // ALWAYS SHOW LOGIN SCREEN IF NOT LOGGED IN
+        openAuth();
+    }
+};
+
+// --- MODAL FUNCTIONS ---
+function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
+function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+
+function toggleAuthMode() {
+    isSignupMode = !isSignupMode;
+    document.getElementById('authTitle').innerText = isSignupMode ? "Create Account" : "Sign In";
+    document.getElementById('authActionBtn').innerText = isSignupMode ? "Sign Up" : "Login";
+    document.getElementById('authToggle').innerText = isSignupMode ? "Have an account? Login" : "Need an account? Create one";
+    document.getElementById('authError').style.display = 'none';
+}
+
+// --- LOGIN LOGIC ---
+function handleAuthAction() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const error = document.getElementById('authError');
+
+    if(!user || !pass) {
+        error.innerText = "Please enter both fields"; 
+        error.style.display = 'block'; 
+        return;
+    }
+
+    let db = JSON.parse(localStorage.getItem('IGBIO_DB'));
+
+    if (isSignupMode) {
+        if (db[user]) {
+            error.innerText = "Username exists!"; 
+            error.style.display = 'block';
+        } else {
+            db[user] = { password: pass, progress: [] };
+            localStorage.setItem('IGBIO_DB', JSON.stringify(db));
+            loginUser(user);
+            closeAuth();
         }
-                function filterTopics() {
-            const input = document.getElementById('topicSearchInput');
-            const filter = input.value.toUpperCase();
-            const grid = document.getElementById('topicGrid');
-            const cards = grid.getElementsByClassName('chapter-card');
-
-            for (let i = 0; i < cards.length; i++) {
-                // We only check the title class here as there are no numbers
-                let title = cards[i].getElementsByClassName('chapter-title')[0];
-                
-                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "flex";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
+    } else {
+        if (db[user] && db[user].password === pass) {
+            loginUser(user);
+            closeAuth();
+        } else {
+            error.innerText = "Invalid credentials"; 
+            error.style.display = 'block';
         }
+    }
+}
 
-            function filterGames() {
-            const input = document.getElementById('gameSearchInput');
-            const filter = input.value.toUpperCase();
-            const grid = document.getElementById('gameGrid');
-            const cards = grid.getElementsByClassName('chapter-card');
+function loginUser(username) {
+    currentUser = username;
+    localStorage.setItem('IGBIO_Session', username);
+    
+    document.getElementById('navAuthBtn').style.display = 'none';
+    document.getElementById('userDashboard').style.display = 'flex';
+    document.getElementById('welcomeMsg').innerText = `Welcome, ${username}!`;
+    
+    loadProgress();
+}
 
-            for (let i = 0; i < cards.length; i++) {
-                let title = cards[i].getElementsByClassName('chapter-title')[0];
-                
-                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "flex";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
+function logout() {
+    localStorage.removeItem('IGBIO_Session');
+    location.reload();
+}
+
+// --- PROGRESS & CHECKBOX LOGIC ---
+function handleCheckboxClick(event, checkbox, id) {
+    // 1. Stop the click from reaching the <a> tag (Prevents page navigation)
+    event.stopPropagation();
+
+    // 2. Auth Check
+    if(!currentUser) {
+        alert("Please Sign In to save progress!");
+        event.preventDefault(); // Stop the box from checking if not logged in
+        openAuth();
+        return;
+    }
+
+    // 3. Database Logic
+    // Since we removed preventDefault(), the box IS ALREADY CHECKED visually by the browser.
+    // We just need to save that state.
+    
+    let db = JSON.parse(localStorage.getItem('IGBIO_DB'));
+    let userProgress = db[currentUser].progress || [];
+
+    if(checkbox.checked) {
+        if(!userProgress.includes(id)) userProgress.push(id);
+    } else {
+        userProgress = userProgress.filter(item => item !== id);
+    }
+
+    // 4. Save & Update UI
+    db[currentUser].progress = userProgress;
+    localStorage.setItem('IGBIO_DB', JSON.stringify(db));
+    
+    calculatePercent(userProgress);
+}
+
+function loadProgress() {
+    let db = JSON.parse(localStorage.getItem('IGBIO_DB'));
+    let userProgress = db[currentUser].progress || [];
+
+    const checkboxes = document.querySelectorAll('.progress-check');
+    checkboxes.forEach(box => {
+        // Extract ID from onclick string (e.g., 'ch1')
+        const id = box.getAttribute('onclick').split("'")[1]; 
+        if(userProgress.includes(id)) {
+            box.checked = true;
+        } else {
+            box.checked = false;
         }
-        
+    });
+
+    calculatePercent(userProgress);
+}
+
+function calculatePercent(progressArray) {
+    const total = document.querySelectorAll('.progress-check').length;
+    const done = progressArray.length;
+    const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+    document.getElementById('progressFill').style.width = pct + "%";
+    document.getElementById('progressText').innerText = pct + "% Complete";
+}
+
+// --- SEARCH FILTERS ---
+function filterChapters() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const grid = document.getElementById('grid');
+    const cards = grid.getElementsByClassName('chapter-card');
+
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].getElementsByClassName('chapter-title')[0];
+        let num = cards[i].getElementsByClassName('chapter-num')[0];
+        if (title.innerText.toUpperCase().indexOf(filter) > -1 || num.innerText.toUpperCase().indexOf(filter) > -1) {
+            cards[i].style.display = "flex";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+
+function filterTopics() {
+    const input = document.getElementById('topicSearchInput');
+    const filter = input.value.toUpperCase();
+    const grid = document.getElementById('topicGrid');
+    const cards = grid.getElementsByClassName('chapter-card');
+
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].getElementsByClassName('chapter-title')[0];
+        if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+            cards[i].style.display = "flex";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+
+function filterGames() {
+    const input = document.getElementById('gameSearchInput');
+    const filter = input.value.toUpperCase();
+    const grid = document.getElementById('gameGrid');
+    const cards = grid.getElementsByClassName('chapter-card');
+
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].getElementsByClassName('chapter-title')[0];
+        if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+            cards[i].style.display = "flex";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
     </script>
 
 </body>
