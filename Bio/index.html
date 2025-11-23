@@ -238,16 +238,87 @@
             .features { grid-template-columns: 1fr; margin-top: 2rem; }
         }
 
+                /* Sticky Navigation Bar */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a:hover { color: var(--primary); transform: translateY(-2px); }
+
+        /* Hero Buttons Layout */
+        .hero-btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        /* Button Colors */
+        .btn-topics { background: var(--accent); border-color: var(--accent); }
+        .btn-topics:hover { color: var(--accent); background: transparent; }
+        
+        .btn-games { background: var(--success); border-color: var(--success); }
+        .btn-games:hover { color: var(--success); background: transparent; }
+        
     </style>
 </head>
 <body>
 
+    <nav>
+        <ul>
+            <li><a href="#chapters"><i class="fa-solid fa-book"></i> Chapters</a></li>
+            <li><a href="#general-topics"><i class="fa-solid fa-layer-group"></i> General Topics</a></li>
+            <li><a href="#edu-games"><i class="fa-solid fa-gamepad"></i> Edu-Games</a></li>
+        </ul>
+    </nav>
+    
     <!-- HERO SECTION -->
     <header>
         <div class="hero-content">
             <h1>IG-bio</h1>
             <p>The Ultimate A* Guide for CIE 0610 Biology. <br>Audio Lectures, Smart Notes, Mind Maps & Quizzes for every chapter.</p>
-            <a href="#chapters" class="cta-btn">Start Learning <i class="fa-solid fa-arrow-down"></i></a>
+            
+            <div class="hero-btn-group">
+                <a href="#chapters" class="cta-btn">
+                    <i class="fa-solid fa-book"></i> Chapters
+                </a>
+                <a href="#general-topics" class="cta-btn btn-topics">
+                    <i class="fa-solid fa-layer-group"></i> General Topics
+                </a>
+                <a href="#edu-games" class="cta-btn btn-games">
+                    <i class="fa-solid fa-gamepad"></i> Edu-Games
+                </a>
+            </div>
         </div>
     </header>
 
@@ -577,6 +648,7 @@
 
 </body>
 </html>
+
 
 
 
