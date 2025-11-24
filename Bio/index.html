@@ -44,11 +44,9 @@
 
         /* ================= AUTH SCREEN ================= */
         #auth-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
         .auth-container {
             background: white; width: 90%; max-width: 450px; padding: 3rem;
@@ -58,9 +56,10 @@
         .auth-logo { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; display: inline-block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ================= MAIN APP ================= */
+        /* ================= MAIN APP STYLES ================= */
         #main-app { display: none; }
 
+        /* --- Navigation --- */
         nav {
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
             position: sticky; top: 0; z-index: 1000;
@@ -78,14 +77,18 @@
         .nav-profile-area { display: flex; align-items: center; gap: 15px; }
         .profile-avatar {
             width: 45px; height: 45px; border-radius: 50%; cursor: pointer;
-            border: 2px solid var(--primary); padding: 2px; object-fit: cover; background: white;
+            border: 2px solid var(--primary); padding: 2px; transition: 0.3s;
+            object-fit: cover; background: white;
         }
+        .profile-avatar:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
+        
         .admin-badge {
             background: var(--accent); color: white; padding: 2px 8px;
             border-radius: 10px; font-size: 0.7rem; font-weight: 800;
             display: none; text-transform: uppercase; letter-spacing: 1px;
         }
 
+        /* --- Hero --- */
         header {
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
             color: white; padding: 5rem 1rem; text-align: center;
@@ -97,18 +100,23 @@
             background: linear-gradient(to right, #fff, #93c5fd);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        header p { font-size: 1.3rem; color: #cbd5e1; margin-bottom: 2rem; font-family: 'Lora', serif; }
+        
         .cta-btn {
             display: inline-block; background: var(--primary); color: white;
             padding: 15px 35px; border-radius: 50px; font-weight: 600;
             text-decoration: none; transition: 0.3s; border: 2px solid transparent; cursor: pointer;
             font-size: 1rem;
         }
-        .cta-btn:hover { background: transparent; border-color: var(--primary); color: var(--primary); }
+        .cta-btn:hover { background: transparent; border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
+        .auth-btn { width: 100%; margin-top: 15px; background: var(--primary); border:none; color:white; }
+        .hero-btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
         .btn-games { background: var(--success); border-color: var(--success); }
-        .btn-games:hover { color: var(--success); }
+        .btn-games:hover { color: var(--success); background: transparent; }
         .btn-danger { background: var(--danger); border-color: var(--danger); }
-        .btn-danger:hover { color: var(--danger); }
+        .btn-danger:hover { color: var(--danger); background: transparent; }
 
+        /* --- Dashboard --- */
         #userDashboard {
             background: white; padding: 20px; margin: 20px auto; max-width: 1200px;
             border-radius: 12px; border-left: 5px solid var(--success);
@@ -119,6 +127,7 @@
         .progress-bar-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--success); width: 0%; transition: 0.5s; }
 
+        /* --- Features --- */
         .features {
             max-width: 1200px; margin: -50px auto 3rem auto; padding: 0 1rem;
             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -127,9 +136,12 @@
         .feature-card {
             background: var(--surface); padding: 2rem; border-radius: 16px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); text-align: center;
-            border-top: 5px solid var(--primary);
+            transition: 0.3s; border-top: 5px solid var(--primary);
         }
+        .feature-card:hover { transform: translateY(-10px); }
+        .feature-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
 
+        /* --- Content Sections --- */
         .chapters-section { max-width: 1200px; margin: 4rem auto; padding: 0 1rem; }
         .section-header { text-align: center; margin-bottom: 3rem; position: relative;} 
         .section-header h2 { font-size: 2.5rem; color: var(--text); }
@@ -148,8 +160,8 @@
         }
         .chapter-card:hover { border-color: var(--primary); transform: scale(1.02); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1); }
         
-        .chapter-card.unavailable { opacity: 0.5; filter: grayscale(100%); pointer-events: none; }
-        .chapter-card.unavailable .admin-controls { pointer-events: auto; }
+        .chapter-card.unavailable { opacity: 0.3; filter: grayscale(100%); }
+        .chapter-card.unavailable:not(.admin-view) { display: none !important; } /* Force Hide for students */
 
         .chapter-num { font-size: 0.8rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; margin-bottom: 5px; }
         .chapter-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; color: var(--primary-dark); }
@@ -158,18 +170,21 @@
             width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
             border-radius: 50%; margin-top: auto; transition: 0.3s;
         }
+        .chapter-card:hover .chapter-icon { background: var(--primary-dark); }
+        
         .progress-check {
             position: absolute; top: 15px; right: 15px;
             width: 25px; height: 25px; cursor: pointer; accent-color: var(--success); z-index: 10; transform: scale(1.5);
         }
 
-        /* ================= ADMIN SPECIFIC STYLES ================= */
+        /* --- Admin Controls --- */
         .add-card {
             border: 2px dashed var(--primary);
             background: rgba(37, 99, 235, 0.05);
             justify-content: center; align-items: center;
             min-height: 200px;
             display: none; 
+            order: 99999; /* Locked to end visually */
         }
         .add-card:hover { background: rgba(37, 99, 235, 0.1); transform: scale(1.05); }
         .add-card i { font-size: 3rem; color: var(--primary); }
@@ -185,19 +200,17 @@
         }
         .control-btn:hover { background: var(--primary); color: white; }
         .drag-handle { cursor: grab; }
-        .section-drag-handle {
-            display: none; font-size: 1.5rem; color: #cbd5e1; 
-            cursor: grab; position: absolute; left: -40px; top: 10px;
-        }
+        .drag-handle:active { cursor: grabbing; }
+        .section-drag-handle { display: none; font-size: 1.5rem; color: #cbd5e1; cursor: grab; position: absolute; left: -40px; top: 10px; }
         
         #addSectionBtn {
             display: none; margin: 4rem auto; max-width: 300px;
             background: var(--text); color: white; text-align: center;
-            padding: 1rem; border-radius: 10px; cursor: pointer;
+            padding: 1rem; border-radius: 10px; cursor: pointer; font-weight: 600;
         }
         #addSectionBtn:hover { background: var(--primary); }
 
-        /* ================= MODALS ================= */
+        /* --- Modals --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
@@ -209,12 +222,13 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;
             animation: fadeIn 0.3s;
         }
-        .close-btn { background: transparent; border: none; color: #999; margin-top: 10px; cursor: pointer; font-size: 0.9rem; }
         .auth-input {
             width: 100%; padding: 12px; margin: 10px 0;
             border: 2px solid #e2e8f0; border-radius: 8px; font-family: inherit; background: #f8fafc;
         }
+        .auth-input:focus { border-color: var(--primary); outline: none; background: white; }
         .gender-options { display: flex; justify-content: center; gap: 20px; margin: 15px 0; }
+        .close-btn { background: transparent; border: none; color: #999; margin-top: 10px; cursor: pointer; font-size: 0.9rem; }
         #authError { color: #ef4444; margin-top: 10px; font-size: 0.9rem; display: none; font-weight: 600; }
 
         @media(max-width: 600px) {
@@ -240,16 +254,16 @@
                 <div class="gender-options">
                     <div class="gender-option">
                         <input type="radio" name="gender" value="male" id="g_male" checked>
-                        <label for="g_male">Male</label>
+                        <label for="g_male"><i class="fa-solid fa-user-tie"></i> Male</label>
                     </div>
                     <div class="gender-option">
                         <input type="radio" name="gender" value="female" id="g_female">
-                        <label for="g_female">Female</label>
+                        <label for="g_female"><i class="fa-solid fa-user-nurse"></i> Female</label>
                     </div>
                 </div>
             </div>
             <input type="password" id="password" class="auth-input" placeholder="Password">
-            <button onclick="handleAuthAction()" class="cta-btn auth-btn" style="width:100%; margin-top:15px;" id="authActionBtn">Login</button>
+            <button onclick="handleAuthAction()" class="cta-btn auth-btn" id="authActionBtn">Login</button>
             <p id="authError"></p>
             <p style="margin-top:20px; font-size:0.9rem; cursor:pointer; color:var(--primary); text-decoration: underline;" onclick="toggleAuthMode()" id="authToggle">New here? Create an account</p>
         </div>
@@ -277,7 +291,8 @@
                 </div>
                 <div class="progress-container">
                     <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
-                        <span>Course Progress</span><span id="progressText">0%</span>
+                        <span style="color: var(--text);">Course Progress</span>
+                        <span id="progressText" style="font-weight:800; color:var(--primary); font-size:1rem;">0%</span>
                     </div>
                     <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
                 </div>
@@ -285,10 +300,10 @@
 
             <div class="hero-content">
                 <h1>Master Biology.</h1>
-                <p>Access audio lectures, smart notes, and interactive quizzes.</p>
+                <p>Access audio lectures, smart notes, and interactive quizzes for CIE 0610.</p>
                 <div class="hero-btn-group">
-                    <a href="#chapters" class="cta-btn">Start Learning</a>
-                    <a href="#edu-games" class="cta-btn btn-games">Play Games</a>
+                    <a href="#chapters" class="cta-btn"><i class="fa-solid fa-book"></i> Start Learning</a>
+                    <a href="#edu-games" class="cta-btn btn-games"><i class="fa-solid fa-gamepad"></i> Play Games</a>
                 </div>
             </div>
         </header>
@@ -307,135 +322,12 @@
                 <div class="section-header">
                     <i class="fa-solid fa-bars section-drag-handle"></i>
                     <h2>Course Content</h2>
-                    <p>Select a chapter to begin your mastery.</p>
                 </div>
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
                     <input type="text" class="search-bar" placeholder="Search chapters..." onkeyup="filterGrid('grid', this.value)">
                 </div>
                 <div class="chapter-grid" id="grid">
-                    <!-- 20 CHAPTERS -->
-                    <div onclick="openContent('1.Classification of Living Organisms .html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch1" onclick="toggleProgress(event, 'ch1')">
-                        <div class="chapter-num">Chapter 1</div>
-                        <div class="chapter-title">Characteristics of Living Organisms</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('2.Organisation of the organisms.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch2" onclick="toggleProgress(event, 'ch2')">
-                        <div class="chapter-num">Chapter 2</div>
-                        <div class="chapter-title">Organization of the Organism</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('3.Movements in & out of cells.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch3" onclick="toggleProgress(event, 'ch3')">
-                        <div class="chapter-num">Chapter 3</div>
-                        <div class="chapter-title">Movement In & Out of Cells</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('4.Biological Molecules.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch4" onclick="toggleProgress(event, 'ch4')">
-                        <div class="chapter-num">Chapter 4</div>
-                        <div class="chapter-title">Biological Molecules</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('5.Enzymes.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch5" onclick="toggleProgress(event, 'ch5')">
-                        <div class="chapter-num">Chapter 5</div>
-                        <div class="chapter-title">Enzymes</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('6.Plant Nutrition.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch6" onclick="toggleProgress(event, 'ch6')">
-                        <div class="chapter-num">Chapter 6</div>
-                        <div class="chapter-title">Plant Nutrition</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('7.Human Nutrition.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch7" onclick="toggleProgress(event, 'ch7')">
-                        <div class="chapter-num">Chapter 7</div>
-                        <div class="chapter-title">Human Nutrition</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('8.Transport in Plants.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch8" onclick="toggleProgress(event, 'ch8')">
-                        <div class="chapter-num">Chapter 8</div>
-                        <div class="chapter-title">Transport in Plants</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('9.Transport in humans.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch9" onclick="toggleProgress(event, 'ch9')">
-                        <div class="chapter-num">Chapter 9</div>
-                        <div class="chapter-title">Transport in Animals</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('10.Disease and Immunity.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch10" onclick="toggleProgress(event, 'ch10')">
-                        <div class="chapter-num">Chapter 10</div>
-                        <div class="chapter-title">Diseases and Immunity</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('11.Respiration and Gas Exchange.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch11" onclick="toggleProgress(event, 'ch11')">
-                        <div class="chapter-num">Chapter 11</div>
-                        <div class="chapter-title">Gas Exchange and Respiration</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('12.Coordination and Response.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch12" onclick="toggleProgress(event, 'ch12')">
-                        <div class="chapter-num">Chapter 12</div>
-                        <div class="chapter-title">Coordination and Response</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('13.Excretion And Homeostasis.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch13" onclick="toggleProgress(event, 'ch13')">
-                        <div class="chapter-num">Chapter 13</div>
-                        <div class="chapter-title">Excretion And Homeostasis</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('14.Reproduction In Plants.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch14" onclick="toggleProgress(event, 'ch14')">
-                        <div class="chapter-num">Chapter 14</div>
-                        <div class="chapter-title">Reproduction In Plants</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('15.Reproduction In Humans.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch15" onclick="toggleProgress(event, 'ch15')">
-                        <div class="chapter-num">Chapter 15</div>
-                        <div class="chapter-title">Reproduction In Humans</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('16.Chromosomes, Genes and Proteins.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch16" onclick="toggleProgress(event, 'ch16')">
-                        <div class="chapter-num">Chapter 16</div>
-                        <div class="chapter-title">Chromosomes, Genes and Proteins</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('17.Variation and Selection.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch17" onclick="toggleProgress(event, 'ch17')">
-                        <div class="chapter-num">Chapter 17</div>
-                        <div class="chapter-title">Variation and Selection</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('18.Organisms and their Environment.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch18" onclick="toggleProgress(event, 'ch18')">
-                        <div class="chapter-num">Chapter 18</div>
-                        <div class="chapter-title">Organisms and their Environment</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('19.Human Influences on Ecosystems.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch19" onclick="toggleProgress(event, 'ch19')">
-                        <div class="chapter-num">Chapter 19</div>
-                        <div class="chapter-title">Human Influences on Ecosystems</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('20.Biotechnology & Genetic Modification.html')" class="chapter-card">
-                        <input type="checkbox" class="progress-check" id="ch20" onclick="toggleProgress(event, 'ch20')">
-                        <div class="chapter-num">Chapter 20</div>
-                        <div class="chapter-title">Biotechnology & Genetic Modification</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    
                     <!-- ADMIN ADD BUTTON -->
                     <div class="chapter-card add-card" id="add-btn-chapters" onclick="openAdminModal('chapters')">
                         <i class="fa-solid fa-plus"></i>
@@ -450,33 +342,12 @@
                 <div class="section-header">
                     <i class="fa-solid fa-bars section-drag-handle"></i>
                     <h2>General Topics</h2>
-                    <p>Additional resources.</p>
                 </div>
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
                     <input type="text" class="search-bar" placeholder="Search topics..." onkeyup="filterGrid('topicGrid', this.value)">
                 </div>
                 <div class="chapter-grid" id="topicGrid">
-                    <div onclick="openContent('specialised cells.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">Specialised Cells</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('smoking.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">Smoking</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('CHD.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">CHD</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('Blood.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">Blood</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
-                    <div onclick="openContent('defense.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">Defense Against Diseases</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
-                    </div>
                     <!-- ADMIN ADD BUTTON -->
                     <div class="chapter-card add-card" id="add-btn-topics" onclick="openAdminModal('general-topics')">
                         <i class="fa-solid fa-plus"></i>
@@ -489,21 +360,12 @@
                 <div class="section-header">
                     <i class="fa-solid fa-bars section-drag-handle"></i>
                     <h2>Edu-Games</h2>
-                    <p>Interactive simulations.</p>
                 </div>
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
                     <input type="text" class="search-bar" placeholder="Search games..." onkeyup="filterGrid('gameGrid', this.value)">
                 </div>
                 <div class="chapter-grid" id="gameGrid">
-                    <div onclick="openContent('game1.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">Classification Game</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-gamepad"></i></div>
-                    </div>
-                    <div onclick="openContent('game2.html')" class="chapter-card">
-                        <div class="chapter-title" style="margin: auto;">Organisation Game</div>
-                        <div class="chapter-icon"><i class="fa-solid fa-gamepad"></i></div>
-                    </div>
                     <!-- ADMIN ADD BUTTON -->
                     <div class="chapter-card add-card" id="add-btn-games" onclick="openAdminModal('edu-games')">
                         <i class="fa-solid fa-plus"></i>
@@ -522,8 +384,8 @@
     <div id="profileModal" class="modal-overlay">
         <div class="modal-box">
             <img src="" id="profileModalAvatar" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary); margin-bottom:15px;">
-            <h2 id="profileUsername">User</h2>
-            <button onclick="logout()" class="cta-btn" style="width:100%; margin-top:10px; background:#ef4444;">Log Out</button>
+            <h2 id="profileUsername" style="margin-bottom:20px;">User</h2>
+            <button onclick="logout()" class="cta-btn btn-danger" style="width:100%;">Log Out</button>
             <button onclick="document.getElementById('profileModal').style.display='none'" class="close-btn">Close</button>
         </div>
     </div>
@@ -534,20 +396,20 @@
             <h2 id="adminModalTitle" style="color:var(--primary); margin-bottom:15px;">Add New Item</h2>
             <input type="hidden" id="adminTargetSection">
             
-            <div style="text-align:left;">
+            <div style="text-align:left; margin-bottom:10px;">
                 <label style="font-size:0.8rem; font-weight:bold;">Title</label>
-                <input type="text" id="adminTitle" class="auth-input" placeholder="e.g., Transport in Animals">
+                <input type="text" id="adminTitle" class="auth-input">
             </div>
-            <div style="text-align:left; display:none;" id="adminNumDiv">
+            <div style="text-align:left; margin-bottom:10px;" id="adminNumDiv">
                 <label style="font-size:0.8rem; font-weight:bold;">Chapter Number (Optional)</label>
-                <input type="text" id="adminNum" class="auth-input" placeholder="e.g., Chapter 21">
+                <input type="text" id="adminNum" class="auth-input">
             </div>
-            <div style="text-align:left; margin-top:10px;">
+            <div style="text-align:left; margin-bottom:15px;">
                 <label style="font-size:0.8rem; font-weight:bold;">HTML File Name</label>
-                <input type="text" id="adminFile" class="auth-input" placeholder="e.g., chapter21.html">
+                <input type="text" id="adminFile" class="auth-input">
             </div>
 
-            <button onclick="saveAdminItem()" class="cta-btn" style="width:100%; margin-top:15px;">Save & Add</button>
+            <button onclick="saveAdminItem()" class="cta-btn" style="width:100%;">Save & Add</button>
             <button onclick="document.getElementById('adminAddModal').style.display='none'" class="close-btn">Cancel</button>
         </div>
     </div>
@@ -556,23 +418,23 @@
     <div id="adminEditModal" class="modal-overlay">
         <div class="modal-box">
             <h2 style="color:var(--primary); margin-bottom:15px;">Edit Item</h2>
-            <input type="hidden" id="editItemId"> <!-- Firestore ID if exists -->
+            <input type="hidden" id="editItemId">
             
-            <div style="text-align:left;">
+            <div style="text-align:left; margin-bottom:10px;">
                 <label style="font-size:0.8rem; font-weight:bold;">Title</label>
                 <input type="text" id="editTitle" class="auth-input">
             </div>
-            <div style="text-align:left;">
+            <div style="text-align:left; margin-bottom:10px;">
                 <label style="font-size:0.8rem; font-weight:bold;">Subtitle / Number</label>
                 <input type="text" id="editSubtitle" class="auth-input">
             </div>
-            <div style="text-align:left; margin-top:10px;">
+            <div style="text-align:left; margin-bottom:15px;">
                 <label style="font-size:0.8rem; font-weight:bold;">File Name</label>
                 <input type="text" id="editFile" class="auth-input">
             </div>
 
-            <div style="display:flex; gap:10px; margin-top:15px;">
-                <button onclick="saveEditItem()" class="cta-btn" style="flex:1;">Save Changes</button>
+            <div style="display:flex; gap:10px;">
+                <button onclick="saveEditItem()" class="cta-btn" style="flex:1;">Save</button>
                 <button onclick="deleteItem()" class="cta-btn btn-danger" style="flex:1;">Delete</button>
             </div>
             <button onclick="document.getElementById('adminEditModal').style.display='none'" class="close-btn">Cancel</button>
@@ -600,31 +462,76 @@
             let isSignupMode = false;
 
             auth.onAuthStateChanged(async (user) => {
-                const authScreen = document.getElementById('auth-screen');
-                const mainApp = document.getElementById('main-app');
-
                 if (user) {
                     currentUser = user;
                     const doc = await db.collection('users').doc(user.uid).get();
                     if(doc.exists) {
                         const data = doc.data();
-                        if(data.isAdmin === true) {
-                            isAdmin = true;
-                            enableAdminMode();
-                        }
+                        if(data.isAdmin === true) isAdmin = true;
                         updateUI(data);
                         loadProgress(data.progress || []);
-                        loadDynamicContent();
+                        await loadAllContent();
                     }
-                    authScreen.style.display = 'none';
-                    mainApp.style.display = 'block';
+                    document.getElementById('auth-screen').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'block';
                 } else {
                     currentUser = null;
                     isAdmin = false;
-                    authScreen.style.display = 'flex';
-                    mainApp.style.display = 'none';
+                    document.getElementById('auth-screen').style.display = 'flex';
+                    document.getElementById('main-app').style.display = 'none';
                 }
             });
+
+            async function loadAllContent() {
+                const snapshot = await db.collection('siteContent').get();
+                const docs = [];
+                snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+
+                // Sort by orderIndex, default large number for new items
+                docs.sort((a, b) => (a.orderIndex ?? 99999) - (b.orderIndex ?? 99999));
+
+                docs.forEach(item => {
+                    if (!item.deleted && item.sectionId) {
+                        if(item.sectionId === 'NEW_SECTION') createNewSection(item.title);
+                        else {
+                            let gridId = (item.sectionId === 'chapters') ? 'grid' : 
+                                         (item.sectionId === 'general-topics') ? 'topicGrid' : 
+                                         (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                            createCard(gridId, item, item.id);
+                        }
+                    }
+                });
+
+                if(isAdmin) enableAdminMode();
+            }
+
+            function createCard(gridId, data, docId) {
+                const grid = document.getElementById(gridId);
+                if(!grid) return;
+                
+                const div = document.createElement('div');
+                div.className = 'chapter-card';
+                if(data.isHidden) div.classList.add('unavailable');
+                
+                div.onclick = function() { window.location.href = data.file; };
+                div.setAttribute('data-doc-id', docId);
+                div.setAttribute('data-file', data.file); // Critical for reading filename
+
+                let iconHtml = (gridId === 'gameGrid') ? '<i class="fa-solid fa-gamepad"></i>' : '<i class="fa-solid fa-chevron-right"></i>';
+                let subtitleHtml = data.subtitle ? `<div class="chapter-num">${data.subtitle}</div>` : '';
+
+                div.innerHTML = `
+                    <input type="checkbox" class="progress-check" id="${docId}" onclick="toggleProgress(event, '${docId}')">
+                    ${subtitleHtml}
+                    <div class="chapter-title" style="${!data.subtitle ? 'margin:auto' : ''}">${data.title}</div>
+                    <div class="chapter-icon">${iconHtml}</div>
+                `;
+
+                const addBtn = grid.querySelector('.add-card');
+                grid.insertBefore(div, addBtn);
+                
+                if(isAdmin) injectAdminControls(div);
+            }
 
             function enableAdminMode() {
                 document.getElementById('adminBadge').style.display = 'inline-block';
@@ -632,40 +539,56 @@
                 document.querySelectorAll('.add-card').forEach(el => el.style.display = 'flex');
                 document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => injectAdminControls(card));
                 
+                const grids = ['grid', 'topicGrid', 'gameGrid'];
+                document.querySelectorAll('.chapter-grid').forEach(g => { if(!grids.includes(g.id)) grids.push(g.id); });
+
+                grids.forEach(gridId => {
+                    const el = document.getElementById(gridId);
+                    if(el) {
+                        Sortable.create(el, { 
+                            handle: '.drag-handle', 
+                            animation: 150,
+                            draggable: ".chapter-card:not(.add-card)",
+                            onEnd: async function(evt) {
+                                const grid = evt.to;
+                                const cards = grid.querySelectorAll('.chapter-card:not(.add-card)');
+                                const batch = db.batch();
+                                cards.forEach((card, index) => {
+                                    const id = card.getAttribute('data-doc-id');
+                                    if(id) batch.update(db.collection('siteContent').doc(id), { orderIndex: index });
+                                });
+                                await batch.commit();
+                                console.log("Order Saved");
+                            }
+                        });
+                    }
+                });
+                
                 enableDragAndDrop('content-sections-wrapper', '.section-drag-handle');
-                enableDragAndDrop('grid', '.drag-handle');
-                enableDragAndDrop('topicGrid', '.drag-handle');
-                enableDragAndDrop('gameGrid', '.drag-handle');
             }
 
             function injectAdminControls(cardElement) {
                 if(cardElement.querySelector('.admin-controls')) return;
                 const controls = document.createElement('div');
                 controls.className = 'admin-controls';
+                const isHidden = cardElement.classList.contains('unavailable');
                 controls.innerHTML = `
                     <div class="control-btn drag-handle"><i class="fa-solid fa-bars"></i></div>
                     <div class="control-btn" onclick="openEditModal(this)"><i class="fa-solid fa-gear"></i></div>
-                    <div class="control-btn" onclick="toggleVisibility(event, this)"><i class="fa-regular fa-eye"></i></div>
+                    <div class="control-btn" onclick="toggleVisibility(event, this)"><i class="fa-regular ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i></div>
                 `;
                 controls.onclick = (e) => e.stopPropagation();
                 cardElement.appendChild(controls);
+                cardElement.classList.add('admin-view');
                 controls.style.display = 'flex';
             }
 
-            // --- ADD ITEM (NO RELOAD) ---
-            window.openAdminModal = function(sectionId) {
-                if(!isAdmin) return;
-                document.getElementById('adminAddModal').style.display = 'flex';
-                document.getElementById('adminTargetSection').value = sectionId;
-                
-                const numDiv = document.getElementById('adminNumDiv');
-                if(sectionId === 'NEW_SECTION') {
-                     document.getElementById('adminModalTitle').innerText = "Add New Section";
-                     numDiv.style.display = 'none';
-                } else {
-                    document.getElementById('adminModalTitle').innerText = "Add Item";
-                    numDiv.style.display = (sectionId.includes('grid') || sectionId === 'chapters') ? 'block' : 'none';
-                }
+            window.openAdminModal = function(s) { 
+                document.getElementById('adminAddModal').style.display = 'flex'; 
+                document.getElementById('adminTargetSection').value = s; 
+                document.getElementById('adminTitle').value = "";
+                document.getElementById('adminNum').value = "";
+                document.getElementById('adminFile').value = "";
             }
 
             window.saveAdminItem = async function() {
@@ -673,160 +596,72 @@
                 const title = document.getElementById('adminTitle').value;
                 const num = document.getElementById('adminNum').value;
                 const file = document.getElementById('adminFile').value;
+                if(!title || !file) { alert("Required"); return; }
 
-                if(!title || !file) { alert("Title and File required"); return; }
-
-                const newItem = { sectionId: section, title: title, subtitle: num, file: file, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+                const newItem = { sectionId: section, title, subtitle: num, file, orderIndex: 9999, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
                 const docRef = await db.collection('siteContent').add(newItem);
-                
                 document.getElementById('adminAddModal').style.display = 'none';
                 
-                // Update DOM immediately without reload
-                if(section === 'NEW_SECTION') {
-                    createNewSection(title);
-                } else {
-                    let gridId = (section === 'chapters') ? 'grid' : (section === 'general-topics') ? 'topicGrid' : (section === 'edu-games') ? 'gameGrid' : section;
-                    createCard(gridId, newItem, docRef.id);
-                    if(isAdmin) {
-                        // Re-apply admin controls to the new item
-                        const grid = document.getElementById(gridId);
-                        const cards = grid.querySelectorAll('.chapter-card');
-                        // The second to last card is our new one (before the Add button)
-                        const newCard = cards[cards.length - 2]; 
-                        if(newCard) injectAdminControls(newCard);
-                    }
-                }
+                let gridId = (section === 'chapters') ? 'grid' : (section === 'general-topics') ? 'topicGrid' : (section === 'edu-games') ? 'gameGrid' : section;
+                createCard(gridId, newItem, docRef.id);
             }
 
-            // --- EDIT / DELETE (NO RELOAD) ---
-            window.openEditModal = function(btn) {
-                if(!isAdmin) return;
-                const card = btn.closest('.chapter-card');
+            window.openEditModal = function(btn) { 
+                const card = btn.closest('.chapter-card'); 
                 currentEditElement = card; 
-
-                const titleEl = card.querySelector('.chapter-title');
-                const subEl = card.querySelector('.chapter-num');
-                
-                let fileVal = "";
-                const clickStr = card.getAttribute('onclick');
-                if(clickStr) { const match = clickStr.match(/'([^']+)'/); if(match) fileVal = match[1]; }
-                const dbId = card.getAttribute('data-doc-id') || "";
-
-                document.getElementById('editItemId').value = dbId;
-                document.getElementById('editTitle').value = titleEl ? titleEl.innerText.trim() : "";
-                document.getElementById('editSubtitle').value = subEl ? subEl.innerText.trim() : "";
-                document.getElementById('editFile').value = fileVal;
-                document.getElementById('adminEditModal').style.display = 'flex';
+                document.getElementById('editItemId').value = card.getAttribute('data-doc-id');
+                document.getElementById('editTitle').value = card.querySelector('.chapter-title').innerText;
+                document.getElementById('editSubtitle').value = card.querySelector('.chapter-num') ? card.querySelector('.chapter-num').innerText : "";
+                document.getElementById('editFile').value = card.getAttribute('data-file') || "";
+                document.getElementById('adminEditModal').style.display = 'flex'; 
             }
 
             window.saveEditItem = async function() {
-                const id = document.getElementById('editItemId').value;
+                let id = document.getElementById('editItemId').value;
                 const title = document.getElementById('editTitle').value;
                 const sub = document.getElementById('editSubtitle').value;
                 const file = document.getElementById('editFile').value;
-
-                if(id) {
-                    await db.collection('siteContent').doc(id).update({ title: title, subtitle: sub, file: file });
-                }
                 
-                // Update DOM Element
-                if(currentEditElement) {
-                    const titleEl = currentEditElement.querySelector('.chapter-title');
-                    const subEl = currentEditElement.querySelector('.chapter-num');
-                    if(titleEl) titleEl.innerText = title;
-                    if(subEl) subEl.innerText = sub;
-                    currentEditElement.setAttribute('onclick', `openContent('${file}')`);
-                }
+                await db.collection('siteContent').doc(id).update({ title, subtitle: sub, file });
+                
+                const card = currentEditElement;
+                card.querySelector('.chapter-title').innerText = title;
+                if(card.querySelector('.chapter-num')) card.querySelector('.chapter-num').innerText = sub;
+                else if(sub) card.innerHTML = `<div class="chapter-num">${sub}</div>` + card.innerHTML;
+                card.setAttribute('data-file', file);
+                card.onclick = function() { window.location.href = file; };
+                
                 document.getElementById('adminEditModal').style.display = 'none';
             }
 
             window.deleteItem = async function() {
-                if(!confirm("Delete item?")) return;
-                const id = document.getElementById('editItemId').value;
-                if(id) await db.collection('siteContent').doc(id).delete();
-                if(currentEditElement) currentEditElement.remove();
+                if(!confirm("Delete?")) return;
+                let id = document.getElementById('editItemId').value;
+                await db.collection('siteContent').doc(id).update({ deleted: true });
+                currentEditElement.remove();
                 document.getElementById('adminEditModal').style.display = 'none';
             }
 
-            // --- LOAD DYNAMIC CONTENT ---
-            window.loadDynamicContent = async function() {
-                const snapshot = await db.collection('siteContent').orderBy('createdAt').get();
-                snapshot.forEach(doc => {
-                    const item = doc.data();
-                    if(item.sectionId === 'NEW_SECTION') {
-                        createNewSection(item.title);
-                    } else {
-                        let gridId = (item.sectionId === 'chapters') ? 'grid' : 
-                                     (item.sectionId === 'general-topics') ? 'topicGrid' : 
-                                     (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
-                        createCard(gridId, item, doc.id);
-                    }
-                });
-                if(isAdmin) enableAdminMode();
+            window.toggleVisibility = async function(e, btn) {
+                e.stopPropagation();
+                const card = btn.closest('.chapter-card');
+                const isHidden = !card.classList.contains('unavailable');
+                card.classList.toggle('unavailable');
+                btn.innerHTML = `<i class="fa-regular ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
+                await db.collection('siteContent').doc(card.getAttribute('data-doc-id')).update({ isHidden });
             }
 
-            function createCard(gridId, data, docId) {
-                const grid = document.getElementById(gridId);
-                if(!grid) return;
-                const div = document.createElement('div');
-                div.className = 'chapter-card';
-                div.onclick = function() { openContent(data.file); };
-                if(docId) div.setAttribute('data-doc-id', docId);
-
-                let iconHtml = (gridId === 'gameGrid') ? '<i class="fa-solid fa-gamepad"></i>' : '<i class="fa-solid fa-chevron-right"></i>';
-                let subtitleHtml = data.subtitle ? `<div class="chapter-num">${data.subtitle}</div>` : '';
-                
-                div.innerHTML = `
-                    ${subtitleHtml}
-                    <div class="chapter-title" style="${!data.subtitle ? 'margin:auto' : ''}">${data.title}</div>
-                    <div class="chapter-icon">${iconHtml}</div>
-                `;
-                const addBtn = grid.querySelector('.add-card');
-                if(addBtn) grid.insertBefore(div, addBtn);
-                else grid.appendChild(div);
-            }
-
-            function createNewSection(title) {
-                const safeId = title.replace(/\s+/g, '-').toLowerCase();
-                document.getElementById('nav-links').innerHTML += `<li><a href="#${safeId}"><i class="fa-solid fa-folder"></i> <span>${title}</span></a></li>`;
-                const wrapper = document.getElementById('content-sections-wrapper');
-                const section = document.createElement('section');
-                section.className = 'chapters-section';
-                section.id = safeId;
-                section.innerHTML = `
-                    <div class="section-header">
-                        <i class="fa-solid fa-bars section-drag-handle"></i>
-                        <h2>${title}</h2>
-                    </div>
-                    <div class="chapter-grid" id="${safeId}">
-                        <div class="chapter-card add-card" onclick="openAdminModal('${safeId}')"><i class="fa-solid fa-plus"></i></div>
-                    </div>
-                `;
-                wrapper.appendChild(section);
-            }
-
-            // --- GENERAL UTILS ---
-            window.toggleAuthMode = function() {
-                isSignupMode = !isSignupMode;
-                document.getElementById('authTitle').innerText = isSignupMode ? "Create Account" : "Sign In";
-                document.getElementById('authActionBtn').innerText = isSignupMode ? "Sign Up" : "Login";
-                document.getElementById('authToggle').innerText = isSignupMode ? "Have account? Login" : "New here? Create an account";
-                document.getElementById('signupExtras').style.display = isSignupMode ? "block" : "none";
-            }
+            window.toggleAuthMode = function() { isSignupMode = !isSignupMode; document.getElementById('authTitle').innerText = isSignupMode ? "Create Account" : "Sign In"; document.getElementById('authActionBtn').innerText = isSignupMode ? "Sign Up" : "Login"; document.getElementById('signupExtras').style.display = isSignupMode ? "block" : "none"; }
             window.handleAuthAction = async function() {
-                const email = document.getElementById('email').value;
-                const pass = document.getElementById('password').value;
-                if(!email || !pass) return;
+                const email = document.getElementById('email').value; const pass = document.getElementById('password').value;
                 try {
                     if(isSignupMode) {
                         const cred = await auth.createUserWithEmailAndPassword(email, pass);
                         const username = document.getElementById('username').value || "Student";
                         const gender = document.querySelector('input[name="gender"]:checked').value;
-                        await db.collection('users').doc(cred.user.uid).set({ username: username, gender: gender, progress: [], isAdmin: false });
-                    } else {
-                        await auth.signInWithEmailAndPassword(email, pass);
-                    }
-                } catch (err) { document.getElementById('authError').innerText = err.message; document.getElementById('authError').style.display = 'block'; }
+                        await db.collection('users').doc(cred.user.uid).set({ username, gender, progress: [], isAdmin: false });
+                    } else await auth.signInWithEmailAndPassword(email, pass);
+                } catch (e) { alert(e.message); }
             }
             window.logout = function() { auth.signOut(); window.location.reload(); }
             window.updateUI = function(data) {
@@ -836,14 +671,11 @@
                 document.getElementById('welcomeMsg').innerText = `Welcome, ${data.username}!`;
                 document.getElementById('profileUsername').innerText = data.username;
             }
-            window.openProfileSettings = function() { document.getElementById('profileModal').style.display = 'flex'; }
-            window.openContent = function(url) { window.location.href = url; }
-            
             window.toggleProgress = async function(e, id) {
-                e.stopPropagation(); if(!currentUser) return;
+                e.stopPropagation(); 
                 const box = document.getElementById(id);
-                if(box.checked) await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue.arrayUnion(id) });
-                else await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue.arrayRemove(id) });
+                const action = box.checked ? 'arrayUnion' : 'arrayRemove';
+                await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue[action](id) });
                 updateProgressBar();
             }
             window.loadProgress = function(arr) { arr.forEach(id => { const b = document.getElementById(id); if(b) b.checked=true; }); updateProgressBar(); }
@@ -851,25 +683,24 @@
                 const t = document.querySelectorAll('.progress-check').length || 1;
                 const c = document.querySelectorAll('.progress-check:checked').length;
                 const p = Math.round((c/t)*100);
-                document.getElementById('progressFill').style.width = p+"%";
-                document.getElementById('progressText').innerText = p+"%";
+                document.getElementById('progressFill').style.width = p+"%"; document.getElementById('progressText').innerText = p+"%";
+            }
+            window.openProfileSettings = function() { document.getElementById('profileModal').style.display = 'flex'; }
+            window.enableDragAndDrop = function(elId, handle) { const el = document.getElementById(elId); if(el) Sortable.create(el, { handle: handle, animation: 150 }); }
+            function createNewSection(title) {
+                const safeId = title.replace(/\s+/g, '-').toLowerCase();
+                if(document.getElementById(safeId)) return;
+                document.getElementById('nav-links').innerHTML += `<li><a href="#${safeId}"><i class="fa-solid fa-book"></i> ${title}</a></li>`;
+                const w = document.getElementById('content-sections-wrapper');
+                const s = document.createElement('section'); s.className = 'chapters-section'; s.id = safeId;
+                s.innerHTML = `<div class="section-header"><i class="fa-solid fa-bars section-drag-handle"></i><h2>${title}</h2></div><div class="chapter-grid" id="${safeId}"><div class="chapter-card add-card" onclick="openAdminModal('${safeId}')"><i class="fa-solid fa-plus"></i></div></div>`;
+                w.appendChild(s);
             }
             window.filterGrid = function(gid, val) {
                 const v = val.toUpperCase();
                 document.querySelectorAll('#'+gid+' .chapter-card:not(.add-card)').forEach(c => {
                     c.style.display = c.innerText.toUpperCase().includes(v) ? 'flex' : 'none';
                 });
-            }
-            window.toggleVisibility = function(e, btn) {
-                e.stopPropagation();
-                const card = btn.closest('.chapter-card');
-                card.classList.toggle('unavailable');
-                const icon = card.classList.contains('unavailable') ? 'fa-eye-slash' : 'fa-eye';
-                btn.innerHTML = `<i class="fa-regular ${icon}"></i>`;
-            }
-            window.enableDragAndDrop = function(elId, handle) {
-                const el = document.getElementById(elId);
-                if(el) Sortable.create(el, { handle: handle, animation: 150 });
             }
 
         } catch (e) { console.error(e); }
