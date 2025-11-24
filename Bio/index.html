@@ -59,7 +59,6 @@
         /* ================= MAIN APP STYLES ================= */
         #main-app { display: none; }
 
-        /* --- Navigation --- */
         nav {
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
             position: sticky; top: 0; z-index: 1000;
@@ -88,7 +87,6 @@
             display: none; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* --- Hero --- */
         header {
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
             color: white; padding: 5rem 1rem; text-align: center;
@@ -100,8 +98,6 @@
             background: linear-gradient(to right, #fff, #93c5fd);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        header p { font-size: 1.3rem; color: #cbd5e1; margin-bottom: 2rem; font-family: 'Lora', serif; }
-        
         .cta-btn {
             display: inline-block; background: var(--primary); color: white;
             padding: 15px 35px; border-radius: 50px; font-weight: 600;
@@ -116,7 +112,6 @@
         .btn-danger { background: var(--danger); border-color: var(--danger); }
         .btn-danger:hover { color: var(--danger); background: transparent; }
 
-        /* --- Dashboard --- */
         #userDashboard {
             background: white; padding: 20px; margin: 20px auto; max-width: 1200px;
             border-radius: 12px; border-left: 5px solid var(--success);
@@ -127,7 +122,6 @@
         .progress-bar-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--success); width: 0%; transition: 0.5s; }
 
-        /* --- Features --- */
         .features {
             max-width: 1200px; margin: -50px auto 3rem auto; padding: 0 1rem;
             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -141,7 +135,6 @@
         .feature-card:hover { transform: translateY(-10px); }
         .feature-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
 
-        /* --- Content Sections --- */
         .chapters-section { max-width: 1200px; margin: 4rem auto; padding: 0 1rem; }
         .section-header { text-align: center; margin-bottom: 3rem; position: relative;} 
         .section-header h2 { font-size: 2.5rem; color: var(--text); }
@@ -159,9 +152,8 @@
             cursor: pointer; min-height: 180px;
         }
         .chapter-card:hover { border-color: var(--primary); transform: scale(1.02); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1); }
-        
         .chapter-card.unavailable { opacity: 0.3; filter: grayscale(100%); }
-        .chapter-card.unavailable:not(.admin-view) { display: none !important; } /* Force Hide for students */
+        .chapter-card.unavailable:not(.admin-view) { display: none !important; }
 
         .chapter-num { font-size: 0.8rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; margin-bottom: 5px; }
         .chapter-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; color: var(--primary-dark); }
@@ -177,14 +169,12 @@
             width: 25px; height: 25px; cursor: pointer; accent-color: var(--success); z-index: 10; transform: scale(1.5);
         }
 
-        /* --- Admin Controls --- */
+        /* Admin */
         .add-card {
             border: 2px dashed var(--primary);
             background: rgba(37, 99, 235, 0.05);
             justify-content: center; align-items: center;
-            min-height: 200px;
-            display: none; 
-            order: 99999; /* Locked to end visually */
+            min-height: 200px; display: none; order: 99999;
         }
         .add-card:hover { background: rgba(37, 99, 235, 0.1); transform: scale(1.05); }
         .add-card i { font-size: 3rem; color: var(--primary); }
@@ -200,7 +190,6 @@
         }
         .control-btn:hover { background: var(--primary); color: white; }
         .drag-handle { cursor: grab; }
-        .drag-handle:active { cursor: grabbing; }
         .section-drag-handle { display: none; font-size: 1.5rem; color: #cbd5e1; cursor: grab; position: absolute; left: -40px; top: 10px; }
         
         #addSectionBtn {
@@ -210,7 +199,7 @@
         }
         #addSectionBtn:hover { background: var(--primary); }
 
-        /* --- Modals --- */
+        /* Modals */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
@@ -241,12 +230,11 @@
 </head>
 <body>
 
-    <!-- ================= 1. LOGIN SCREEN ================= -->
+    <!-- LOGIN SCREEN -->
     <div id="auth-screen">
         <div class="auth-container">
             <div class="auth-logo"><i class="fa-solid fa-dna"></i> IG-bio</div>
             <p class="auth-subtitle">The Ultimate IGCSE Biology Resource</p>
-            
             <h2 id="authTitle" style="color:var(--text); margin-bottom:15px;">Sign In</h2>
             <input type="email" id="email" class="auth-input" placeholder="Email Address">
             <div id="signupExtras" style="display:none;">
@@ -269,7 +257,7 @@
         </div>
     </div>
 
-    <!-- ================= 2. MAIN APPLICATION ================= -->
+    <!-- MAIN APP -->
     <div id="main-app">
         <nav>
             <div style="font-weight:800; font-size:1.5rem; color:var(--primary);">IG-bio</div>
@@ -315,7 +303,7 @@
             <div class="feature-card" style="border-top-color: #ef4444;"><i class="fa-solid fa-clipboard-check feature-icon" style="color: #ef4444;"></i><h3>Exam Quizzes</h3></div>
         </div>
 
-        <!-- DYNAMIC WRAPPER -->
+        <!-- DYNAMIC CONTENT WRAPPER -->
         <div id="content-sections-wrapper">
             <!-- CHAPTERS -->
             <section class="chapters-section" id="chapters">
@@ -328,7 +316,6 @@
                     <input type="text" class="search-bar" placeholder="Search chapters..." onkeyup="filterGrid('grid', this.value)">
                 </div>
                 <div class="chapter-grid" id="grid">
-                    <!-- ADMIN ADD BUTTON -->
                     <div class="chapter-card add-card" id="add-btn-chapters" onclick="openAdminModal('chapters')">
                         <i class="fa-solid fa-plus"></i>
                     </div>
@@ -348,7 +335,6 @@
                     <input type="text" class="search-bar" placeholder="Search topics..." onkeyup="filterGrid('topicGrid', this.value)">
                 </div>
                 <div class="chapter-grid" id="topicGrid">
-                    <!-- ADMIN ADD BUTTON -->
                     <div class="chapter-card add-card" id="add-btn-topics" onclick="openAdminModal('general-topics')">
                         <i class="fa-solid fa-plus"></i>
                     </div>
@@ -366,7 +352,6 @@
                     <input type="text" class="search-bar" placeholder="Search games..." onkeyup="filterGrid('gameGrid', this.value)">
                 </div>
                 <div class="chapter-grid" id="gameGrid">
-                    <!-- ADMIN ADD BUTTON -->
                     <div class="chapter-card add-card" id="add-btn-games" onclick="openAdminModal('edu-games')">
                         <i class="fa-solid fa-plus"></i>
                     </div>
@@ -374,13 +359,12 @@
             </section>
         </div>
 
-        <!-- ADMIN: ADD SECTION -->
         <div id="addSectionBtn" onclick="openAdminModal('NEW_SECTION')"><i class="fa-solid fa-plus"></i> Add New Section</div>
 
         <footer><p>© 2026 IG-bio. Designed for CIE IGCSE Syllabus 0610.</p></footer>
     </div>
 
-    <!-- ================= PROFILE MODAL ================= -->
+    <!-- MODALS -->
     <div id="profileModal" class="modal-overlay">
         <div class="modal-box">
             <img src="" id="profileModalAvatar" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary); margin-bottom:15px;">
@@ -390,49 +374,25 @@
         </div>
     </div>
 
-    <!-- ================= ADMIN ADD MODAL ================= -->
     <div id="adminAddModal" class="modal-overlay">
         <div class="modal-box">
             <h2 id="adminModalTitle" style="color:var(--primary); margin-bottom:15px;">Add New Item</h2>
             <input type="hidden" id="adminTargetSection">
-            
-            <div style="text-align:left; margin-bottom:10px;">
-                <label style="font-size:0.8rem; font-weight:bold;">Title</label>
-                <input type="text" id="adminTitle" class="auth-input">
-            </div>
-            <div style="text-align:left; margin-bottom:10px;" id="adminNumDiv">
-                <label style="font-size:0.8rem; font-weight:bold;">Chapter Number (Optional)</label>
-                <input type="text" id="adminNum" class="auth-input">
-            </div>
-            <div style="text-align:left; margin-bottom:15px;">
-                <label style="font-size:0.8rem; font-weight:bold;">HTML File Name</label>
-                <input type="text" id="adminFile" class="auth-input">
-            </div>
-
+            <div style="text-align:left; margin-bottom:10px;"><label style="font-size:0.8rem; font-weight:bold;">Title</label><input type="text" id="adminTitle" class="auth-input"></div>
+            <div style="text-align:left; margin-bottom:10px;" id="adminNumDiv"><label style="font-size:0.8rem; font-weight:bold;">Chapter Number (Optional)</label><input type="text" id="adminNum" class="auth-input"></div>
+            <div style="text-align:left; margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:bold;">HTML File Name</label><input type="text" id="adminFile" class="auth-input"></div>
             <button onclick="saveAdminItem()" class="cta-btn" style="width:100%;">Save & Add</button>
             <button onclick="document.getElementById('adminAddModal').style.display='none'" class="close-btn">Cancel</button>
         </div>
     </div>
 
-    <!-- ================= ADMIN EDIT/DELETE MODAL ================= -->
     <div id="adminEditModal" class="modal-overlay">
         <div class="modal-box">
             <h2 style="color:var(--primary); margin-bottom:15px;">Edit Item</h2>
             <input type="hidden" id="editItemId">
-            
-            <div style="text-align:left; margin-bottom:10px;">
-                <label style="font-size:0.8rem; font-weight:bold;">Title</label>
-                <input type="text" id="editTitle" class="auth-input">
-            </div>
-            <div style="text-align:left; margin-bottom:10px;">
-                <label style="font-size:0.8rem; font-weight:bold;">Subtitle / Number</label>
-                <input type="text" id="editSubtitle" class="auth-input">
-            </div>
-            <div style="text-align:left; margin-bottom:15px;">
-                <label style="font-size:0.8rem; font-weight:bold;">File Name</label>
-                <input type="text" id="editFile" class="auth-input">
-            </div>
-
+            <div style="text-align:left; margin-bottom:10px;"><label style="font-size:0.8rem; font-weight:bold;">Title</label><input type="text" id="editTitle" class="auth-input"></div>
+            <div style="text-align:left; margin-bottom:10px;"><label style="font-size:0.8rem; font-weight:bold;">Subtitle / Number</label><input type="text" id="editSubtitle" class="auth-input"></div>
+            <div style="text-align:left; margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:bold;">File Name</label><input type="text" id="editFile" class="auth-input"></div>
             <div style="display:flex; gap:10px;">
                 <button onclick="saveEditItem()" class="cta-btn" style="flex:1;">Save</button>
                 <button onclick="deleteItem()" class="cta-btn btn-danger" style="flex:1;">Delete</button>
@@ -452,6 +412,7 @@
         };
 
         let currentEditElement = null; 
+        let userProgress = []; // Global progress store
 
         try {
             firebase.initializeApp(firebaseConfig);
@@ -468,9 +429,13 @@
                     if(doc.exists) {
                         const data = doc.data();
                         if(data.isAdmin === true) isAdmin = true;
+                        
+                        // PRE-LOAD PROGRESS
+                        userProgress = data.progress || [];
+                        
                         updateUI(data);
-                        loadProgress(data.progress || []);
-                        await loadAllContent();
+                        await loadAllContent(); // Now content loads with checked boxes
+                        updateProgressBar();
                     }
                     document.getElementById('auth-screen').style.display = 'none';
                     document.getElementById('main-app').style.display = 'block';
@@ -487,7 +452,6 @@
                 const docs = [];
                 snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
 
-                // Sort by orderIndex, default large number for new items
                 docs.sort((a, b) => (a.orderIndex ?? 99999) - (b.orderIndex ?? 99999));
 
                 docs.forEach(item => {
@@ -515,13 +479,20 @@
                 
                 div.onclick = function() { window.location.href = data.file; };
                 div.setAttribute('data-doc-id', docId);
-                div.setAttribute('data-file', data.file); // Critical for reading filename
+                div.setAttribute('data-file', data.file); 
 
                 let iconHtml = (gridId === 'gameGrid') ? '<i class="fa-solid fa-gamepad"></i>' : '<i class="fa-solid fa-chevron-right"></i>';
                 let subtitleHtml = data.subtitle ? `<div class="chapter-num">${data.subtitle}</div>` : '';
 
+                // CHECKBOX LOGIC: ONLY FOR 'grid' (CHAPTERS)
+                let checkboxHtml = '';
+                if(gridId === 'grid') {
+                    const isChecked = userProgress.includes(docId) ? 'checked' : '';
+                    checkboxHtml = `<input type="checkbox" class="progress-check" id="${docId}" ${isChecked} onclick="toggleProgress(event, '${docId}')">`;
+                }
+
                 div.innerHTML = `
-                    <input type="checkbox" class="progress-check" id="${docId}" onclick="toggleProgress(event, '${docId}')">
+                    ${checkboxHtml}
                     ${subtitleHtml}
                     <div class="chapter-title" style="${!data.subtitle ? 'margin:auto' : ''}">${data.title}</div>
                     <div class="chapter-icon">${iconHtml}</div>
@@ -563,7 +534,6 @@
                         });
                     }
                 });
-                
                 enableDragAndDrop('content-sections-wrapper', '.section-drag-handle');
             }
 
@@ -581,6 +551,25 @@
                 cardElement.appendChild(controls);
                 cardElement.classList.add('admin-view');
                 controls.style.display = 'flex';
+            }
+
+            window.toggleProgress = async function(e, id) {
+                e.stopPropagation(); 
+                const box = document.getElementById(id);
+                const action = box.checked ? 'arrayUnion' : 'arrayRemove';
+                await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue[action](id) });
+                // Update local global var
+                if(box.checked) userProgress.push(id);
+                else userProgress = userProgress.filter(item => item !== id);
+                updateProgressBar();
+            }
+
+            window.updateProgressBar = function() {
+                const total = document.querySelectorAll('.progress-check').length || 1;
+                const checked = document.querySelectorAll('.progress-check:checked').length;
+                const pct = Math.round((checked/total)*100);
+                document.getElementById('progressFill').style.width = pct+"%";
+                document.getElementById('progressText').innerText = pct+"%";
             }
 
             window.openAdminModal = function(s) { 
@@ -670,20 +659,6 @@
                 document.getElementById('profileModalAvatar').src = img;
                 document.getElementById('welcomeMsg').innerText = `Welcome, ${data.username}!`;
                 document.getElementById('profileUsername').innerText = data.username;
-            }
-            window.toggleProgress = async function(e, id) {
-                e.stopPropagation(); 
-                const box = document.getElementById(id);
-                const action = box.checked ? 'arrayUnion' : 'arrayRemove';
-                await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue[action](id) });
-                updateProgressBar();
-            }
-            window.loadProgress = function(arr) { arr.forEach(id => { const b = document.getElementById(id); if(b) b.checked=true; }); updateProgressBar(); }
-            window.updateProgressBar = function() {
-                const t = document.querySelectorAll('.progress-check').length || 1;
-                const c = document.querySelectorAll('.progress-check:checked').length;
-                const p = Math.round((c/t)*100);
-                document.getElementById('progressFill').style.width = p+"%"; document.getElementById('progressText').innerText = p+"%";
             }
             window.openProfileSettings = function() { document.getElementById('profileModal').style.display = 'flex'; }
             window.enableDragAndDrop = function(elId, handle) { const el = document.getElementById(elId); if(el) Sortable.create(el, { handle: handle, animation: 150 }); }
