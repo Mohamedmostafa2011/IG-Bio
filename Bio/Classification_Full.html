@@ -2,25 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IG-Bio | Ultimate Classification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IG-Bio | Advanced Syllabus Guide</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Libraries -->
+    <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         :root {
-            --primary: #0f766e;
-            --primary-dark: #115e59;
+            --primary: #0e7490; /* Cyan 700 */
+            --primary-dark: #164e63;
             --accent: #d97706;
-            --bg: #f3f4f6;
-            --text: #1f2937;
-            --paper: #ffffff;
+            --bg: #f8fafc;
+            --text: #334155;
+            --sidebar-w: 280px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,667 +34,531 @@
             overflow: hidden;
         }
 
+        /* --- NAVIGATION BUTTON (Fixed Circular) --- */
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+            position: fixed; top: 20px; left: 20px; z-index: 3000;
+            background: var(--primary); color: white; border: none;
+            width: 50px; height: 50px; border-radius: 50%;
+            font-size: 1.4rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .menu-toggle:active { transform: scale(0.9); }
+
+        /* --- MOBILE OVERLAY --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1999;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
         /* --- SIDEBAR --- */
         aside {
-            width: 260px;
-            background: #111827;
+            width: var(--sidebar-w);
+            background: #0f172a;
             color: white;
             display: flex;
             flex-direction: column;
-            padding: 25px;
+            padding: 30px 20px;
             flex-shrink: 0;
+            z-index: 2000;
+            border-right: 1px solid #1e293b;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .brand {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #2dd4bf;
-            margin-bottom: 40px;
-            letter-spacing: -0.5px;
-            display: flex; align-items: center; gap: 12px;
+            font-size: 1.5rem; font-weight: 800; color: #22d3ee; margin-bottom: 40px;
+            display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;
         }
 
-        .nav-btn {
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #9ca3af;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex; align-items: center; gap: 12px;
+        .nav-item {
+            padding: 16px; margin-bottom: 8px; border-radius: 8px;
+            cursor: pointer; color: #94a3b8; font-weight: 600;
+            display: flex; align-items: center; gap: 15px; transition: 0.2s;
             border: 1px solid transparent;
         }
-
-        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
-        
-        .nav-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.4);
-        }
-
-        .action-area { margin-top: auto; border-top: 1px solid #374151; padding-top: 20px; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(8, 145, 178, 0.4); }
 
         /* --- MAIN CONTENT --- */
-        main {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
+        main { flex: 1; position: relative; overflow: hidden; width: 100%; }
 
         .view-panel {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            overflow-y: auto;
-            padding: 40px;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto; padding: 0; display: none; opacity: 0;
+            transition: opacity 0.4s;
         }
         .view-panel.active { display: block; opacity: 1; }
 
-        /* --- TEXTBOOK STYLES (Detailed Notes) --- */
-        .textbook-wrapper {
-            max-width: 950px;
-            margin: 0 auto;
-            background: var(--paper);
-            padding: 60px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
+        /* --- TEXTBOOK STYLING (Academic) --- */
+        .paper {
+            max-width: 950px; margin: 0 auto; background: white;
+            padding: 80px; min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
         }
 
-        article h1 { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 10px; border-bottom: 4px solid var(--primary); padding-bottom: 20px; }
-        article h2 { font-size: 1.8rem; color: #111827; margin-top: 50px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-        article h3 { font-size: 1.3rem; color: #4b5563; margin-top: 30px; margin-bottom: 15px; font-weight: 700; }
+        h1 { font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px; letter-spacing: -1px; }
+        .meta { color: #64748b; text-transform: uppercase; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; }
         
-        article p {
-            font-family: 'Merriweather', serif;
-            line-height: 1.8;
-            color: #374151;
-            margin-bottom: 18px;
-            font-size: 1.05rem;
-        }
-
-        article ul { margin-left: 25px; margin-bottom: 25px; }
-        article li { margin-bottom: 10px; font-family: 'Merriweather', serif; line-height: 1.7; }
-
-        .highlight { background: #fef3c7; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #f59e0b; }
-        .term { font-weight: 700; color: var(--primary-dark); }
-
-        /* Data Tables */
-        table.data-table { width: 100%; border-collapse: collapse; margin: 25px 0; font-family: 'Inter', sans-serif; font-size: 0.95rem; }
-        table.data-table th { background: #f0fdfa; color: var(--primary-dark); padding: 15px; text-align: left; border: 1px solid #ccfbf1; }
-        table.data-table td { padding: 15px; border: 1px solid #e5e7eb; vertical-align: top; line-height: 1.6; }
-        table.data-table tr:nth-child(even) { background: #f9fafb; }
-
-        /* Callout Boxes */
-        .callout {
-            background: #eff6ff;
-            border-left: 5px solid #3b82f6;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .callout h4 { color: #1e40af; margin-bottom: 10px; }
-        .callout p { margin-bottom: 0; font-size: 0.95rem; }
-
-        /* --- MIND MAP STYLES --- */
-        .mm-container {
-            display: flex;
-            justify-content: center;
-            min-width: fit-content;
-            padding: 50px;
+        h2 { 
+            font-family: 'Inter', sans-serif; font-size: 1.8rem; color: #1e293b; 
+            margin-top: 60px; margin-bottom: 25px; padding-bottom: 15px; 
+            border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 10px;
         }
         
-        .tree { display: flex; flex-direction: column; align-items: center; }
+        h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; color: #0e7490; margin-top: 35px; margin-bottom: 15px; }
+
+        /* Academic Body Text */
+        p {
+            font-family: 'Crimson Pro', serif; font-size: 1.2rem; line-height: 1.8;
+            color: #334155; margin-bottom: 20px;
+        }
+        li { font-family: 'Crimson Pro', serif; font-size: 1.15rem; line-height: 1.7; margin-bottom: 8px; }
+        
+        /* Concept Boxes */
+        .concept-box {
+            background: #ecfeff; border-left: 5px solid var(--primary);
+            padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
+        }
+        .concept-box strong { color: var(--primary-dark); font-family: 'Inter', sans-serif; }
+
+        .exam-tip {
+            background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px;
+            padding: 20px; margin: 30px 0; display: flex; gap: 15px; align-items: flex-start;
+        }
+        .exam-tip i { color: var(--accent); font-size: 1.5rem; margin-top: 3px; }
+
+        /* Tables */
+        .t-wrap { overflow-x: auto; margin: 30px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #f8fafc; color: var(--primary-dark); padding: 16px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 700; border-bottom: 2px solid #cbd5e1; }
+        td { padding: 16px; border-bottom: 1px solid #e2e8f0; vertical-align: top; font-family: 'Crimson Pro', serif; font-size: 1.1rem; }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- MIND MAP --- */
+        .mm-wrapper { padding: 80px; display: inline-flex; min-width: 100%; justify-content: center; background: #f1f5f9; }
+        .tree ul { padding-top: 20px; position: relative; display: flex; justify-content: center; }
+        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px; }
+        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #94a3b8; width: 50%; height: 20px; }
+        .tree li::after { right: auto; left: 50%; border-left: 2px solid #94a3b8; }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; } .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid #94a3b8; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #94a3b8; width: 0; height: 20px; }
+
         .node {
-            background: white; border: 2px solid #cbd5e1; padding: 12px 20px; 
-            border-radius: 8px; font-weight: 600; text-align: center; 
-            position: relative; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            min-width: 140px;
+            background: white; border: 1px solid #cbd5e1; padding: 12px 18px; border-radius: 8px;
+            display: inline-block; min-width: 140px; font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; z-index: 2;
         }
-        .node strong { display: block; color: var(--primary); margin-bottom: 4px; }
-        .node span { font-size: 0.8rem; color: #6b7280; font-weight: 400; }
-        
-        .node.root { background: var(--primary); border: none; color: white; font-size: 1.2rem; padding: 15px 30px; }
-        .node.root strong { color: white; }
-        .node.root span { color: #ccfbf1; }
+        .root-node { background: var(--primary-dark); color: white; transform: scale(1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-        .children { display: flex; margin-top: 30px; position: relative; }
-        .branch { display: flex; flex-direction: column; align-items: center; padding: 0 15px; position: relative; }
-
-        /* Connectors */
-        .branch::before { content: ''; position: absolute; top: -30px; left: 50%; width: 2px; height: 30px; background: #cbd5e1; }
-        .branch::after { content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 2px; background: #cbd5e1; }
-        .branch:first-child::after { left: 50%; width: 50%; }
-        .branch:last-child::after { width: 50%; }
-        .branch:only-child::after { display: none; }
-        .branch:only-child::before { height: 30px; top: -30px; }
-        .node::after { content: ''; position: absolute; bottom: -30px; left: 50%; width: 2px; height: 30px; background: #cbd5e1; }
-        .node.leaf::after { display: none; }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-wrapper { max-width: 800px; margin: 0 auto; }
-        .q-card {
-            background: white; padding: 25px; border-radius: 12px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px;
-            border: 1px solid #e5e7eb;
-        }
-        .q-header { font-weight: 700; color: #374151; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        /* --- QUIZ --- */
+        .quiz-area { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .q-card { background: white; padding: 30px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; }
         .q-opt {
-            padding: 12px 15px; border: 1px solid #e5e7eb; margin-bottom: 8px;
-            border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid #e2e8f0;
+            margin-top: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s;
         }
-        .q-opt:hover { background: #f3f4f6; border-color: #d1d5db; }
-        .q-opt.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
-        .q-opt.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .q-opt:hover { background: #f1f5f9; border-color: #94a3b8; }
+        .q-let { font-weight: 900; color: #94a3b8; background: #f1f5f9; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         
+        .q-opt.correct { background: #dcfce7; border-color: #16a34a; }
+        .q-opt.correct .q-let { background: #16a34a; color: white; }
+        .q-opt.wrong { background: #fee2e2; border-color: #dc2626; }
+        .q-opt.wrong .q-let { background: #dc2626; color: white; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            aside { position: fixed; top: 0; left: -100%; height: 100%; width: 85%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+            aside.active { left: 0; }
+            .paper { padding: 30px 20px; }
+            h1 { font-size: 2.2rem; }
+            .mm-wrapper { justify-content: flex-start; padding: 40px; }
+        }
     </style>
 </head>
 <body>
 
-    <aside>
-        <div class="brand"><i class="fa-solid fa-dna"></i> IG-Bio Ultimate</div>
+    <!-- MENU BUTTON -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <div class="brand"><i class="fa-solid fa-dna"></i> IG-BIO MASTER</div>
         
-        <div class="nav-btn active" onclick="switchTab('notes', this)">
-            <i class="fa-solid fa-book-open"></i> Detailed Notes
+        <div class="nav-item active" onclick="switchTab('notes', this)">
+            <i class="fa-solid fa-book-open"></i> Textbook Notes
         </div>
-        <div class="nav-btn" onclick="switchTab('mindmap', this)">
+        <div class="nav-item" onclick="switchTab('mindmap', this)">
             <i class="fa-solid fa-sitemap"></i> Mind Map
         </div>
-        <div class="nav-btn" onclick="switchTab('quiz', this)">
-            <i class="fa-solid fa-list-check"></i> 50 Question Quiz
+        <div class="nav-item" onclick="switchTab('quiz', this)">
+            <i class="fa-solid fa-list-check"></i> 50 Qs Quiz
         </div>
-
-        <div class="action-area">
-            <p style="font-size:0.8rem; color:#6b7280; margin-bottom:10px;">RESOURCES</p>
-            <div class="nav-btn" onclick="downloadPDF()" style="color:#2dd4bf; border:1px solid #1f2937;">
-                <i class="fa-solid fa-download"></i> Download PDF
-            </div>
+        
+        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #334155;">
+             <div class="nav-item" onclick="genPDF()" style="color:#38bdf8; border-color:#1e293b;">
+                 <i class="fa-solid fa-download"></i> Save as PDF
+             </div>
         </div>
     </aside>
 
     <main>
         
-        <!-- 1. DETAILED NOTES (DEFAULT) -->
+        <!-- 1. DETAILED NOTES -->
         <div id="notes" class="view-panel active">
-            <article class="textbook-wrapper" id="content-to-export">
-                <div style="text-align:center; margin-bottom:40px;">
-                    <span style="background:#ccfbf1; color:#0f766e; padding:5px 15px; border-radius:20px; font-size:0.8rem; font-weight:700;">IGCSE BIOLOGY 0610</span>
-                </div>
+            <div class="paper" id="pdf-source">
+                <span class="meta">IGCSE Biology 0610 • Topic 1</span>
                 <h1>Classification of Living Organisms</h1>
-                
-                <!-- Section 1 -->
+                <p>This comprehensive guide covers the variety of life, how organisms are named and grouped, and the detailed structural features used to distinguish the five kingdoms and their subdivisions.</p>
+
                 <h2>1. Characteristics of Living Organisms</h2>
-                <p>For an organism to be considered "alive", it must perform <strong>all seven</strong> of the following life processes. Viruses are not considered living because they cannot reproduce on their own or respire. The mnemonic to remember this is <span class="highlight">MRS GREN</span>.</p>
+                <p>The concept of "life" is defined by seven distinct processes. In biology, if an entity does not perform all seven of these on its own, it is not considered living (this is why viruses are non-living). You can recall these using the mnemonic <strong>MRS GREN</strong>.</p>
                 
-                <div class="callout">
-                    <h4><i class="fa-solid fa-lightbulb"></i> Exam Tip</h4>
-                    <p>You must memorize the specific definitions below. A common mistake is confusing "Respiration" with "Breathing". Breathing is a mechanical process; Respiration is a chemical reaction.</p>
+                <div class="concept-box">
+                    <strong>Definitions to Memorize:</strong>
+                    <ul>
+                        <li><strong>Movement:</strong> An action by an organism or part of an organism causing a change of position or place. Animals move their whole bodies to find food; plants move leaves towards light.</li>
+                        <li><strong>Respiration:</strong> The chemical reactions in cells that break down nutrient molecules and release energy for metabolism. (Note: This is <em>not</em> the same as breathing).</li>
+                        <li><strong>Sensitivity:</strong> The ability to detect and respond to changes in the internal or external environment (stimuli).</li>
+                        <li><strong>Growth:</strong> A permanent increase in size and dry mass by an increase in cell number or cell size or both.</li>
+                        <li><strong>Reproduction:</strong> The processes that make more of the same kind of organism.</li>
+                        <li><strong>Excretion:</strong> Removal from organisms of the waste products of metabolism (toxic materials like Urea and CO2) and substances in excess of requirements.</li>
+                        <li><strong>Nutrition:</strong> Taking in of materials for energy, growth and development. Plants require light, carbon dioxide, water and ions. Animals need organic compounds.</li>
+                    </ul>
                 </div>
 
-                <table class="data-table">
-                    <tr><th>Characteristic</th><th>Definition & Detail</th></tr>
-                    <tr>
-                        <td><strong>Movement</strong></td>
-                        <td>An action by an organism or part of an organism causing a change of position or place. <br><em>Example: Plants turn leaves towards light (phototropism); Animals use muscles to move.</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Respiration</strong></td>
-                        <td>The chemical reactions in cells that break down nutrient molecules and release energy for metabolism. <br><em>Equation: Glucose + Oxygen → Carbon Dioxide + Water + Energy</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Sensitivity</strong></td>
-                        <td>The ability to detect and respond to changes in the internal or external environment (stimuli). <br><em>Example: Skin detecting heat; Eyes detecting light.</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Growth</strong></td>
-                        <td>A permanent increase in size and dry mass by an increase in cell number or cell size or both. <br><em>Note: "Dry mass" is used because water content fluctuates.</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Reproduction</strong></td>
-                        <td>The processes that make more of the same kind of organism. <br><em>Asexual (1 parent, clones) or Sexual (2 parents, variation).</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Excretion</strong></td>
-                        <td>Removal from organisms of the waste products of metabolism (chemical reactions in cells including respiration), toxic materials, and substances in excess of requirements. <br><em>Examples: Urea (urine), Carbon Dioxide (lungs). This is different from Egestion (removal of undigested food).</em></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Nutrition</strong></td>
-                        <td>Taking in of materials for energy, growth and development. <br><em>Plants require light, CO2, water, and ions. Animals require organic compounds.</em></td>
-                    </tr>
-                </table>
+                <div class="exam-tip">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div>
+                        <strong>Exam Tip:</strong> Be careful with <em>Excretion</em> vs <em>Egestion</em>. Excretion is metabolic waste (from cells). Egestion is the removal of undigested food (feces) through the anus.
+                    </div>
+                </div>
 
-                <!-- Section 2 -->
                 <h2>2. Classification Systems</h2>
-                <p>Classification is the grouping of organisms. The ultimate unit of classification is the <span class="term">Species</span>.</p>
-                <p><strong>Definition of Species:</strong> A group of organisms that can reproduce to produce <span class="highlight">fertile offspring</span>.</p>
+                <p>Classification is the process of sorting organisms into groups based on shared features. The largest group is the Kingdom, and the smallest is the Species.</p>
+                <p><strong>Species:</strong> A group of organisms that can reproduce to produce fertile offspring. For example, a horse and a donkey can breed, but the offspring (mule) is infertile; therefore, they are different species.</p>
                 
                 <h3>The Binomial System</h3>
-                <p>Invented by Carl Linnaeus. Gives every organism two names.</p>
+                <p>An internationally agreed system in which the scientific name of an organism is made up of two parts showing the genus and species. This avoids confusion caused by local common names.</p>
                 <ul>
-                    <li><strong>First name (Genus):</strong> Capitalized.</li>
-                    <li><strong>Second name (species):</strong> Lowercase.</li>
-                    <li><strong>Format:</strong> <em>Italics</em> when typed, <u>underlined</u> when handwritten.</li>
-                    <li><em>Example:</em> <strong><em>Homo sapiens</em></strong>.</li>
+                    <li>The <strong>Genus</strong> is always Capitalized.</li>
+                    <li>The <strong>species</strong> is always lowercase.</li>
+                    <li>Example: <em>Homo sapiens</em> (Humans), <em>Panthera leo</em> (Lions).</li>
                 </ul>
 
-                <h3>DNA vs Morphology</h3>
-                <p>Modern classification is based on <strong>DNA Base Sequences</strong>. Organisms that share a more recent ancestor have more similar DNA base sequences. This is more accurate than traditional morphology (outward shape).</p>
+                <h3>DNA Sequencing</h3>
+                <p>Traditional classification relied on morphology (shape) and anatomy. However, modern science uses DNA base sequences. Organisms that share a more recent ancestor have more similar DNA base sequences. This is the most accurate method of classification.</p>
 
-                <!-- Section 3 -->
                 <h2>3. The Five Kingdoms</h2>
-                <p>All living things are sorted into 5 Kingdoms. You must know the cell structure of each.</p>
+                <p>All living things are categorized into five kingdoms. The primary distinction lies in their cell structure and mode of nutrition.</p>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Kingdom</th><th>Cell Details</th><th>Nutrition</th></tr>
+                        <tr><td><strong>Animals</strong></td><td>Multicellular. Nucleus present. <strong>No cell wall</strong>. No chloroplasts.</td><td>Heterotrophic (ingest food).</td></tr>
+                        <tr><td><strong>Plants</strong></td><td>Multicellular. Nucleus present. Cell wall made of <strong>Cellulose</strong>. Contain chloroplasts.</td><td>Autotrophic (Photosynthesis).</td></tr>
+                        <tr><td><strong>Fungi</strong></td><td>Multicellular (Mushroom) or Unicellular (Yeast). Cell wall made of <strong>Chitin</strong>.</td><td>Saprophytic (secrete enzymes, absorb nutrients).</td></tr>
+                        <tr><td><strong>Prokaryotes</strong></td><td>Unicellular. <strong>NO Nucleus</strong>. Cell wall made of Peptidoglycan.</td><td>Various (Bacteria).</td></tr>
+                        <tr><td><strong>Protoctists</strong></td><td>Mostly unicellular. Nucleus present. (e.g., Amoeba).</td><td>Various.</td></tr>
+                    </table>
+                </div>
 
-                <table class="data-table">
-                    <tr>
-                        <th>Kingdom</th>
-                        <th>Cell Wall</th>
-                        <th>Nucleus?</th>
-                        <th>Details</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Animals</strong></td>
-                        <td>No</td>
-                        <td>Yes</td>
-                        <td>Heterotrophic. Store carbohydrates as Glycogen.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Plants</strong></td>
-                        <td>Yes (Cellulose)</td>
-                        <td>Yes</td>
-                        <td>Autotrophic. Store carbohydrates as Starch.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Fungi</strong></td>
-                        <td>Yes (Chitin)</td>
-                        <td>Yes</td>
-                        <td>Saprotrophic (secrete enzymes on dead matter). E.g., Yeast, Mushroom.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Prokaryotes</strong></td>
-                        <td>Yes (Peptidoglycan)</td>
-                        <td><strong>NO</strong></td>
-                        <td>Bacteria. No mitochondria. Circular DNA loop.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Protoctists</strong></td>
-                        <td>Some</td>
-                        <td>Yes</td>
-                        <td>Unicellular Eukaryotes. E.g., Amoeba.</td>
-                    </tr>
-                </table>
-
-                <!-- Section 4 (UPDATED TO TABLE) -->
-                <h2>4. The Animal Kingdom: Vertebrates</h2>
-                <p>Vertebrates (Phylum Chordata) have a backbone. There are 5 main classes.</p>
+                <h2>4. Vertebrates (Phylum Chordata)</h2>
+                <p>Animals possessing a backbone. They are divided into 5 classes. Classification relies on their skin type, gas exchange method, and reproductive strategy.</p>
                 
-                <table class="data-table">
-                    <tr>
-                        <th style="width: 15%;">Class</th>
-                        <th style="width: 20%;">Body Covering</th>
-                        <th style="width: 15%;">Breathing</th>
-                        <th style="width: 20%;">Reproduction</th>
-                        <th style="width: 30%;">Key Features & Details</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Fish</strong></td>
-                        <td>Wet, scaly skin</td>
-                        <td>Gills</td>
-                        <td>Lay eggs in water (Jelly covered)</td>
-                        <td>
-                            • Poikilothermic (Cold-blooded)<br>
-                            • Fins for movement<br>
-                            • Gills covered by <strong>operculum</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Amphibians</strong></td>
-                        <td>Moist, permeable skin</td>
-                        <td>Skin, Lungs, Gills (larvae)</td>
-                        <td>Lay eggs in water (Jelly covered)</td>
-                        <td>
-                            • Poikilothermic<br>
-                            • Larvae live in water; Adults on land<br>
-                            • <strong>Metamorphosis</strong> (tadpole to frog)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Reptiles</strong></td>
-                        <td>Dry, scaly skin</td>
-                        <td>Lungs</td>
-                        <td>Lay <strong>leathery</strong> eggs on land</td>
-                        <td>
-                            • Poikilothermic<br>
-                            • Waterproof skin prevents drying out<br>
-                            • Soft shell eggs (won't dry out)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Birds</strong></td>
-                        <td>Feathers (Scales on legs)</td>
-                        <td>Lungs</td>
-                        <td>Lay <strong>hard-shelled</strong> eggs</td>
-                        <td>
-                            • <strong>Homoiothermic</strong> (Warm-blooded)<br>
-                            • Have wings and a beak<br>
-                            • Forelimbs modified for flight
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Mammals</strong></td>
-                        <td>Fur or Hair</td>
-                        <td>Lungs (with Diaphragm)</td>
-                        <td>Live Birth (Viviparous)</td>
-                        <td>
-                            • <strong>Homoiothermic</strong> (Warm-blooded)<br>
-                            • Females produce milk (<strong>mammary glands</strong>)<br>
-                            • External ear flap (<strong>pinna</strong>)<br>
-                            • Differentiated teeth
-                        </td>
-                    </tr>
-                </table>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Class</th><th>Skin</th><th>Breathing</th><th>Reproduction</th><th>Details</th></tr>
+                        <tr>
+                            <td><strong>Fish</strong></td>
+                            <td>Wet Scales</td>
+                            <td>Gills</td>
+                            <td>Jelly Eggs (Water)</td>
+                            <td>Cold-blooded. Fins for balance. Operculum covers gills.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Amphibians</strong></td>
+                            <td>Moist Skin</td>
+                            <td>Skin & Lungs</td>
+                            <td>Jelly Eggs (Water)</td>
+                            <td>Cold-blooded. Metamorphosis (larvae have gills).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reptiles</strong></td>
+                            <td>Dry Scales</td>
+                            <td>Lungs</td>
+                            <td>Leathery Eggs</td>
+                            <td>Cold-blooded. Waterproof skin allows life on land.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Birds</strong></td>
+                            <td>Feathers</td>
+                            <td>Lungs</td>
+                            <td>Hard Eggs</td>
+                            <td>Warm-blooded. Forelimbs are wings. Beak (no teeth).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mammals</strong></td>
+                            <td>Fur/Hair</td>
+                            <td>Lungs</td>
+                            <td>Live Birth</td>
+                            <td>Warm-blooded. <strong>Mammary glands</strong>. External ear (Pinna).</td>
+                        </tr>
+                    </table>
+                </div>
 
-                <!-- Section 5 -->
-                <h2>5. The Animal Kingdom: Arthropods</h2>
-                <p>Invertebrates (no backbone) with jointed legs and a hard exoskeleton (chitin).</p>
+                <h2>5. Arthropods (Invertebrates)</h2>
+                <p>The largest group in the animal kingdom. They have <strong>jointed legs</strong>, no backbone, and a hard <strong>exoskeleton</strong>.</p>
                 
-                <table class="data-table">
-                    <tr><th>Group</th><th>Legs</th><th>Body Parts</th><th>Antennae</th></tr>
-                    <tr><td><strong>Insects</strong></td><td>3 Pairs (6)</td><td>3 (Head, Thorax, Abdomen)</td><td>1 Pair</td></tr>
-                    <tr><td><strong>Arachnids</strong></td><td>4 Pairs (8)</td><td>2 (Cephalothorax, Abdomen)</td><td>None</td></tr>
-                    <tr><td><strong>Crustaceans</strong></td><td>>4 Pairs</td><td>Chalky Shell</td><td>2 Pairs</td></tr>
-                    <tr><td><strong>Myriapods</strong></td><td>Many</td><td>Segmented Body</td><td>1 Pair</td></tr>
-                </table>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Group</th><th>Legs</th><th>Body Segments</th><th>Antennae</th></tr>
+                        <tr>
+                            <td><strong>Insects</strong></td>
+                            <td>3 Pairs (6)</td>
+                            <td>3 (Head, Thorax, Abdomen)</td>
+                            <td>1 Pair</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arachnids</strong></td>
+                            <td>4 Pairs (8)</td>
+                            <td>2 (Cephalothorax, Abdomen)</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Crustaceans</strong></td>
+                            <td>>4 Pairs</td>
+                            <td>Chalky Exoskeleton</td>
+                            <td>2 Pairs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Myriapods</strong></td>
+                            <td>Many</td>
+                            <td>Many Segments</td>
+                            <td>1 Pair</td>
+                        </tr>
+                    </table>
+                </div>
 
-                <!-- Section 6 -->
                 <h2>6. The Plant Kingdom</h2>
-                <p><strong>Ferns:</strong> Have roots, stems, leaves. <strong>No flowers</strong>. Reproduce via <strong>spores</strong>.</p>
-                <p><strong>Flowering Plants:</strong> Reproduce via seeds inside fruits. Divided into Monocots and Dicots.</p>
-
-                <table class="data-table">
-                    <tr><th>Feature</th><th>Monocotyledons</th><th>Dicotyledons</th></tr>
-                    <tr><td><strong>Leaves</strong></td><td>Parallel veins</td><td>Network (reticulated) veins</td></tr>
-                    <tr><td><strong>Seeds</strong></td><td>1 Cotyledon</td><td>2 Cotyledons</td></tr>
-                    <tr><td><strong>Roots</strong></td><td>Fibrous root system</td><td>Tap root system</td></tr>
-                    <tr><td><strong>Flowers</strong></td><td>Multiples of 3</td><td>Multiples of 4 or 5</td></tr>
-                </table>
-
-                <!-- Section 7 -->
-                <h2>7. Viruses</h2>
-                <p>Viruses are <strong>not cells</strong>. They are not living.</p>
+                <p><strong>Ferns:</strong> Non-flowering plants. They have roots, stems, and leaves (fronds). They reproduce by <strong>spores</strong> released from the underside of the leaves.</p>
+                <p><strong>Flowering Plants:</strong> Reproduce via seeds produced inside a fruit. Divided into Monocots and Dicots.</p>
+                
                 <ul>
-                    <li><strong>Structure:</strong> A protein coat (capsid) surrounding genetic material (DNA or RNA).</li>
-                    <li><strong>Why not living?</strong> Cannot reproduce on their own (parasitic). No respiration.</li>
+                    <li><strong>Monocots:</strong> Seeds have one cotyledon. Leaves have parallel veins. Roots are fibrous. Flower petals in multiples of 3. (e.g., Grass, Maize).</li>
+                    <li><strong>Dicots:</strong> Seeds have two cotyledons. Leaves have net-like veins. Roots have a main tap root. Flower petals in multiples of 4 or 5. (e.g., Rose, Bean).</li>
                 </ul>
+
+                <h2>7. Dichotomous Keys</h2>
+                <p>A tool used to identify organisms based on visible traits. It consists of a series of paired statements (couplets). You observe the organism, select the statement that matches, and follow the instruction (e.g., "Go to question 2") until the organism is named.</p>
+
+                <h2>8. Viruses</h2>
+                <p>Viruses are not included in the 5 kingdoms because they are <strong>not living</strong>. They do not carry out the 7 life processes (like respiration) on their own. A virus consists of a strand of genetic material (DNA or RNA) surrounded by a <strong>protein coat</strong>. They are parasites that can only reproduce inside a host cell.</p>
+                
                 <div style="height:100px;"></div>
-            </article>
+            </div>
         </div>
 
         <!-- 2. MIND MAP -->
         <div id="mindmap" class="view-panel">
-            <div class="mm-container">
-                <div class="tree" id="full-mindmap">
-                    
-                    <!-- ROOT -->
-                    <div class="node root">
-                        <strong>CLASSIFICATION</strong>
-                        <span>Taxonomy</span>
-                    </div>
-
-                    <div class="children">
-                        
-                        <!-- BRANCH 1: VIRUS -->
-                        <div class="branch">
-                            <div class="node" style="border-color:#ef4444;">
-                                <strong style="color:#ef4444;">VIRUS</strong>
-                                <span>Not Living<br>Protein + DNA</span>
-                            </div>
-                        </div>
-
-                        <!-- BRANCH 2: PROKARYOTE -->
-                        <div class="branch">
-                            <div class="node">
-                                <strong>PROKARYOTE</strong>
-                                <span>No Nucleus<br>Bacteria</span>
-                            </div>
-                        </div>
-
-                        <!-- BRANCH 3: EUKARYOTE -->
-                        <div class="branch">
-                            <div class="node">
-                                <strong>EUKARYOTE</strong>
-                                <span>Has Nucleus</span>
-                            </div>
-                            <div class="children">
-                                
-                                <!-- Fungi -->
-                                <div class="branch">
-                                    <div class="node">
-                                        <strong>Fungi</strong>
-                                        <span>Chitin Wall</span>
-                                    </div>
-                                    <div class="children">
-                                        <div class="branch"><div class="node leaf"><strong>Yeast</strong><span>Unicellular</span></div></div>
-                                        <div class="branch"><div class="node leaf"><strong>Mould</strong><span>Multicellular</span></div></div>
-                                    </div>
-                                </div>
-
-                                <!-- Plants -->
-                                <div class="branch">
-                                    <div class="node">
-                                        <strong>Plants</strong>
-                                        <span>Cellulose Wall</span>
-                                    </div>
-                                    <div class="children">
-                                        <div class="branch"><div class="node leaf"><strong>Ferns</strong><span>Spores</span></div></div>
-                                        <div class="branch">
-                                            <div class="node"><strong>Flowering</strong><span>Seeds</span></div>
-                                            <div class="children">
-                                                <div class="branch"><div class="node leaf"><strong>Monocot</strong><span>1 Cotyledon</span></div></div>
-                                                <div class="branch"><div class="node leaf"><strong>Dicot</strong><span>2 Cotyledons</span></div></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Animals -->
-                                <div class="branch">
-                                    <div class="node">
-                                        <strong>Animals</strong>
-                                        <span>Heterotroph</span>
-                                    </div>
-                                    <div class="children">
-                                        <div class="branch">
-                                            <div class="node"><strong>Vertebrates</strong><span>Backbone</span></div>
-                                            <div class="children">
-                                                <div class="branch"><div class="node leaf">Fish</div></div>
-                                                <div class="branch"><div class="node leaf">Amphibian</div></div>
-                                                <div class="branch"><div class="node leaf">Reptile</div></div>
-                                                <div class="branch"><div class="node leaf">Bird</div></div>
-                                                <div class="branch"><div class="node leaf">Mammal</div></div>
-                                            </div>
-                                        </div>
-                                        <div class="branch">
-                                            <div class="node"><strong>Arthropods</strong><span>Exoskeleton</span></div>
-                                            <div class="children">
-                                                <div class="branch"><div class="node leaf">Insect</div></div>
-                                                <div class="branch"><div class="node leaf">Arachnid</div></div>
-                                                <div class="branch"><div class="node leaf">Crustacean</div></div>
-                                                <div class="branch"><div class="node leaf">Myriapod</div></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
+            <div class="mm-wrapper">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="node root-node">CLASSIFICATION</div>
+                            <ul>
+                                <li><div class="node" style="border-color:red; color:red;">VIRUS<br><small>Non-Living</small></div></li>
+                                <li><div class="node">PROKARYOTE<br><small>Bacteria</small></div></li>
+                                <li>
+                                    <div class="node">EUKARYOTE<br><small>Nucleus</small></div>
+                                    <ul>
+                                        <li><div class="node">Fungi</div></li>
+                                        <li><div class="node">Plants</div></li>
+                                        <li>
+                                            <div class="node">Animals</div>
+                                            <ul>
+                                                <li>
+                                                    <div class="node">Vertebrates</div>
+                                                    <ul>
+                                                        <li><div class="node">Fish</div></li>
+                                                        <li><div class="node">Amphibian</div></li>
+                                                        <li><div class="node">Reptile</div></li>
+                                                        <li><div class="node">Bird</div></li>
+                                                        <li><div class="node">Mammal</div></li>
+                                                    </ul>
+                                                </li>
+                                                <li><div class="node">Arthropods</div></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <!-- 3. QUIZ (50 REAL QUESTIONS) -->
+        <!-- 3. QUIZ -->
         <div id="quiz" class="view-panel">
-            <div class="quiz-wrapper">
-                <div style="margin-bottom:30px;">
-                    <h2 style="color:#111827;">Exam Simulation</h2>
-                    <p>50 questions covering specific details found in the notes.</p>
-                    <div style="margin-top:10px; font-weight:bold; color:var(--primary);">Score: <span id="score-display">0</span> / 50</div>
-                </div>
-                <div id="questions-container">
-                    <!-- Injected via JS -->
-                </div>
-            </div>
+            <div class="quiz-area" id="q-container"></div>
         </div>
 
     </main>
 
-    <!-- Logic -->
     <script>
-        function switchTab(id, btn) {
-            document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            btn.classList.add('active');
+        // --- UI LOGIC ---
+        function toggleMenu() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            if(sb.style.left === '0px') {
+                sb.style.left = '-100%';
+                ov.classList.remove('active');
+            } else {
+                sb.style.left = '0px';
+                ov.classList.add('active');
+            }
         }
 
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
+        function switchTab(id, btn) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             
-            const wasActive = document.getElementById('notes').classList.contains('active');
-            if(!wasActive) switchTab('notes', document.querySelector('.nav-btn')); 
+            // AUTO-CLOSE SIDEBAR ON MOBILE
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').style.left = '-100%';
+                document.getElementById('overlay').classList.remove('active');
+            }
+        }
 
-            const element = document.getElementById('content-to-export');
+        function genPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('pdf-source');
+            const origWidth = element.style.width;
+            element.style.width = '900px'; 
             
             html2canvas(element, { scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
+                element.style.width = origWidth;
+                const img = canvas.toDataURL('image/png');
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210;
-                const pageHeight = 297;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
+                const w = 210; const h = 297;
+                const imgH = canvas.height * w / canvas.width;
+                let hLeft = imgH; let pos = 0;
 
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
+                pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                hLeft -= h;
+                while (hLeft >= 0) {
+                    pos = hLeft - imgH;
                     pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
+                    pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                    hLeft -= h;
                 }
-                pdf.save('IG_Bio_Complete_Notes.pdf');
-                
-                if(!wasActive) switchTab('mindmap', document.querySelectorAll('.nav-btn')[1]); 
+                pdf.save('IG_Bio_Notes.pdf');
             });
         }
 
-        // --- 50 REAL QUESTIONS ---
-        const rawQuestions = [
-            ["Which life process releases energy from nutrient molecules?", "Respiration", "Breathing", "Digestion", "Nutrition"],
-            ["Which characteristic is defined as a permanent increase in size and dry mass?", "Growth", "Reproduction", "Sensitivity", "Excretion"],
-            ["What is the removal of toxic materials and metabolic waste called?", "Excretion", "Egestion", "Secretion", "Respiration"],
-            ["Which is NOT a characteristic of life?", "Thinking", "Movement", "Sensitivity", "Reproduction"],
-            ["What is the correct way to write the scientific name for humans?", "Homo sapiens", "homo sapiens", "Homo Sapiens", "HOMO SAPIENS"],
-            ["In the binomial system, the first name represents the...", "Genus", "Species", "Kingdom", "Family"],
-            ["A group of organisms that can reproduce to produce fertile offspring is a...", "Species", "Genus", "Family", "Phylum"],
-            ["Modern classification relies most heavily on...", "DNA base sequences", "Morphology", "Anatomy", "Behavior"],
-            ["Which kingdom contains multicellular organisms with no cell walls?", "Animals", "Plants", "Fungi", "Prokaryotes"],
-            ["Which kingdom has cell walls made of chitin?", "Fungi", "Plants", "Prokaryotes", "Animals"],
-            ["Prokaryotes (Bacteria) are defined by lacking a...", "Nucleus", "Cell Wall", "Cell Membrane", "Cytoplasm"],
-            ["Which kingdom is known as the 'dustbin' group of eukaryotes?", "Protoctists", "Fungi", "Plants", "Prokaryotes"],
-            ["Fungi feed by...", "Saprophytic nutrition", "Photosynthesis", "Ingestion", "Chemosynthesis"],
-            ["Plants store carbohydrates as...", "Starch", "Glycogen", "Fats", "Protein"],
-            ["Animals store carbohydrates as...", "Glycogen", "Starch", "Sucrose", "Cellulose"],
-            ["Viruses are not considered living because...", "They cannot reproduce without a host", "They are too small", "They cause disease", "They have RNA"],
-            ["The protein coat of a virus is called a...", "Capsid", "Cell wall", "Membrane", "Envelope"],
-            ["Fish breathe using...", "Gills", "Lungs", "Skin", "Spiracles"],
-            ["Which vertebrate class has moist, permeable skin?", "Amphibians", "Reptiles", "Fish", "Mammals"],
-            ["Reptiles lay what kind of eggs?", "Leathery, soft-shelled", "Hard-shelled", "Jelly-covered", "No eggs"],
-            ["Which vertebrate class is homoiothermic (warm-blooded)?", "Birds", "Reptiles", "Fish", "Amphibians"],
-            ["Which feature is unique to Mammals?", "Mammary glands", "Backbone", "Lungs", "Four legs"],
-            ["The external ear flap in mammals is called the...", "Pinna", "Cochlea", "Drum", "Operculum"],
-            ["What type of scales do fish have?", "Wet scales", "Dry scales", "Feathered scales", "Hair scales"],
-            ["Insects have how many pairs of legs?", "3", "4", "5", "Many"],
-            ["Insects have bodies divided into...", "Head, Thorax, Abdomen", "Cephalothorax, Abdomen", "Head, Body", "Segments"],
-            ["Arachnids differ from insects because they have...", "4 pairs of legs", "Wings", "Antennae", "3 body parts"],
-            ["Which arthropod group has a chalky exoskeleton?", "Crustaceans", "Insects", "Arachnids", "Myriapods"],
-            ["Millipedes are...", "Herbivores", "Carnivores", "Parasites", "Aquatic"],
-            ["Ferns reproduce using...", "Spores", "Seeds", "Bulbs", "Runners"],
-            ["Ferns lack...", "Flowers", "Roots", "Stems", "Leaves"],
-            ["Flowering plants are also called...", "Angiosperms", "Gymnosperms", "Ferns", "Mosses"],
-            ["Monocots have how many cotyledons?", "One", "Two", "Three", "Four"],
-            ["The leaf veins of a Monocot are...", "Parallel", "Network", "Absent", "Spiral"],
-            ["Dicots have flower parts in multiples of...", "4 or 5", "3", "2", "1"],
-            ["Which root system do Dicots typically have?", "Tap root", "Fibrous root", "Adventitious", "Aerial"],
-            ["The vascular bundles in a Dicot stem are...", "Arranged in a ring", "Scattered", "Absent", "Central"],
-            ["Sensitivity is the detection of...", "Stimuli", "Nutrients", "Waste", "Energy"],
-            ["Which is a waste product of respiration?", "Carbon Dioxide", "Glucose", "Oxygen", "Starch"],
-            ["What is the main component of plant cell walls?", "Cellulose", "Chitin", "Peptidoglycan", "Protein"],
-            ["Myriapods have bodies that are...", "Segmented", "Smooth", "Round", "Flat"],
-            ["Crustaceans breathe using...", "Gills", "Lungs", "Trachea", "Skin"],
-            ["Which is NOT an arachnid?", "Beetle", "Spider", "Scorpion", "Tick"],
-            ["Amphibian larvae (tadpoles) breathe using...", "Gills", "Lungs", "Skin only", "Mouth"],
-            ["Birds are unique because they have...", "Feathers", "Wings", "Beaks", "Two legs"],
-            ["Which kingdom contains yeast?", "Fungi", "Protoctist", "Plant", "Prokaryote"],
-            ["A virus contains...", "Genetic material", "Cytoplasm", "Nucleus", "Mitochondria"],
-            ["Binomial names are usually written in which language?", "Latin", "English", "Greek", "French"],
-            ["Morphology is the study of...", "Outward appearance", "DNA", "Internal organs", "Cells"],
-            ["Which vertebrate heart has 4 chambers (Complete)?", "Mammal", "Fish", "Amphibian", "Reptile"]
+        // --- 50 QUESTIONS ---
+        const qData = [
+            {q:"Which process releases energy?", o:["Respiration","Breathing","Digestion","Nutrition"], a:0},
+            {q:"Growth is a permanent increase in...", o:["Dry mass","Water","Height only","Fat"], a:0},
+            {q:"Toxic waste removal?", o:["Excretion","Egestion","Digestion","Secretion"], a:0},
+            {q:"Binomial Name format?", o:["Genus species","genus Species","Kingdom Phylum","Species Genus"], a:0},
+            {q:"Group producing fertile offspring?", o:["Species","Family","Order","Phylum"], a:0},
+            {q:"Prokaryotes lack?", o:["Nucleus","Cell Wall","DNA","Ribosomes"], a:0},
+            {q:"Fungi cell walls?", o:["Chitin","Cellulose","Protein","Lipid"], a:0},
+            {q:"Animals store carbs as?", o:["Glycogen","Starch","Fat","Sugar"], a:0},
+            {q:"Plants store carbs as?", o:["Starch","Glycogen","Maltose","Cellulose"], a:0},
+            {q:"Viruses are?", o:["Non-living","Alive","Bacteria","Fungi"], a:0},
+            {q:"Virus coat made of?", o:["Protein","Lipid","Carb","DNA"], a:0},
+            {q:"Fish breathe via?", o:["Gills","Lungs","Skin","Mouth"], a:0},
+            {q:"Amphibian skin is?", o:["Moist","Dry","Scaly","Feathered"], a:0},
+            {q:"Reptile eggs?", o:["Leathery","Hard","Jelly","Soft"], a:0},
+            {q:"Birds are?", o:["Homoiothermic","Poikilothermic","Cold-blooded","Aquatic"], a:0},
+            {q:"Mammal unique feature?", o:["Mammary Glands","Lungs","Backbone","Eyes"], a:0},
+            {q:"Mammal ear?", o:["Pinna","Drum","Cochlea","Bone"], a:0},
+            {q:"Insect legs?", o:["3 Pairs","4 Pairs","5 Pairs","Many"], a:0},
+            {q:"Arachnid legs?", o:["4 Pairs","3 Pairs","2 Pairs","Many"], a:0},
+            {q:"Insect body parts?", o:["3","2","1","Segments"], a:0},
+            {q:"Arachnid body parts?", o:["2","3","1","Segments"], a:0},
+            {q:"Crustaceans have?", o:["Chalky shell","Wings","Fur","Scales"], a:0},
+            {q:"Myriapods are?", o:["Centipedes","Spiders","Crabs","Ants"], a:0},
+            {q:"Ferns lack?", o:["Flowers","Roots","Leaves","Stems"], a:0},
+            {q:"Ferns reproduce by?", o:["Spores","Seeds","Bulbs","Runners"], a:0},
+            {q:"Monocot cotyledons?", o:["1","2","3","4"], a:0},
+            {q:"Monocot veins?", o:["Parallel","Net","Round","Absent"], a:0},
+            {q:"Dicot veins?", o:["Net","Parallel","Straight","Spiral"], a:0},
+            {q:"Dicot flower parts?", o:["4 or 5","3","2","1"], a:0},
+            {q:"Dicot roots?", o:["Tap root","Fibrous","Aerial","None"], a:0},
+            {q:"Sensitivity is?", o:["Detecting stimuli","Eating","Growing","Moving"], a:0},
+            {q:"Respiration waste?", o:["CO2","Glucose","O2","Protein"], a:0},
+            {q:"Plant wall material?", o:["Cellulose","Chitin","Protein","Fat"], a:0},
+            {q:"Bacterial wall?", o:["Peptidoglycan","Chitin","Cellulose","None"], a:0},
+            {q:"Fungi digestion?", o:["Saprophytic","Ingestion","Photosynthesis","Chemosynthesis"], a:0},
+            {q:"Modern classification uses?", o:["DNA","Morphology","Color","Size"], a:0},
+            {q:"Fish scales?", o:["Wet","Dry","Feathered","Hair"], a:0},
+            {q:"Reptile skin?", o:["Dry/Scaly","Moist","Slimy","Fur"], a:0},
+            {q:"Bird eggs?", o:["Hard shell","Leathery","Jelly","None"], a:0},
+            {q:"Diaphragm found in?", o:["Mammals","Fish","Birds","Reptiles"], a:0},
+            {q:"Myriapod body?", o:["Segmented","Smooth","Round","Short"], a:0},
+            {q:"Tadpole breathes via?", o:["Gills","Lungs","Skin only","Mouth"], a:0},
+            {q:"Adult frog breathes via?", o:["Lungs/Skin","Gills","Lungs only","Skin only"], a:0},
+            {q:"Virus needs?", o:["Host cell","Sunlight","Water","Sugar"], a:0},
+            {q:"Protoctist example?", o:["Amoeba","Yeast","Bacteria","Virus"], a:0},
+            {q:"Prokaryote example?", o:["Bacteria","Yeast","Fern","Moss"], a:0},
+            {q:"Binomial language?", o:["Latin","English","Greek","French"], a:0},
+            {q:"Morphology is?", o:["Shape","DNA","Internal","Cell"], a:0},
+            {q:"4-chamber heart?", o:["Mammal","Fish","Reptile","Amphibian"], a:0},
+            {q:"Placenta found in?", o:["Mammals","Birds","Fish","Insects"], a:0}
         ];
 
-        let score = 0;
+        const qDiv = document.getElementById('q-container');
+        const lets = ['A','B','C','D'];
 
-        function loadQuiz() {
-            const container = document.getElementById('questions-container');
-            
-            rawQuestions.forEach((q, index) => {
-                const questionText = q[0];
-                const correctAnswer = q[1];
-                // Create options array (Correct + 3 distractors)
-                let options = [q[1], q[2], q[3], q[4]];
-                // Shuffle options
-                options.sort(() => Math.random() - 0.5);
+        qData.forEach((q, idx) => {
+            let opts = q.o.map((txt, i) => ({txt, i}));
+            opts.sort(() => Math.random() - 0.5);
 
-                const div = document.createElement('div');
-                div.className = 'q-card';
-                div.innerHTML = `
-                    <div class="q-header">
-                        <span>${index + 1}. ${questionText}</span>
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            card.innerHTML = `
+                <h3 style="margin:0 0 15px 0; font-size:1.1rem;">${idx+1}. ${q.q}</h3>
+                ${opts.map((o, k) => `
+                    <div class="q-opt" onclick="check(${idx}, ${o.i}, this)">
+                        <div class="q-let">${lets[k]}</div>
+                        <div>${o.txt}</div>
                     </div>
-                    <div class="options-area">
-                        ${options.map(opt => `<div class="q-opt" onclick="checkAnswer(this, '${opt}', '${correctAnswer}')">${opt}</div>`).join('')}
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
+                `).join('')}
+            `;
+            qDiv.appendChild(card);
+        });
 
-        function checkAnswer(el, selected, correct) {
+        function check(qIdx, oIdx, el) {
             const parent = el.parentElement;
             if(parent.classList.contains('locked')) return;
             parent.classList.add('locked');
 
-            if(selected === correct) {
+            if(oIdx === qData[qIdx].a) {
                 el.classList.add('correct');
-                score++;
-                document.getElementById('score-display').innerText = score;
             } else {
                 el.classList.add('wrong');
-                const allOpts = parent.querySelectorAll('.q-opt');
-                allOpts.forEach(opt => {
-                    if(opt.innerText === correct) opt.classList.add('correct');
-                });
+                const text = qData[qIdx].o[qData[qIdx].a];
+                for(let child of parent.children) {
+                    if(child.innerText.includes(text)) child.classList.add('correct');
+                }
             }
         }
-
-        loadQuiz();
-
     </script>
 </body>
 </html>
