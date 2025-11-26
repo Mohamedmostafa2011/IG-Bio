@@ -456,7 +456,7 @@
 
                 docs.forEach(item => {
                     if (!item.deleted && item.sectionId) {
-                        if(item.sectionId === 'NEW_SECTION') createNewSection(item.title, item.id);
+                        if(item.sectionId === 'NEW_SECTION') createNewSection(item.title);
                         else {
                             let gridId = (item.sectionId === 'chapters') ? 'grid' : 
                                          (item.sectionId === 'general-topics') ? 'topicGrid' : 
@@ -572,88 +572,91 @@
                 document.getElementById('progressText').innerText = pct+"%";
             }
 
-           // 3. UPDATED: Create New Section (Adds Edit/Delete buttons)
-function createNewSection(title, docId) {
-    const safeId = title.replace(/\s+/g, '-').toLowerCase();
-    
-    // Avoid duplicates in DOM
-    if(document.getElementById(safeId)) return;
+// 1. UPDATED: Open Admin Modal (Adapts for Sections vs Items)
+window.openAdminModal = function(sectionId) { 
+    const modal = document.getElementById('adminAddModal');
+    const numDiv = document.getElementById('adminNumDiv');
+    const fileInput = document.getElementById('adminFile');
+    const titleLabel = document.querySelector('#adminAddModal label'); // First label (Title)
+    const fileLabel = fileInput.previousElementSibling; // Label for file
 
-    // Add to Navigation
-    document.getElementById('nav-links').innerHTML += `<li><a href="#${safeId}"><i class="fa-solid fa-book"></i> ${title}</a></li>`;
-    
-    const w = document.getElementById('content-sections-wrapper');
-    const s = document.createElement('section'); 
-    s.className = 'chapters-section'; 
-    s.id = safeId;
-    
-    // Admin Controls HTML
-    // Note: These buttons only show if docId exists (which it will for new/loaded sections)
-    const adminButtons = docId ? `
-        <div style="display:inline-flex; gap:10px; margin-left:15px; vertical-align:middle;">
-            <i class="fa-solid fa-pen-to-square" 
-               style="color:var(--primary); cursor:pointer; font-size:1.2rem;" 
-               onclick="editSection('${docId}', '${safeId}')" title="Edit Name"></i>
-            <i class="fa-solid fa-trash" 
-               style="color:var(--danger); cursor:pointer; font-size:1.2rem;" 
-               onclick="deleteSection('${docId}', '${safeId}')" title="Delete Section"></i>
-        </div>
-    ` : '';
+    // Clear previous values
+    document.getElementById('adminTargetSection').value = sectionId; 
+    document.getElementById('adminTitle').value = "";
+    document.getElementById('adminNum').value = "";
+    document.getElementById('adminFile').value = "";
 
-    s.innerHTML = `
-        <div class="section-header">
-            <i class="fa-solid fa-bars section-drag-handle"></i>
-            <h2 id="title-${safeId}" style="display:inline-block;">${title}</h2>
-            ${adminButtons}
-        </div>
-        <div class="chapter-grid" id="${safeId}">
-            <div class="chapter-card add-card" onclick="openAdminModal('${safeId}')" style="display: flex;">
-                <i class="fa-solid fa-plus"></i>
-            </div>
-        </div>`;
-    w.appendChild(s);
-}
+    modal.style.display = 'flex'; 
 
-// 4. NEW: Logic to Delete a Section
-window.deleteSection = async function(docId, elementId) {
-    if(!confirm("⚠️ Are you sure?\n\nThis will delete the Section Title. \n(Items inside might be hidden until moved).")) return;
-    
-    try {
-        await firebase.firestore().collection('siteContent').doc(docId).delete();
+    // IF WE ARE ADDING A NEW SECTION
+    if(sectionId === 'NEW_SECTION') {
+        document.getElementById('adminModalTitle').innerText = "Create New Section";
+        titleLabel.innerText = "Section Title";
         
-        // Remove from HTML
-        const el = document.getElementById(elementId);
-        if(el) el.remove();
+        // Hide unnecessary fields
+        numDiv.style.display = 'none';
+        fileInput.style.display = 'none';
+        fileLabel.style.display = 'none';
+    } 
+    // IF WE ARE ADDING A CHAPTER/GAME/TOPIC
+    else {
+        document.getElementById('adminModalTitle').innerText = "Add New Item";
+        titleLabel.innerText = "Title";
         
-        alert("Section deleted successfully.");
-    } catch(e) {
-        console.error(e);
-        alert("Error deleting section.");
+        // Show all fields
+        numDiv.style.display = 'block';
+        fileInput.style.display = 'block';
+        fileLabel.style.display = 'block';
     }
 }
 
-// 5. NEW: Logic to Edit a Section Title
-window.editSection = async function(docId, elementId) {
-    // Find current title
-    const titleEl = document.getElementById(`title-${elementId}`);
-    const currentTitle = titleEl ? titleEl.innerText : "";
+// 2. UPDATED: Save Item (Handles Section vs Item logic)
+window.saveAdminItem = async function() {
+    const section = document.getElementById('adminTargetSection').value;
+    const title = document.getElementById('adminTitle').value;
+    const num = document.getElementById('adminNum').value;
+    const file = document.getElementById('adminFile').value;
+    const db = firebase.firestore();
 
-    // Simple prompt for editing (cleanest way without creating a 3rd modal)
-    const newTitle = prompt("Edit Section Title:", currentTitle);
+    if(!title) { alert("Title is required"); return; }
 
-    if (newTitle && newTitle !== currentTitle) {
-        try {
-            await firebase.firestore().collection('siteContent').doc(docId).update({
-                title: newTitle
-            });
-            
-            // Update UI
-            if(titleEl) titleEl.innerText = newTitle;
-        } catch(e) {
-            console.error(e);
-            alert("Error updating title");
+    // LOGIC FOR SAVING A NEW SECTION
+    if (section === 'NEW_SECTION') {
+        const newSection = { 
+            sectionId: 'NEW_SECTION', 
+            title: title, 
+            orderIndex: 9999, // Puts it at the bottom
+            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+        };
+
+        const docRef = await db.collection('siteContent').add(newSection);
+        createNewSection(title, docRef.id); // Pass the ID so we can edit/delete later
+    } 
+    // LOGIC FOR SAVING A NORMAL ITEM
+    else {
+        if(!file) { alert("File Name is required for items"); return; }
+        
+        const newItem = { 
+            sectionId: section, 
+            title, 
+            subtitle: num, 
+            file, 
+            orderIndex: 9999, 
+            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+        };
+        const docRef = await db.collection('siteContent').add(newItem);
+        
+        let gridId = (section === 'chapters') ? 'grid' : 
+                     (section === 'general-topics') ? 'topicGrid' : 
+                     (section === 'edu-games') ? 'gameGrid' : section;
+        
+        // Helper function assumed to exist from your original code
+        if(typeof createCard === "function") {
+            createCard(gridId, newItem, docRef.id);
         }
     }
+
+    document.getElementById('adminAddModal').style.display = 'none';
 }
                 let gridId = (section === 'chapters') ? 'grid' : (section === 'general-topics') ? 'topicGrid' : (section === 'edu-games') ? 'gameGrid' : section;
                 createCard(gridId, newItem, docRef.id);
@@ -746,4 +749,5 @@ window.editSection = async function(docId, elementId) {
     </script>
 </body>
 </html>
+
 
