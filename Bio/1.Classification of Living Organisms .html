@@ -274,7 +274,6 @@
     </style>
 </head>
 <body>
-
     <div id="loader">
         <div class="spinner"></div>
         <p style="margin-top: 10px; font-weight:600; color:var(--primary);">Generating File...</p>
@@ -809,5 +808,456 @@
         loadQuiz();
 
     </script>
+</body>
+<!-- LOGIN SCREEN -->
+<div id="auth-screen">
+    <div class="auth-container">
+        <div class="auth-logo"><i class="fa-solid fa-dna"></i> IG-bio</div>
+        <p class="auth-subtitle">The Ultimate IGCSE Biology Resource</p>
+        <h2 id="authTitle" style="color:var(--text); margin-bottom:15px;">Sign In</h2>
+        <input type="email" id="email" class="auth-input" placeholder="Email Address">
+        <div id="signupExtras" style="display:none;">
+            <input type="text" id="username" class="auth-input" placeholder="Username">
+            <div class="gender-options">
+                <div class="gender-option">
+                    <input type="radio" name="gender" value="male" id="g_male" checked>
+                    <label for="g_male"><i class="fa-solid fa-user-tie"></i> Male</label>
+                </div>
+                <div class="gender-option">
+                    <input type="radio" name="gender" value="female" id="g_female">
+                    <label for="g_female"><i class="fa-solid fa-user-nurse"></i> Female</label>
+                </div>
+            </div>
+        </div>
+        <input type="password" id="password" class="auth-input" placeholder="Password">
+        <button onclick="handleAuthAction()" class="cta-btn auth-btn" id="authActionBtn">Login</button>
+        <p id="authError"></p>
+        <p style="margin-top:20px; font-size:0.9rem; cursor:pointer; color:var(--primary); text-decoration: underline;" onclick="toggleAuthMode()" id="authToggle">New here? Create an account</p>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-app">
+    <nav>
+        <div style="font-weight:800; font-size:1.5rem; color:var(--primary);">IG-bio</div>
+        <ul id="nav-links">
+            <li><a href="#chapters"><i class="fa-solid fa-book"></i> <span>Chapters</span></a></li>
+            <li><a href="#general-topics"><i class="fa-solid fa-layer-group"></i> <span>Topics</span></a></li>
+            <li><a href="#edu-games"><i class="fa-solid fa-gamepad"></i> <span>Games</span></a></li>
+        </ul>
+        <div class="nav-profile-area">
+            <span class="admin-badge" id="adminBadge">ADMIN</span>
+            <img src="" id="topRightAvatar" class="profile-avatar" onclick="openProfileSettings()" alt="Profile">
+        </div>
+    </nav>
+    
+    <header>
+        <div id="userDashboard">
+            <div style="text-align: left;">
+                <h3 id="welcomeMsg" style="margin:0; color: var(--text);">Welcome!</h3>
+            </div>
+            <div class="progress-container">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
+                    <span style="color: var(--text);">Course Progress</span>
+                    <span id="progressText" style="font-weight:800; color:var(--primary); font-size:1rem;">0%</span>
+                </div>
+                <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1>Master Biology.</h1>
+            <p>Access audio lectures, smart notes, and interactive quizzes for CIE 0610.</p>
+            <div class="hero-btn-group">
+                <a href="#chapters" class="cta-btn"><i class="fa-solid fa-book"></i> Start Learning</a>
+                <a href="#edu-games" class="cta-btn btn-games"><i class="fa-solid fa-gamepad"></i> Play Games</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="features">
+        <div class="feature-card"><i class="fa-solid fa-headphones feature-icon"></i><h3>Audio Lectures</h3></div>
+        <div class="feature-card" style="border-top-color: #10b981;"><i class="fa-solid fa-book-open feature-icon" style="color: #10b981;"></i><h3>Smart Notes</h3></div>
+        <div class="feature-card" style="border-top-color: #f59e0b;"><i class="fa-solid fa-sitemap feature-icon" style="color: #f59e0b;"></i><h3>Mind Maps</h3></div>
+        <div class="feature-card" style="border-top-color: #ef4444;"><i class="fa-solid fa-clipboard-check feature-icon" style="color: #ef4444;"></i><h3>Exam Quizzes</h3></div>
+    </div>
+
+    <!-- DYNAMIC CONTENT WRAPPER -->
+    <div id="content-sections-wrapper">
+        <!-- CHAPTERS -->
+        <section class="chapters-section" id="chapters">
+            <div class="section-header">
+                <i class="fa-solid fa-bars section-drag-handle"></i>
+                <h2>Course Content</h2>
+            </div>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-bar" placeholder="Search chapters..." onkeyup="filterGrid('grid', this.value)">
+            </div>
+            <div class="chapter-grid" id="grid">
+                <div class="chapter-card add-card" id="add-btn-chapters" onclick="openAdminModal('chapters')">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+            </div>
+        </section>
+
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;"><hr style="border: 0; height: 1px; background: #e2e8f0; margin: 4rem 0;"></div>
+
+        <!-- GENERAL TOPICS -->
+        <section class="chapters-section" id="general-topics">
+            <div class="section-header">
+                <i class="fa-solid fa-bars section-drag-handle"></i>
+                <h2>General Topics</h2>
+            </div>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-bar" placeholder="Search topics..." onkeyup="filterGrid('topicGrid', this.value)">
+            </div>
+            <div class="chapter-grid" id="topicGrid">
+                <div class="chapter-card add-card" id="add-btn-topics" onclick="openAdminModal('general-topics')">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDU-GAMES -->
+        <section class="chapters-section" id="edu-games">
+            <div class="section-header">
+                <i class="fa-solid fa-bars section-drag-handle"></i>
+                <h2>Edu-Games</h2>
+            </div>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-bar" placeholder="Search games..." onkeyup="filterGrid('gameGrid', this.value)">
+            </div>
+            <div class="chapter-grid" id="gameGrid">
+                <div class="chapter-card add-card" id="add-btn-games" onclick="openAdminModal('edu-games')">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="addSectionBtn" onclick="openAdminModal('NEW_SECTION')"><i class="fa-solid fa-plus"></i> Add New Section</div>
+
+    <footer><p>© 2026 IG-bio. Designed for CIE IGCSE Syllabus 0610.</p></footer>
+</div>
+
+<!-- MODALS -->
+<div id="profileModal" class="modal-overlay">
+    <div class="modal-box">
+        <img src="" id="profileModalAvatar" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary); margin-bottom:15px;">
+        <h2 id="profileUsername" style="margin-bottom:20px;">User</h2>
+        <button onclick="logout()" class="cta-btn btn-danger" style="width:100%;">Log Out</button>
+        <button onclick="document.getElementById('profileModal').style.display='none'" class="close-btn">Close</button>
+    </div>
+</div>
+
+<div id="adminAddModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 id="adminModalTitle" style="color:var(--primary); margin-bottom:15px;">Add New Item</h2>
+        <input type="hidden" id="adminTargetSection">
+        <div style="text-align:left; margin-bottom:10px;"><label style="font-size:0.8rem; font-weight:bold;">Title</label><input type="text" id="adminTitle" class="auth-input"></div>
+        <div style="text-align:left; margin-bottom:10px;" id="adminNumDiv"><label style="font-size:0.8rem; font-weight:bold;">Chapter Number (Optional)</label><input type="text" id="adminNum" class="auth-input"></div>
+        <div style="text-align:left; margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:bold;">HTML File Name</label><input type="text" id="adminFile" class="auth-input"></div>
+        <button onclick="saveAdminItem()" class="cta-btn" style="width:100%;">Save & Add</button>
+        <button onclick="document.getElementById('adminAddModal').style.display='none'" class="close-btn">Cancel</button>
+    </div>
+</div>
+
+<div id="adminEditModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="color:var(--primary); margin-bottom:15px;">Edit Item</h2>
+        <input type="hidden" id="editItemId">
+        <div style="text-align:left; margin-bottom:10px;"><label style="font-size:0.8rem; font-weight:bold;">Title</label><input type="text" id="editTitle" class="auth-input"></div>
+        <div style="text-align:left; margin-bottom:10px;"><label style="font-size:0.8rem; font-weight:bold;">Subtitle / Number</label><input type="text" id="editSubtitle" class="auth-input"></div>
+        <div style="text-align:left; margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:bold;">File Name</label><input type="text" id="editFile" class="auth-input"></div>
+        <div style="display:flex; gap:10px;">
+            <button onclick="saveEditItem()" class="cta-btn" style="flex:1;">Save</button>
+            <button onclick="deleteItem()" class="cta-btn btn-danger" style="flex:1;">Delete</button>
+        </div>
+        <button onclick="document.getElementById('adminEditModal').style.display='none'" class="close-btn">Cancel</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOkZSP6ZMvdoZ8QAt0e8iRxzFa1-lRNnk",
+      authDomain: "ig-bio-f9d8f.firebaseapp.com",
+      projectId: "ig-bio-f9d8f",
+      storageBucket: "ig-bio-f9d8f.firebasestorage.app",
+      messagingSenderId: "630166010132",
+      appId: "1:630166010132:web:72f335cf0f012b85bb6a01"
+    };
+
+    let currentEditElement = null; 
+    let userProgress = []; // Global progress store
+
+    try {
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let currentUser = null;
+        let isAdmin = false;
+        let isSignupMode = false;
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                const doc = await db.collection('users').doc(user.uid).get();
+                if(doc.exists) {
+                    const data = doc.data();
+                    if(data.isAdmin === true) isAdmin = true;
+                    
+                    // PRE-LOAD PROGRESS
+                    userProgress = data.progress || [];
+                    
+                    updateUI(data);
+                    await loadAllContent(); // Now content loads with checked boxes
+                    updateProgressBar();
+                }
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+            } else {
+                currentUser = null;
+                isAdmin = false;
+                document.getElementById('auth-screen').style.display = 'flex';
+                document.getElementById('main-app').style.display = 'none';
+            }
+        });
+
+        async function loadAllContent() {
+            const snapshot = await db.collection('siteContent').get();
+            const docs = [];
+            snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+
+            docs.sort((a, b) => (a.orderIndex ?? 99999) - (b.orderIndex ?? 99999));
+
+            docs.forEach(item => {
+                if (!item.deleted && item.sectionId) {
+                    if(item.sectionId === 'NEW_SECTION') createNewSection(item.title);
+                    else {
+                        let gridId = (item.sectionId === 'chapters') ? 'grid' : 
+                                     (item.sectionId === 'general-topics') ? 'topicGrid' : 
+                                     (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                        createCard(gridId, item, item.id);
+                    }
+                }
+            });
+
+            if(isAdmin) enableAdminMode();
+        }
+
+        function createCard(gridId, data, docId) {
+            const grid = document.getElementById(gridId);
+            if(!grid) return;
+            
+            const div = document.createElement('div');
+            div.className = 'chapter-card';
+            if(data.isHidden) div.classList.add('unavailable');
+            
+            div.onclick = function() { window.location.href = data.file; };
+            div.setAttribute('data-doc-id', docId);
+            div.setAttribute('data-file', data.file); 
+
+            let iconHtml = (gridId === 'gameGrid') ? '<i class="fa-solid fa-gamepad"></i>' : '<i class="fa-solid fa-chevron-right"></i>';
+            let subtitleHtml = data.subtitle ? `<div class="chapter-num">${data.subtitle}</div>` : '';
+
+            // CHECKBOX LOGIC: ONLY FOR 'grid' (CHAPTERS)
+            let checkboxHtml = '';
+            if(gridId === 'grid') {
+                const isChecked = userProgress.includes(docId) ? 'checked' : '';
+                checkboxHtml = `<input type="checkbox" class="progress-check" id="${docId}" ${isChecked} onclick="toggleProgress(event, '${docId}')">`;
+            }
+
+            div.innerHTML = `
+                ${checkboxHtml}
+                ${subtitleHtml}
+                <div class="chapter-title" style="${!data.subtitle ? 'margin:auto' : ''}">${data.title}</div>
+                <div class="chapter-icon">${iconHtml}</div>
+            `;
+
+            const addBtn = grid.querySelector('.add-card');
+            grid.insertBefore(div, addBtn);
+            
+            if(isAdmin) injectAdminControls(div);
+        }
+
+        function enableAdminMode() {
+            document.getElementById('adminBadge').style.display = 'inline-block';
+            document.getElementById('addSectionBtn').style.display = 'block';
+            document.querySelectorAll('.add-card').forEach(el => el.style.display = 'flex');
+            document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => injectAdminControls(card));
+            
+            const grids = ['grid', 'topicGrid', 'gameGrid'];
+            document.querySelectorAll('.chapter-grid').forEach(g => { if(!grids.includes(g.id)) grids.push(g.id); });
+
+            grids.forEach(gridId => {
+                const el = document.getElementById(gridId);
+                if(el) {
+                    Sortable.create(el, { 
+                        handle: '.drag-handle', 
+                        animation: 150,
+                        draggable: ".chapter-card:not(.add-card)",
+                        onEnd: async function(evt) {
+                            const grid = evt.to;
+                            const cards = grid.querySelectorAll('.chapter-card:not(.add-card)');
+                            const batch = db.batch();
+                            cards.forEach((card, index) => {
+                                const id = card.getAttribute('data-doc-id');
+                                if(id) batch.update(db.collection('siteContent').doc(id), { orderIndex: index });
+                            });
+                            await batch.commit();
+                            console.log("Order Saved");
+                        }
+                    });
+                }
+            });
+            enableDragAndDrop('content-sections-wrapper', '.section-drag-handle');
+        }
+
+        function injectAdminControls(cardElement) {
+            if(cardElement.querySelector('.admin-controls')) return;
+            const controls = document.createElement('div');
+            controls.className = 'admin-controls';
+            const isHidden = cardElement.classList.contains('unavailable');
+            controls.innerHTML = `
+                <div class="control-btn drag-handle"><i class="fa-solid fa-bars"></i></div>
+                <div class="control-btn" onclick="openEditModal(this)"><i class="fa-solid fa-gear"></i></div>
+                <div class="control-btn" onclick="toggleVisibility(event, this)"><i class="fa-regular ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i></div>
+            `;
+            controls.onclick = (e) => e.stopPropagation();
+            cardElement.appendChild(controls);
+            cardElement.classList.add('admin-view');
+            controls.style.display = 'flex';
+        }
+
+        window.toggleProgress = async function(e, id) {
+            e.stopPropagation(); 
+            const box = document.getElementById(id);
+            const action = box.checked ? 'arrayUnion' : 'arrayRemove';
+            await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue[action](id) });
+            // Update local global var
+            if(box.checked) userProgress.push(id);
+            else userProgress = userProgress.filter(item => item !== id);
+            updateProgressBar();
+        }
+
+        window.updateProgressBar = function() {
+            const total = document.querySelectorAll('.progress-check').length || 1;
+            const checked = document.querySelectorAll('.progress-check:checked').length;
+            const pct = Math.round((checked/total)*100);
+            document.getElementById('progressFill').style.width = pct+"%";
+            document.getElementById('progressText').innerText = pct+"%";
+        }
+
+        window.openAdminModal = function(s) { 
+            document.getElementById('adminAddModal').style.display = 'flex'; 
+            document.getElementById('adminTargetSection').value = s; 
+            document.getElementById('adminTitle').value = "";
+            document.getElementById('adminNum').value = "";
+            document.getElementById('adminFile').value = "";
+        }
+
+        window.saveAdminItem = async function() {
+            const section = document.getElementById('adminTargetSection').value;
+            const title = document.getElementById('adminTitle').value;
+            const num = document.getElementById('adminNum').value;
+            const file = document.getElementById('adminFile').value;
+            if(!title || !file) { alert("Required"); return; }
+
+            const newItem = { sectionId: section, title, subtitle: num, file, orderIndex: 9999, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+            const docRef = await db.collection('siteContent').add(newItem);
+            document.getElementById('adminAddModal').style.display = 'none';
+            
+            let gridId = (section === 'chapters') ? 'grid' : (section === 'general-topics') ? 'topicGrid' : (section === 'edu-games') ? 'gameGrid' : section;
+            createCard(gridId, newItem, docRef.id);
+        }
+
+        window.openEditModal = function(btn) { 
+            const card = btn.closest('.chapter-card'); 
+            currentEditElement = card; 
+            document.getElementById('editItemId').value = card.getAttribute('data-doc-id');
+            document.getElementById('editTitle').value = card.querySelector('.chapter-title').innerText;
+            document.getElementById('editSubtitle').value = card.querySelector('.chapter-num') ? card.querySelector('.chapter-num').innerText : "";
+            document.getElementById('editFile').value = card.getAttribute('data-file') || "";
+            document.getElementById('adminEditModal').style.display = 'flex'; 
+        }
+
+        window.saveEditItem = async function() {
+            let id = document.getElementById('editItemId').value;
+            const title = document.getElementById('editTitle').value;
+            const sub = document.getElementById('editSubtitle').value;
+            const file = document.getElementById('editFile').value;
+            
+            await db.collection('siteContent').doc(id).update({ title, subtitle: sub, file });
+            
+            const card = currentEditElement;
+            card.querySelector('.chapter-title').innerText = title;
+            if(card.querySelector('.chapter-num')) card.querySelector('.chapter-num').innerText = sub;
+            else if(sub) card.innerHTML = `<div class="chapter-num">${sub}</div>` + card.innerHTML;
+            card.setAttribute('data-file', file);
+            card.onclick = function() { window.location.href = file; };
+            
+            document.getElementById('adminEditModal').style.display = 'none';
+        }
+
+        window.deleteItem = async function() {
+            if(!confirm("Delete?")) return;
+            let id = document.getElementById('editItemId').value;
+            await db.collection('siteContent').doc(id).update({ deleted: true });
+            currentEditElement.remove();
+            document.getElementById('adminEditModal').style.display = 'none';
+        }
+
+        window.toggleVisibility = async function(e, btn) {
+            e.stopPropagation();
+            const card = btn.closest('.chapter-card');
+            const isHidden = !card.classList.contains('unavailable');
+            card.classList.toggle('unavailable');
+            btn.innerHTML = `<i class="fa-regular ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
+            await db.collection('siteContent').doc(card.getAttribute('data-doc-id')).update({ isHidden });
+        }
+
+        window.toggleAuthMode = function() { isSignupMode = !isSignupMode; document.getElementById('authTitle').innerText = isSignupMode ? "Create Account" : "Sign In"; document.getElementById('authActionBtn').innerText = isSignupMode ? "Sign Up" : "Login"; document.getElementById('signupExtras').style.display = isSignupMode ? "block" : "none"; }
+        window.handleAuthAction = async function() {
+            const email = document.getElementById('email').value; const pass = document.getElementById('password').value;
+            try {
+                if(isSignupMode) {
+                    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+                    const username = document.getElementById('username').value || "Student";
+                    const gender = document.querySelector('input[name="gender"]:checked').value;
+                    await db.collection('users').doc(cred.user.uid).set({ username, gender, progress: [], isAdmin: false });
+                } else await auth.signInWithEmailAndPassword(email, pass);
+            } catch (e) { alert(e.message); }
+        }
+        window.logout = function() { auth.signOut(); window.location.reload(); }
+        window.updateUI = function(data) {
+            const img = (data.gender === 'female') ? "https://cdn-icons-png.flaticon.com/512/4128/4128253.png" : "https://cdn-icons-png.flaticon.com/512/4128/4128176.png";
+            document.getElementById('topRightAvatar').src = img;
+            document.getElementById('profileModalAvatar').src = img;
+            document.getElementById('welcomeMsg').innerText = `Welcome, ${data.username}!`;
+            document.getElementById('profileUsername').innerText = data.username;
+        }
+        window.openProfileSettings = function() { document.getElementById('profileModal').style.display = 'flex'; }
+        window.enableDragAndDrop = function(elId, handle) { const el = document.getElementById(elId); if(el) Sortable.create(el, { handle: handle, animation: 150 }); }
+        function createNewSection(title) {
+            const safeId = title.replace(/\s+/g, '-').toLowerCase();
+            if(document.getElementById(safeId)) return;
+            document.getElementById('nav-links').innerHTML += `<li><a href="#${safeId}"><i class="fa-solid fa-book"></i> ${title}</a></li>`;
+            const w = document.getElementById('content-sections-wrapper');
+            const s = document.createElement('section'); s.className = 'chapters-section'; s.id = safeId;
+            s.innerHTML = `<div class="section-header"><i class="fa-solid fa-bars section-drag-handle"></i><h2>${title}</h2></div><div class="chapter-grid" id="${safeId}"><div class="chapter-card add-card" onclick="openAdminModal('${safeId}')"><i class="fa-solid fa-plus"></i></div></div>`;
+            w.appendChild(s);
+        }
+        window.filterGrid = function(gid, val) {
+            const v = val.toUpperCase();
+            document.querySelectorAll('#'+gid+' .chapter-card:not(.add-card)').forEach(c => {
+                c.style.display = c.innerText.toUpperCase().includes(v) ? 'flex' : 'none';
+            });
+        }
+
+    } catch (e) { console.error(e); }
+</script>
 </body>
 </html>
