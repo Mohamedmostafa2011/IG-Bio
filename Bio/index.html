@@ -447,7 +447,12 @@
                 }
             });
 
-            async function loadAllContent() {
+                        async function loadAllContent() {
+                // --- START FIX: Clear existing cards before loading new ones ---
+                // This removes all cards that are NOT the "Add (+)" button
+                document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => card.remove());
+                // --- END FIX ---
+
                 const snapshot = await db.collection('siteContent').get();
                 const docs = [];
                 snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
@@ -682,3 +687,4 @@
     </script>
 </body>
 </html>
+
