@@ -1,12 +1,12 @@
-<html lang="en"><head><style>body {transition: opacity ease-in 0.2s; } 
-body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IG-Bio | Ch 15: Human Reproduction</title>
+    <title>IG-Bio | Ch 6: Plant Nutrition</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;family=Crimson+Pro:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- PDF Libraries -->
@@ -15,11 +15,11 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
     <style>
         :root {
-            /* Theme: Teal / Slate Blue for Human Biology */
-            --primary: #0f766e; /* Teal 700 */
-            --primary-dark: #134e4a;
-            --accent: #f43f5e; /* Rose (for blood/tissue accents) */
-            --bg: #f0f9ff; /* Light Blue tint */
+            /* Theme: Green / Emerald for Plant Biology */
+            --primary: #15803d; /* Emerald 700 */
+            --primary-dark: #052e16; /* Emerald 950 */
+            --accent: #d97706; /* Amber (for sunlight/energy accents) */
+            --bg: #f0fdf4; /* Light Green tint */
             --text: #334155;
             --sidebar-w: 280px;
         }
@@ -33,6 +33,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
             height: 100vh;
             display: flex;
             overflow: hidden;
+            transition: opacity ease-in 0.2s;
         }
 
         /* --- NAVIGATION BUTTON (Fixed Circular) --- */
@@ -60,30 +61,30 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         /* --- SIDEBAR --- */
         aside {
             width: var(--sidebar-w);
-            background: #0f172a; /* Slate 900 */
+            background: #022c22; /* Very dark green */
             color: white;
             display: flex;
             flex-direction: column;
             padding: 30px 20px;
             flex-shrink: 0;
             z-index: 2000;
-            border-right: 1px solid #1e293b;
+            border-right: 1px solid #064e3b;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .brand {
-            font-size: 1.5rem; font-weight: 800; color: #2dd4bf; margin-bottom: 40px;
+            font-size: 1.5rem; font-weight: 800; color: #4ade80; margin-bottom: 40px;
             display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;
         }
 
         .nav-item {
             padding: 16px; margin-bottom: 8px; border-radius: 8px;
-            cursor: pointer; color: #cbd5e1; font-weight: 600;
+            cursor: pointer; color: #a7f3d0; font-weight: 600;
             display: flex; align-items: center; gap: 15px; transition: 0.2s;
             border: 1px solid transparent;
         }
         .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
-        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.4); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(21, 128, 61, 0.4); }
 
         /* --- MAIN CONTENT --- */
         main { flex: 1; position: relative; overflow: hidden; width: 100%; }
@@ -121,22 +122,22 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         
         /* Concept Boxes */
         .concept-box {
-            background: #ccfbf1; border-left: 5px solid var(--primary);
+            background: #dcfce7; border-left: 5px solid var(--primary);
             padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
         }
         .concept-box strong { color: var(--primary-dark); font-family: 'Inter', sans-serif; }
 
         .exam-tip {
-            background: #fff1f2; border: 1px solid #fda4af; border-radius: 8px;
+            background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px;
             padding: 20px; margin: 30px 0; display: flex; gap: 15px; align-items: flex-start;
         }
         .exam-tip i { color: var(--accent); font-size: 1.5rem; margin-top: 3px; }
-        .exam-tip strong { color: #9f1239; }
+        .exam-tip strong { color: #92400e; }
 
         /* Tables */
         .t-wrap { overflow-x: auto; margin: 30px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; min-width: 700px; }
-        th { background: #ecfeff; color: var(--primary-dark); padding: 16px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 700; border-bottom: 2px solid #99f6e4; }
+        th { background: #f0fdf4; color: var(--primary-dark); padding: 16px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 700; border-bottom: 2px solid #86efac; }
         td { padding: 16px; border-bottom: 1px solid #e2e8f0; vertical-align: top; font-family: 'Crimson Pro', serif; font-size: 1.1rem; }
         tr:last-child td { border-bottom: none; }
 
@@ -169,10 +170,10 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         .q-opt:hover { background: #f1f5f9; border-color: #94a3b8; }
         .q-let { font-weight: 900; color: #94a3b8; background: #f1f5f9; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         
-        .q-opt.correct { background: #ccfbf1; border-color: var(--primary); }
+        .q-opt.correct { background: #dcfce7; border-color: var(--primary); }
         .q-opt.correct .q-let { background: var(--primary); color: white; }
-        .q-opt.wrong { background: #ffe4e6; border-color: #f43f5e; }
-        .q-opt.wrong .q-let { background: #f43f5e; color: white; }
+        .q-opt.wrong { background: #fee2e2; border-color: #ef4444; }
+        .q-opt.wrong .q-let { background: #ef4444; color: white; }
 
         /* --- MOBILE --- */
         @media (max-width: 768px) {
@@ -184,7 +185,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
             .mm-wrapper { justify-content: flex-start; padding: 40px; }
         }
     </style>
-<style id="hb-stylesheet"></style></head>
+</head>
 <body>
 
     <!-- MENU BUTTON -->
@@ -195,20 +196,20 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
     <!-- SIDEBAR -->
     <aside id="sidebar">
-        <div class="brand"><i class="fa-solid fa-venus-mars"></i> IG-BIO HUMAN</div>
+        <div class="brand"><i class="fa-solid fa-leaf"></i> IG-BIO PLANTS</div>
         
         <div class="nav-item active" onclick="switchTab('notes', this)">
-            <i class="fa-solid fa-book-medical"></i> Full Notes
+            <i class="fa-solid fa-book-open"></i> Full Notes
         </div>
         <div class="nav-item" onclick="switchTab('mindmap', this)">
-            <i class="fa-solid fa-network-wired"></i> Mind Map
+            <i class="fa-solid fa-sitemap"></i> Mind Map
         </div>
         <div class="nav-item" onclick="switchTab('quiz', this)">
-            <i class="fa-solid fa-clipboard-question"></i> 50 Qs Quiz
+            <i class="fa-solid fa-list-check"></i> 50 Qs Quiz
         </div>
         
-        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #334155;">
-             <div class="nav-item" onclick="genPDF()" style="color:#2dd4bf; border-color:#134e4a;">
+        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #064e3b;">
+             <div class="nav-item" onclick="genPDF()" style="color:#4ade80; border-color:#064e3b;">
                  <i class="fa-solid fa-file-pdf"></i> Save as PDF
              </div>
         </div>
@@ -219,110 +220,112 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         <!-- 1. DETAILED NOTES -->
         <div id="notes" class="view-panel active">
             <div class="paper" id="pdf-source">
-                <span class="meta">IGCSE Biology 0610 • Chapter 15</span>
-                <h1>Reproduction in Humans</h1>
-                <p>Human reproduction is sexual, involving the fusion of male and female gametes (sperm and egg) to create genetically distinct offspring. This chapter covers anatomy, gametes, fertilization, pregnancy, the menstrual cycle, and STIs.</p>
+                <span class="meta">IGCSE Biology 0610 • Chapter 6</span>
+                <h1>Plant Nutrition</h1>
+                <p>Plants are autotrophs; they make their own organic nutrients (carbohydrates) from simple inorganic raw materials (carbon dioxide and water) using light energy. This chapter covers photosynthesis, leaf anatomy, and environmental factors.</p>
 
-                <h2>1. Reproductive Systems</h2>
+                <h2>1. Photosynthesis</h2>
                 
-                <h3>The Male Reproductive System</h3>
-                <div class="t-wrap">
-                    <table>
-                        <tbody><tr><th>Part</th><th>Function</th></tr>
-                        <tr><td><strong>Testes</strong></td><td>Produce sperm and the hormone testosterone.</td></tr>
-                        <tr><td><strong>Scrotum</strong></td><td>Sac that holds the testes outside the body to keep them cooler (optimum temp for sperm production).</td></tr>
-                        <tr><td><strong>Sperm Duct</strong></td><td>Transports sperm from the testes to the urethra.</td></tr>
-                        <tr><td><strong>Prostate Gland</strong></td><td>Secretes fluids that nourish sperm and help them swim (forming semen).</td></tr>
-                        <tr><td><strong>Urethra</strong></td><td>Tube carrying urine or semen out of the body.</td></tr>
-                        <tr><td><strong>Penis</strong></td><td>Organ that passes urine out and deposits semen into the vagina.</td></tr>
-                    </tbody></table>
-                </div>
-
-                <h3>The Female Reproductive System</h3>
-                <div class="t-wrap">
-                    <table>
-                        <tbody><tr><th>Part</th><th>Function</th></tr>
-                        <tr><td><strong>Ovary</strong></td><td>Produces egg cells (ova) and hormones (Oestrogen, Progesterone).</td></tr>
-                        <tr><td><strong>Oviduct (Fallopian Tube)</strong></td><td>Connects ovary to uterus. <strong>Site of fertilization</strong>. lined with cilia to move the egg.</td></tr>
-                        <tr><td><strong>Uterus (Womb)</strong></td><td>Muscular bag where the fetus develops.</td></tr>
-                        <tr><td><strong>Cervix</strong></td><td>Ring of muscle at the neck of the uterus; keeps fetus in place.</td></tr>
-                        <tr><td><strong>Vagina</strong></td><td>Receives penis during intercourse; birth canal.</td></tr>
-                    </tbody></table>
-                </div>
-
-                <h2>2. Gametes (Sex Cells)</h2>
-                <div class="t-wrap">
-                    <table>
-                        <tbody><tr><th>Feature</th><th>Sperm (Male)</th><th>Egg / Ovum (Female)</th></tr>
-                        <tr><td><strong>Size</strong></td><td>Very small.</td><td>Large.</td></tr>
-                        <tr><td><strong>Motility</strong></td><td>Swims using a tail (flagellum).</td><td>Not motile (moved by cilia).</td></tr>
-                        <tr><td><strong>Numbers</strong></td><td>Millions produced continuously.</td><td>One released per month.</td></tr>
-                        <tr><td><strong>Energy Store</strong></td><td>Very little (relies on semen fluids).</td><td>Large yolk containing protein/fat.</td></tr>
-                        <tr><td><strong>Nucleus</strong></td><td>Haploid (23 chromosomes).</td><td>Haploid (23 chromosomes).</td></tr>
-                    </tbody></table>
-                </div>
-
-                <h2>3. Fertilization &amp; Development</h2>
                 <div class="concept-box">
-                    <strong>Key Definition: Fertilization</strong><br>
-                    The fusion of the nuclei of the male gamete (sperm) and the female gamete (egg) to form a <strong>zygote</strong>. This produces a diploid cell (46 chromosomes).
+                    <strong>Definition:</strong><br>
+                    Photosynthesis is the process by which plants manufacture <strong>carbohydrates</strong> from raw materials using energy from light.
                 </div>
-                
-                <ol>
-                    <li><strong>Ovulation:</strong> An egg is released from the ovary into the oviduct.</li>
-                    <li><strong>Copulation:</strong> Sperm is deposited in the vagina.</li>
-                    <li><strong>Fertilization:</strong> Happens in the <strong>oviduct</strong>. The zygote forms.</li>
-                    <li><strong>Implantation:</strong> The zygote divides by mitosis to form a ball of cells (embryo) which sinks into the uterus lining.</li>
-                </ol>
 
-                <h3>The Placenta and Amniotic Fluid</h3>
-                <p>The fetus connects to the placenta via the <strong>Umbilical Cord</strong>.</p>
+                <h3>The Equations</h3>
+                <p>You must memorize both the word and chemical equations.</p>
                 <ul>
-                    <li><strong>Placenta:</strong> Allows exchange of materials. Oxygen and nutrients (glucose/amino acids) move from Mother → Fetus. CO2 and Urea move from Fetus → Mother. 
-                    <br><em>Note: It also acts as a barrier to most pathogens, but viruses (Rubella/HIV) and drugs (Nicotine/Alcohol) can cross it.</em></li>
-                    <li><strong>Amniotic Sac/Fluid:</strong> A membrane enclosing the fetus containing fluid. It protects the fetus from mechanical shock and drying out.</li>
+                    <li><strong>Word Equation:</strong><br>Carbon Dioxide + Water &rarr; (light + chlorophyll) &rarr; Glucose + Oxygen</li>
+                    <li><strong>Balanced Chemical Equation:</strong><br>6CO<sub>2</sub> + 6H<sub>2</sub>O &rarr; C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + 6O<sub>2</sub></li>
                 </ul>
+                <p><strong>Chlorophyll</strong> is the green pigment in chloroplasts that absorbs light energy. This energy is used to convert CO<sub>2</sub> and H<sub>2</sub>O into glucose. Oxygen is released as a by-product.</p>
+
+                <h3>Use of Products</h3>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Product</th><th>Fate / Use</th></tr>
+                        <tr><td><strong>Glucose</strong></td><td>Used for respiration (energy), converted to sucrose for transport, or converted to cellulose for cell walls.</td></tr>
+                        <tr><td><strong>Starch</strong></td><td>Glucose is converted to starch for <strong>storage</strong>. Starch is insoluble, so it does not affect the water potential (osmosis) of the cell.</td></tr>
+                        <tr><td><strong>Amino Acids</strong></td><td>Glucose + Nitrates &rarr; Amino Acids &rarr; Proteins (for growth).</td></tr>
+                        <tr><td><strong>Oxygen</strong></td><td>Used in respiration or excreted via stomata.</td></tr>
+                    </table>
+                </div>
+
+                <h2>2. Leaf Structure & Adaptations</h2>
+                <p>Leaves are adapted to maximize photosynthesis (absorbing light and gas exchange).</p>
+                
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Structure</th><th>Adaptation/Function</th></tr>
+                        <tr><td><strong>Waxy Cuticle</strong></td><td>Waterproof layer on top; prevents water loss (evaporation) but allows light through.</td></tr>
+                        <tr><td><strong>Upper Epidermis</strong></td><td>Transparent cells (no chloroplasts) to let light pass to the palisade layer.</td></tr>
+                        <tr><td><strong>Palisade Mesophyll</strong></td><td>Packed with <strong>many chloroplasts</strong>. Located near the top to absorb maximum light. Main site of photosynthesis.</td></tr>
+                        <tr><td><strong>Spongy Mesophyll</strong></td><td>Loose cells with air spaces to allow <strong>gas exchange</strong> (CO<sub>2</sub> in, O<sub>2</sub> out). Contains fewer chloroplasts.</td></tr>
+                        <tr><td><strong>Vascular Bundle</strong></td><td>Contains Xylem (transports water/minerals) and Phloem (transports sugars/amino acids).</td></tr>
+                        <tr><td><strong>Stomata</strong></td><td>Pores on the underside of the leaf for gas diffusion.</td></tr>
+                        <tr><td><strong>Guard Cells</strong></td><td>Control the opening and closing of stomata.</td></tr>
+                    </table>
+                </div>
+
+                <h2>3. Mineral Nutrition</h2>
+                <p>Plants need ions for healthy growth. The two most important for IGCSE are:</p>
+
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Mineral Ion</th><th>Function</th><th>Deficiency Symptom</th></tr>
+                        <tr><td><strong>Nitrate Ions</strong></td><td>Required to make <strong>amino acids</strong> (for proteins).</td><td>Stunted growth; weak stem.</td></tr>
+                        <tr><td><strong>Magnesium Ions</strong></td><td>Required to make <strong>chlorophyll</strong>.</td><td>Yellowing between veins (Chlorosis).</td></tr>
+                    </table>
+                </div>
+
+                <h2>4. Limiting Factors</h2>
+                <div class="concept-box">
+                    <strong>Definition: Limiting Factor</strong><br>
+                    Something present in the environment in such short supply that it restricts life processes.
+                </div>
+                <p>The rate of photosynthesis can be limited by:</p>
+                <ol>
+                    <li><strong>Light Intensity:</strong> As light increases, rate increases until it plateaus (another factor becomes limiting).</li>
+                    <li><strong>Carbon Dioxide Concentration:</strong> As CO<sub>2</sub> increases, rate increases until it plateaus.</li>
+                    <li><strong>Temperature:</strong> Photosynthesis uses enzymes. Rate increases with temperature up to an optimum, then drops rapidly as enzymes <strong>denature</strong>.</li>
+                </ol>
 
                 <div class="exam-tip">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <div>
-                        <strong>Exam Warning: Blood Mixing</strong><br>
-                        The mother's blood and fetal blood <strong>DO NOT MIX</strong>. They are separated by a thin wall in the placenta. Mixing would cause clotting due to different blood types and high maternal blood pressure would damage the fetus.
+                        <strong>Exam Warning: Glasshouses</strong><br>
+                        In glasshouses (greenhouses), farmers control these factors to maximize yield. They use artificial lights, burn gas to add CO<sub>2</sub>, and use heaters/ventilation to maintain optimum temperature.
                     </div>
                 </div>
 
-                <h2>4. The Menstrual Cycle</h2>
-                <p>The cycle lasts about 28 days. It prepares the uterus for pregnancy.</p>
+                <h2>5. Practical Experiments</h2>
+                
+                <h3>A. Testing a Leaf for Starch</h3>
+                <p>This proves photosynthesis has occurred.</p>
+                <ol>
+                    <li><strong>Boil leaf in water:</strong> Kills the leaf, stops enzymes, breaks cell membranes.</li>
+                    <li><strong>Boil in ethanol:</strong> Removes chlorophyll (decolorizes leaf). <em>Safety: Turn off Bunsen burner (ethanol is flammable).</em></li>
+                    <li><strong>Dip in hot water:</strong> Softens the brittle leaf.</li>
+                    <li><strong>Add Iodine Solution:</strong> 
+                        <ul>
+                            <li>Positive result (Starch present): Blue-Black.</li>
+                            <li>Negative result: Orange-Brown.</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>B. Requirement Tests</h3>
                 <ul>
-                    <li><strong>Days 1-5 (Menstruation):</strong> Uterus lining breaks down (period).</li>
-                    <li><strong>Days 6-13:</strong> Lining rebuilds.</li>
-                    <li><strong>Day 14 (Ovulation):</strong> Egg is released.</li>
-                    <li><strong>Days 15-28:</strong> Lining maintained. If no fertilization, cycle repeats.</li>
+                    <li><strong>Light:</strong> Cover part of a leaf with foil. Destarch plant first. Expose to light. Test for starch. Only exposed part turns blue-black.</li>
+                    <li><strong>Chlorophyll:</strong> Use a <strong>variegated leaf</strong> (white and green patches). Only green parts turn blue-black.</li>
+                    <li><strong>CO<sub>2</sub>:</strong> Enclose leaf in a flask with <strong>Soda Lime</strong> (absorbs CO<sub>2</sub>). Leaf will produce no starch.</li>
                 </ul>
 
-                <h3>Hormonal Control</h3>
-                <div class="t-wrap">
-                    <table>
-                        <tbody><tr><th>Hormone</th><th>Source</th><th>Function</th></tr>
-                        <tr><td><strong>FSH</strong></td><td>Pituitary</td><td>Stimulates egg maturation in the ovary.</td></tr>
-                        <tr><td><strong>LH</strong></td><td>Pituitary</td><td>Stimulates <strong>Ovulation</strong> (release of egg).</td></tr>
-                        <tr><td><strong>Oestrogen</strong></td><td>Ovary</td><td>Thickens uterus lining; inhibits FSH.</td></tr>
-                        <tr><td><strong>Progesterone</strong></td><td>Ovary</td><td>Maintains uterus lining.</td></tr>
-                    </tbody></table>
-                </div>
-
-                <h2>5. Puberty &amp; Secondary Characteristics</h2>
-                <p>Controlled by <strong>Testosterone</strong> (Male) and <strong>Oestrogen</strong> (Female).</p>
+                <h3>C. Rate of Photosynthesis (Pondweed)</h3>
+                <p>Count bubbles of oxygen produced by aquatic plants (e.g., Elodea) over time.</p>
                 <ul>
-                    <li><strong>Males:</strong> Voice breaks (deepens), muscle growth, facial/body hair, sperm production starts.</li>
-                    <li><strong>Females:</strong> Breasts develop, hips widen, menstruation begins, body hair.</li>
-                </ul>
-
-                <h2>6. STIs (Sexually Transmitted Infections)</h2>
-                <p><strong>HIV (Human Immunodeficiency Virus):</strong> Attacks lymphocytes (white blood cells), leading to AIDS (Acquired Immune Deficiency Syndrome). The body cannot fight other infections.</p>
-                <ul>
-                    <li><strong>Transmission:</strong> Unprotected sex, sharing needles, blood transfusions, mother to child (placenta/breastmilk).</li>
-                    <li><strong>Prevention:</strong> Use condoms (barrier method), sterile needles, screening blood.</li>
+                    <li><strong>Independent Variable:</strong> Distance of lamp (Light Intensity).</li>
+                    <li><strong>Dependent Variable:</strong> Number of bubbles per minute (Rate).</li>
+                    <li><strong>Control Variables:</strong> Temperature (use water bath), CO<sub>2</sub> (add sodium hydrogencarbonate).</li>
                 </ul>
 
                 <div style="height:100px;"></div>
@@ -335,36 +338,38 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
                 <div class="tree">
                     <ul>
                         <li>
-                            <div class="node root-node">HUMAN REPRO</div>
+                            <div class="node root-node">PLANT NUTRITION</div>
                             <ul>
                                 <li>
-                                    <div class="node">Anatomy</div>
+                                    <div class="node">Photosynthesis</div>
                                     <ul>
-                                        <li><div class="node">Male (Testes/Sperm Duct)</div></li>
-                                        <li><div class="node">Female (Ovary/Uterus)</div></li>
+                                        <li><div class="node">6CO2 + 6H2O</div></li>
+                                        <li><div class="node">Chlorophyll / Light</div></li>
+                                        <li><div class="node">Glucose + O2</div></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <div class="node">Process</div>
+                                    <div class="node">Leaf Structure</div>
                                     <ul>
-                                        <li><div class="node">Gametes (Sperm/Egg)</div></li>
-                                        <li><div class="node">Fertilization (Oviduct)</div></li>
-                                        <li><div class="node">Implantation</div></li>
+                                        <li><div class="node">Palisade (Light)</div></li>
+                                        <li><div class="node">Spongy (Gas)</div></li>
+                                        <li><div class="node">Stomata/Guard</div></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <div class="node">Pregnancy</div>
+                                    <div class="node">Factors</div>
                                     <ul>
-                                        <li><div class="node">Placenta (Exchange)</div></li>
-                                        <li><div class="node">Amnion (Protection)</div></li>
-                                        <li><div class="node">Umbilical Cord</div></li>
+                                        <li><div class="node">Light Intensity</div></li>
+                                        <li><div class="node">CO2 Conc.</div></li>
+                                        <li><div class="node">Temp (Enzymes)</div></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <div class="node">Hormones</div>
+                                    <div class="node">Experiments</div>
                                     <ul>
-                                        <li><div class="node">Puberty (Test./Oest.)</div></li>
-                                        <li><div class="node">Cycle (FSH/LH)</div></li>
+                                        <li><div class="node">Starch (Iodine)</div></li>
+                                        <li><div class="node">Limiting Factors</div></li>
+                                        <li><div class="node">Minerals (Mg/N)</div></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -376,1157 +381,9 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
         <!-- 3. QUIZ -->
         <div id="quiz" class="view-panel">
-            <div class="quiz-area" id="q-container"><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">1. Where are sperm produced?</h3>
-                
-                    <div class="q-opt" onclick="check(0, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Testes</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(0, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Urethra</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(0, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Penis</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(0, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Prostate</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">2. Where are eggs (ova) produced?</h3>
-                
-                    <div class="q-opt" onclick="check(1, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Uterus</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(1, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Cervix</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(1, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(1, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Ovaries</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">3. Where does fertilization typically occur?</h3>
-                
-                    <div class="q-opt" onclick="check(2, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Ovary</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(2, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Vagina</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(2, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(2, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Uterus</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">4. The fusion of male and female gamete nuclei forms a?</h3>
-                
-                    <div class="q-opt" onclick="check(3, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Gamete</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(3, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Fetus</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(3, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Zygote</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(3, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Embryo</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">5. Which hormone causes male secondary sexual characteristics?</h3>
-                
-                    <div class="q-opt" onclick="check(4, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Oestrogen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(4, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Testosterone</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(4, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>FSH</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(4, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Insulin</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">6. Which hormone causes female secondary sexual characteristics?</h3>
-                
-                    <div class="q-opt" onclick="check(5, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Auxin</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(5, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Oestrogen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(5, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Testosterone</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(5, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Adrenaline</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">7. On which day of the menstrual cycle does ovulation usually occur?</h3>
-                
-                    <div class="q-opt" onclick="check(6, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Day 1</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(6, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Day 28</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(6, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Day 5</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(6, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Day 14</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">8. What is the function of the amniotic fluid?</h3>
-                
-                    <div class="q-opt" onclick="check(7, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Protect from shock</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(7, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Remove waste</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(7, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Feed the baby</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(7, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Provide oxygen</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">9. What connects the fetus to the placenta?</h3>
-                
-                    <div class="q-opt" onclick="check(8, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Urethra</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(8, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Cervix</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(8, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Umbilical cord</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(8, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">10. Which substance passes from mother to fetus?</h3>
-                
-                    <div class="q-opt" onclick="check(9, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Cells</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(9, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Oxygen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(9, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Carbon dioxide</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(9, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Urea</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">11. Which substance passes from fetus to mother?</h3>
-                
-                    <div class="q-opt" onclick="check(10, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Glucose</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(10, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Urea</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(10, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Oxygen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(10, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Amino acids</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">12. The narrow opening (neck) of the uterus is the?</h3>
-                
-                    <div class="q-opt" onclick="check(11, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(11, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Cervix</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(11, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Vulva</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(11, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Vagina</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">13. Sperm are mixed with fluid from the?</h3>
-                
-                    <div class="q-opt" onclick="check(12, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Scrotum</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(12, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Bladder</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(12, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Testes</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(12, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Prostate gland</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">14. The mixture of sperm and fluid is called?</h3>
-                
-                    <div class="q-opt" onclick="check(13, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Lymph</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(13, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Plasma</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(13, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Semen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(13, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Urine</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">15. How many chromosomes are in a human gamete?</h3>
-                
-                    <div class="q-opt" onclick="check(14, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>46</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(14, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>92</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(14, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>2</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(14, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>23</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">16. How many chromosomes are in a human zygote?</h3>
-                
-                    <div class="q-opt" onclick="check(15, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>92</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(15, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>2</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(15, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>46</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(15, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>23</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">17. The release of an egg from the ovary is called?</h3>
-                
-                    <div class="q-opt" onclick="check(16, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Implantation</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(16, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Ovulation</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(16, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Fertilization</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(16, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Menstruation</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">18. Where does the embryo implant?</h3>
-                
-                    <div class="q-opt" onclick="check(17, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(17, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Uterus lining</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(17, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Ovary</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(17, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Cervix</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">19. Which hormone maintains the uterus lining during pregnancy?</h3>
-                
-                    <div class="q-opt" onclick="check(18, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Progesterone</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(18, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>FSH</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(18, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Adrenaline</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(18, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>LH</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">20. Which hormone stimulates the egg to mature?</h3>
-                
-                    <div class="q-opt" onclick="check(19, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>LH</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(19, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Oestrogen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(19, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>FSH</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(19, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Testosterone</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">21. Which hormone triggers ovulation?</h3>
-                
-                    <div class="q-opt" onclick="check(20, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>LH</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(20, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Progesterone</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(20, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>FSH</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(20, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Oestrogen</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">22. Which represents the correct size comparison?</h3>
-                
-                    <div class="q-opt" onclick="check(21, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Egg is much larger than sperm</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(21, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Both visible to naked eye</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(21, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Sperm is larger than egg</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(21, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Both are same size</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">23. What is the tail of the sperm for?</h3>
-                
-                    <div class="q-opt" onclick="check(22, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Storing food</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(22, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Swimming (Motility)</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(22, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Digesting egg</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(22, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Protection</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">24. The mitochondria in sperm provide?</h3>
-                
-                    <div class="q-opt" onclick="check(23, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Enzymes</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(23, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Genetic material</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(23, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Food for egg</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(23, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Energy for swimming</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">25. What helps move the egg along the oviduct?</h3>
-                
-                    <div class="q-opt" onclick="check(24, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Flagella</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(24, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Gravity</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(24, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Cilia</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(24, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Peristalsis</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">26. What prevents the mixing of maternal and fetal blood?</h3>
-                
-                    <div class="q-opt" onclick="check(25, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Amnion</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(25, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Umbilical cord</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(25, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Uterus</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(25, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Placenta barrier</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">27. Why must blood NOT mix?</h3>
-                
-                    <div class="q-opt" onclick="check(26, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>To stop feeding</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(26, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Blood type incompatibility / Pressure</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(26, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>To stop oxygen</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(26, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>To mix DNA</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">28. HIV attacks which system?</h3>
-                
-                    <div class="q-opt" onclick="check(27, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Nervous system</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(27, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Immune system</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(27, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Reproductive system</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(27, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Digestive system</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">29. Which is a method of HIV transmission?</h3>
-                
-                    <div class="q-opt" onclick="check(28, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Toilet seats</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(28, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Shaking hands</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(28, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Sneezing</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(28, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Sharing needles</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">30. Which creates a barrier against STIs?</h3>
-                
-                    <div class="q-opt" onclick="check(29, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Sterilization</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(29, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Condom</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(29, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>IUD</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(29, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Contraceptive pill</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">31. The permanent stopping of the menstrual cycle is?</h3>
-                
-                    <div class="q-opt" onclick="check(30, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Puberty</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(30, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Menopause</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(30, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Ovulation</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(30, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Menstruation</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">32. During menstruation, what is shed?</h3>
-                
-                    <div class="q-opt" onclick="check(31, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Ovary wall</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(31, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Uterus lining</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(31, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Egg only</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(31, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Placenta</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">33. The sac holding the testes is the?</h3>
-                
-                    <div class="q-opt" onclick="check(32, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Bladder</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(32, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Scrotum</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(32, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Prostate</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(32, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Urethra</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">34. Why are testes outside the body?</h3>
-                
-                    <div class="q-opt" onclick="check(33, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Better blood flow</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(33, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Appearance</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(33, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Cooler temperature for sperm</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(33, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Protection</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">35. What does the acrosome (head of sperm) contain?</h3>
-                
-                    <div class="q-opt" onclick="check(34, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Enzymes to digest egg coat</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(34, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Mitochondria</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(34, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Food</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(34, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Water</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">36. A fetus is genetically identical to?</h3>
-                
-                    <div class="q-opt" onclick="check(35, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Neither parent</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(35, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Mother</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(35, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Sibling</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(35, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Father</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">37. Nicotine crossing the placenta can cause?</h3>
-                
-                    <div class="q-opt" onclick="check(36, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Stronger bones</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(36, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Low birth weight</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(36, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Better lungs</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(36, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Large baby</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">38. Rubella virus crossing the placenta causes?</h3>
-                
-                    <div class="q-opt" onclick="check(37, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Strong immunity</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(37, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Defects / Deafness</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(37, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Flu</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(37, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Hiccups</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">39. Breast milk contains?</h3>
-                
-                    <div class="q-opt" onclick="check(38, 2, this)">
-                        <div class="q-let">A</div>
-                        <div>Blood cells</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(38, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Bacteria</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(38, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Harmful toxins</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(38, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Antibodies &amp; Nutrients</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">40. Formula milk lacks?</h3>
-                
-                    <div class="q-opt" onclick="check(39, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Sugar</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(39, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Calcium</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(39, 0, this)">
-                        <div class="q-let">C</div>
-                        <div>Antibodies</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(39, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Water</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">41. The tube carrying urine and semen in males is?</h3>
-                
-                    <div class="q-opt" onclick="check(40, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Urethra</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(40, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Sperm duct</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(40, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Ureter</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(40, 3, this)">
-                        <div class="q-let">D</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">42. Sperm duct is also known as?</h3>
-                
-                    <div class="q-opt" onclick="check(41, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Eustachian tube</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(41, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Ureter</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(41, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Fallopian tube</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(41, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Vas deferens</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">43. Implantation happens approximately how long after fertilization?</h3>
-                
-                    <div class="q-opt" onclick="check(42, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>1 hour</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(42, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>1 week</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(42, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>1 day</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(42, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>1 month</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">44. Which part dilates during birth?</h3>
-                
-                    <div class="q-opt" onclick="check(43, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Cervix</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(43, 3, this)">
-                        <div class="q-let">B</div>
-                        <div>Ureter</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(43, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Ovary</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(43, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Oviduct</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">45. The 'afterbirth' refers to the expulsion of?</h3>
-                
-                    <div class="q-opt" onclick="check(44, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>Placenta</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(44, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>Fluid</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(44, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Urine</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(44, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Baby</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">46. Which is a male secondary sexual characteristic?</h3>
-                
-                    <div class="q-opt" onclick="check(45, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Breast growth</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(45, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Deepening voice</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(45, 1, this)">
-                        <div class="q-let">C</div>
-                        <div>Widening hips</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(45, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Menstruation</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">47. Which is a female secondary sexual characteristic?</h3>
-                
-                    <div class="q-opt" onclick="check(46, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Facial hair</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(46, 2, this)">
-                        <div class="q-let">B</div>
-                        <div>Deep voice</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(46, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Sperm production</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(46, 0, this)">
-                        <div class="q-let">D</div>
-                        <div>Widening hips</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">48. What is a zygote?</h3>
-                
-                    <div class="q-opt" onclick="check(47, 0, this)">
-                        <div class="q-let">A</div>
-                        <div>A fertilized egg cell</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(47, 1, this)">
-                        <div class="q-let">B</div>
-                        <div>A sperm cell</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(47, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>A fetus</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(47, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>An unfertilized egg</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">49. What is the main role of the placenta?</h3>
-                
-                    <div class="q-opt" onclick="check(48, 3, this)">
-                        <div class="q-let">A</div>
-                        <div>Digestion</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(48, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Exchange of nutrients/waste</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(48, 2, this)">
-                        <div class="q-let">C</div>
-                        <div>Protecting from shock</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(48, 1, this)">
-                        <div class="q-let">D</div>
-                        <div>Making blood</div>
-                    </div>
-                
-            </div><div class="q-card">
-                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">50. Gametes are produced by which cell division?</h3>
-                
-                    <div class="q-opt" onclick="check(49, 1, this)">
-                        <div class="q-let">A</div>
-                        <div>Mitosis</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(49, 0, this)">
-                        <div class="q-let">B</div>
-                        <div>Meiosis</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(49, 3, this)">
-                        <div class="q-let">C</div>
-                        <div>Cloning</div>
-                    </div>
-                
-                    <div class="q-opt" onclick="check(49, 2, this)">
-                        <div class="q-let">D</div>
-                        <div>Binary fission</div>
-                    </div>
-                
-            </div></div>
+            <div class="quiz-area" id="q-container">
+                <!-- Questions injected via JS -->
+            </div>
         </div>
 
     </main>
@@ -1561,7 +418,6 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('pdf-source');
             const origWidth = element.style.width;
-            // Fix width to ensure consistent PDF layout
             element.style.width = '900px'; 
             
             html2canvas(element, { scale: 2 }).then(canvas => {
@@ -1580,62 +436,62 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
                     pdf.addImage(img, 'PNG', 0, pos, w, imgH);
                     hLeft -= h;
                 }
-                pdf.save('IG_Bio_Ch15_HumanRepro.pdf');
+                pdf.save('IG_Bio_Ch6_PlantNutrition.pdf');
             });
         }
 
-        // --- 50 QUESTIONS (Human Reproduction) ---
+        // --- 50 QUESTIONS (Plant Nutrition) ---
         const qData = [
-            {q:"Where are sperm produced?", o:["Testes","Prostate","Penis","Urethra"], a:0},
-            {q:"Where are eggs (ova) produced?", o:["Ovaries","Uterus","Cervix","Oviduct"], a:0},
-            {q:"Where does fertilization typically occur?", o:["Oviduct","Uterus","Vagina","Ovary"], a:0},
-            {q:"The fusion of male and female gamete nuclei forms a?", o:["Zygote","Fetus","Embryo","Gamete"], a:0},
-            {q:"Which hormone causes male secondary sexual characteristics?", o:["Testosterone","Oestrogen","FSH","Insulin"], a:0},
-            {q:"Which hormone causes female secondary sexual characteristics?", o:["Oestrogen","Testosterone","Adrenaline","Auxin"], a:0},
-            {q:"On which day of the menstrual cycle does ovulation usually occur?", o:["Day 14","Day 1","Day 28","Day 5"], a:0},
-            {q:"What is the function of the amniotic fluid?", o:["Protect from shock","Feed the baby","Provide oxygen","Remove waste"], a:0},
-            {q:"What connects the fetus to the placenta?", o:["Umbilical cord","Oviduct","Urethra","Cervix"], a:0},
-            {q:"Which substance passes from mother to fetus?", o:["Oxygen","Carbon dioxide","Urea","Cells"], a:0},
-            {q:"Which substance passes from fetus to mother?", o:["Urea","Glucose","Amino acids","Oxygen"], a:0},
-            {q:"The narrow opening (neck) of the uterus is the?", o:["Cervix","Vagina","Oviduct","Vulva"], a:0},
-            {q:"Sperm are mixed with fluid from the?", o:["Prostate gland","Testes","Scrotum","Bladder"], a:0},
-            {q:"The mixture of sperm and fluid is called?", o:["Semen","Urine","Plasma","Lymph"], a:0},
-            {q:"How many chromosomes are in a human gamete?", o:["23","46","2","92"], a:0},
-            {q:"How many chromosomes are in a human zygote?", o:["46","23","2","92"], a:0},
-            {q:"The release of an egg from the ovary is called?", o:["Ovulation","Menstruation","Fertilization","Implantation"], a:0},
-            {q:"Where does the embryo implant?", o:["Uterus lining","Oviduct","Cervix","Ovary"], a:0},
-            {q:"Which hormone maintains the uterus lining during pregnancy?", o:["Progesterone","FSH","LH","Adrenaline"], a:0},
-            {q:"Which hormone stimulates the egg to mature?", o:["FSH","LH","Oestrogen","Testosterone"], a:0},
-            {q:"Which hormone triggers ovulation?", o:["LH","FSH","Progesterone","Oestrogen"], a:0},
-            {q:"Which represents the correct size comparison?", o:["Egg is much larger than sperm","Sperm is larger than egg","Both are same size","Both visible to naked eye"], a:0},
-            {q:"What is the tail of the sperm for?", o:["Swimming (Motility)","Digesting egg","Protection","Storing food"], a:0},
-            {q:"The mitochondria in sperm provide?", o:["Energy for swimming","Food for egg","Genetic material","Enzymes"], a:0},
-            {q:"What helps move the egg along the oviduct?", o:["Cilia","Flagella","Peristalsis","Gravity"], a:0},
-            {q:"What prevents the mixing of maternal and fetal blood?", o:["Placenta barrier","Umbilical cord","Amnion","Uterus"], a:0},
-            {q:"Why must blood NOT mix?", o:["Blood type incompatibility / Pressure","To stop feeding","To stop oxygen","To mix DNA"], a:0},
-            {q:"HIV attacks which system?", o:["Immune system","Nervous system","Digestive system","Reproductive system"], a:0},
-            {q:"Which is a method of HIV transmission?", o:["Sharing needles","Shaking hands","Sneezing","Toilet seats"], a:0},
-            {q:"Which creates a barrier against STIs?", o:["Condom","Contraceptive pill","IUD","Sterilization"], a:0},
-            {q:"The permanent stopping of the menstrual cycle is?", o:["Menopause","Puberty","Menstruation","Ovulation"], a:0},
-            {q:"During menstruation, what is shed?", o:["Uterus lining","Ovary wall","Egg only","Placenta"], a:0},
-            {q:"The sac holding the testes is the?", o:["Scrotum","Bladder","Prostate","Urethra"], a:0},
-            {q:"Why are testes outside the body?", o:["Cooler temperature for sperm","Protection","Better blood flow","Appearance"], a:0},
-            {q:"What does the acrosome (head of sperm) contain?", o:["Enzymes to digest egg coat","Food","Water","Mitochondria"], a:0},
-            {q:"A fetus is genetically identical to?", o:["Neither parent","Mother","Father","Sibling"], a:0},
-            {q:"Nicotine crossing the placenta can cause?", o:["Low birth weight","Large baby","Better lungs","Stronger bones"], a:0},
-            {q:"Rubella virus crossing the placenta causes?", o:["Defects / Deafness","Flu","Strong immunity","Hiccups"], a:0},
-            {q:"Breast milk contains?", o:["Antibodies & Nutrients","Bacteria","Blood cells","Harmful toxins"], a:0},
-            {q:"Formula milk lacks?", o:["Antibodies","Calcium","Water","Sugar"], a:0},
-            {q:"The tube carrying urine and semen in males is?", o:["Urethra","Ureter","Sperm duct","Oviduct"], a:0},
-            {q:"Sperm duct is also known as?", o:["Vas deferens","Ureter","Fallopian tube","Eustachian tube"], a:0},
-            {q:"Implantation happens approximately how long after fertilization?", o:["1 week","1 hour","1 month","1 day"], a:0},
-            {q:"Which part dilates during birth?", o:["Cervix","Ovary","Oviduct","Ureter"], a:0},
-            {q:"The 'afterbirth' refers to the expulsion of?", o:["Placenta","Fluid","Baby","Urine"], a:0},
-            {q:"Which is a male secondary sexual characteristic?", o:["Deepening voice","Widening hips","Menstruation","Breast growth"], a:0},
-            {q:"Which is a female secondary sexual characteristic?", o:["Widening hips","Facial hair","Deep voice","Sperm production"], a:0},
-            {q:"What is a zygote?", o:["A fertilized egg cell","A sperm cell","An unfertilized egg","A fetus"], a:0},
-            {q:"What is the main role of the placenta?", o:["Exchange of nutrients/waste","Making blood","Protecting from shock","Digestion"], a:0},
-            {q:"Gametes are produced by which cell division?", o:["Meiosis","Mitosis","Binary fission","Cloning"], a:0}
+            {q:"What are the raw materials for photosynthesis?", o:["CO2 and Water","Glucose and Oxygen","Starch and Water","Amino acids"], a:0},
+            {q:"What is the main by-product of photosynthesis?", o:["Carbon Dioxide","Nitrogen","Oxygen","Glucose"], a:2},
+            {q:"Which pigment absorbs light energy?", o:["Haemoglobin","Chlorophyll","Melanin","Keratin"], a:1},
+            {q:"Where is chlorophyll found?", o:["Nucleus","Cytoplasm","Chloroplasts","Cell wall"], a:2},
+            {q:"What is the chemical formula for glucose?", o:["C6H12O6","CO2","H2O","C12H22O11"], a:0},
+            {q:"Magnesium is needed to make?", o:["Cell walls","Chlorophyll","Protein","DNA"], a:1},
+            {q:"Nitrate ions are needed to make?", o:["Starch","Fats","Amino acids","Glucose"], a:2},
+            {q:"Deficiency of Magnesium causes?", o:["Red leaves","Stunted growth","Chlorosis (yellowing)","Wilting"], a:2},
+            {q:"Deficiency of Nitrate causes?", o:["Stunted growth","Yellow leaves","Large roots","More flowers"], a:0},
+            {q:"Glucose is stored in leaves as?", o:["Sugar","Starch","Glycogen","Fats"], a:1},
+            {q:"Why is starch a good storage molecule?", o:["It is soluble","It is insoluble","It is sweet","It is small"], a:1},
+            {q:"Which layer of the leaf has the most chloroplasts?", o:["Upper Epidermis","Palisade Mesophyll","Spongy Mesophyll","Lower Epidermis"], a:1},
+            {q:"What is the function of the waxy cuticle?", o:["Absorb light","Prevent water loss","Gas exchange","Transport sugar"], a:1},
+            {q:"Which cells control the opening of stomata?", o:["Palisade cells","Guard cells","Epidermal cells","Xylem"], a:1},
+            {q:"Stomata are usually found on the?", o:["Upper surface","Lower surface","Leaf edges","Stem"], a:1},
+            {q:"What gas enters the leaf for photosynthesis?", o:["Oxygen","Nitrogen","Carbon Dioxide","Argon"], a:2},
+            {q:"What gas leaves the leaf during the day?", o:["Carbon Dioxide","Hydrogen","Oxygen","Methane"], a:2},
+            {q:"The transport tissue for water is?", o:["Phloem","Xylem","Cortex","Pith"], a:1},
+            {q:"The transport tissue for sucrose/amino acids is?", o:["Xylem","Phloem","Epidermis","Cuticle"], a:1},
+            {q:"What color does Iodine turn in the presence of starch?", o:["Orange-Brown","Blue-Black","Purple","Red"], a:1},
+            {q:"Why do we boil the leaf in ethanol?", o:["To kill it","To remove chlorophyll","To soften it","To cook starch"], a:1},
+            {q:"Why turn off the Bunsen burner when using ethanol?", o:["Ethanol is toxic","Ethanol is flammable","To save gas","It evaporates too fast"], a:1},
+            {q:"What does Soda Lime absorb?", o:["Oxygen","Water","Carbon Dioxide","Light"], a:2},
+            {q:"A variegated leaf has?", o:["No chloroplasts","Green and white parts","Only red parts","Thorns"], a:1},
+            {q:"In a destarched variegated leaf, which part turns blue-black?", o:["The white part","The green part","Both parts","Neither part"], a:1},
+            {q:"How do you destarch a plant?", o:["Place in dark for 48hrs","Boil it","Put in sunlight","Remove soil"], a:0},
+            {q:"Which is a limiting factor of photosynthesis?", o:["Oxygen level","Soil pH","Light intensity","Wind speed"], a:2},
+            {q:"As temperature increases beyond optimum, photosynthesis drops because?", o:["Enzymes denature","Stomata close","Water boils","CO2 runs out"], a:0},
+            {q:"What happens to the rate if light intensity increases indefinitely?", o:["Keeps increasing","Plateaus (levels off)","Decreases","Stops"], a:1},
+            {q:"The air spaces in the spongy mesophyll allow?", o:["Light absorption","Gas diffusion","Water storage","Support"], a:1},
+            {q:"The upper epidermis is transparent to?", o:["Let gas in","Let light through","Stop water","Protect cells"], a:1},
+            {q:"The chemical equation for photosynthesis requires how many CO2 molecules?", o:["6","12","1","2"], a:0},
+            {q:"Plants are known as?", o:["Heterotrophs","Autotrophs","Saprotrophs","Decomposers"], a:1},
+            {q:"Which creates a barrier against evaporation?", o:["Stomata","Cuticle","Xylem","Phloem"], a:1},
+            {q:"Oxygen produced comes from the splitting of?", o:["CO2","Glucose","Water","Nitrates"], a:2},
+            {q:"Sodium hydrogencarbonate is added to water to provide?", o:["Oxygen","Carbon Dioxide","Magnesium","Light"], a:1},
+            {q:"Counting bubbles from pondweed measures?", o:["Respiration rate","Photosynthesis rate","Growth rate","Transpiration"], a:1},
+            {q:"The main independent variable in the pondweed lab is?", o:["Distance of lamp","Temperature","Type of plant","Water volume"], a:0},
+            {q:"What color is Iodine solution originally?", o:["Blue-Black","Orange-Brown","Clear","Pink"], a:1},
+            {q:"Why dip the leaf in hot water after ethanol?", o:["To kill it","To soften it","To remove starch","To dry it"], a:1},
+            {q:"Glucose contains which elements?", o:["C, H, O","C, H, O, N","C, O, N","H, O, N"], a:0},
+            {q:"Amino acids contain which extra element compared to glucose?", o:["Magnesium","Nitrogen","Iron","Calcium"], a:1},
+            {q:"Where does the energy for photosynthesis come from?", o:["Heat","Chemicals","Sunlight","Soil"], a:2},
+            {q:"Cell walls are made of?", o:["Starch","Glycogen","Cellulose","Protein"], a:2},
+            {q:"Sucrose is used for?", o:["Storage","Transport","Cell walls","Enzymes"], a:1},
+            {q:"Glasshouses allow control of?", o:["Genes","Limiting factors","Gravity","Time"], a:1},
+            {q:"If a plant has no CO2, the iodine test will be?", o:["Blue-Black","Orange-Brown","Purple","Green"], a:1},
+            {q:"Xylem vessels are?", o:["Living cells","Dead hollow tubes","Full of cytoplasm","On the outside"], a:1},
+            {q:"Phloem transports food in which direction?", o:["Up only","Down only","Up and Down","Sideways only"], a:2},
+            {q:"Most photosynthesis happens in the?", o:["Stem","Roots","Leaves","Flowers"], a:2}
         ];
 
         const qDiv = document.getElementById('q-container');
@@ -1676,43 +532,5 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
             }
         }
     </script>
-
-
-<div id="give-freely-root-ejkiikneibegknkgimmihdpcbcedgmpo" class="give-freely-root" data-extension-id="ejkiikneibegknkgimmihdpcbcedgmpo" data-extension-name="Volume Booster" style="display: block;"><template shadowrootmode="open"><style>
-  :host {
-    all: initial;
-  }
-
-  .gf-scroll-remove::-webkit-scrollbar {
-    border-radius-bottom-right: 15px;
-  }
-
-  button {
-    cursor: pointer;
-    transition: transform 0.1s ease;
-  }
-
-  button:active {
-    transform: scale(0.98);
-  }
-
-  .give-freely-close-button:hover {
-    opacity: 0.7;
-  }
-
-  input[type="radio"] {
-    margin-right: 8px;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid #e5e5e5;
-    margin: 1em 0;
-  }
-
-  @media (max-width: 600px), (max-height: 480px) {
-    #give-freely-checkout-popup {
-      display: none !important;
-    }
-  }
-</style><div><div class="gf-app"></div></div></template></div></body></html>
+</body>
+</html>
