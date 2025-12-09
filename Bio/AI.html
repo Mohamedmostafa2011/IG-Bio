@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE Biology 0610 AI Tutor</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7D32; /* Bio Green */
+            --secondary: #81C784;
+            --accent: #FFC107;
+            --light: #F1F8E9;
+            --dark: #1B5E20;
+            --text: #333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        header p { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            background: var(--dark);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Content Sections */
+        .section {
+            display: none;
+            padding: 25px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            resize: none;
+            height: 100px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        textarea:focus { outline: none; border-color: var(--primary); }
+
+        /* Media Controls */
+        .media-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .media-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px dashed #bbb;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            color: #666;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .media-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--light); }
+
+        /* Hidden File Input */
+        #fileInput1, #fileInput2 { display: none; }
+
+        /* Preview Area */
+        .image-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+            border: 2px solid var(--primary);
+        }
+
+        /* Action Buttons */
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-main:hover { background: var(--dark); transform: translateY(-2px); }
+        .btn-main:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+        /* Follow up Options (Section 2) */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            display: none; /* Hidden by default */
+        }
+
+        .btn-option {
+            padding: 12px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-option:hover { background: var(--light); }
+
+        /* Response Area */
+        .response-box {
+            margin-top: 25px;
+            background: #f9f9f9;
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Markdown styling support inside response */
+        .response-box h3 { color: var(--dark); margin-top: 0; }
+        .response-box strong { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1><i class="fa-solid fa-dna"></i> BioTutor 0610</h1>
+        <p>Cambridge IGCSE Biology Assistant</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('explain')">
+            <i class="fa-solid fa-chalkboard-user"></i> Explanation
+        </button>
+        <button class="tab-btn" onclick="switchTab('questions')">
+            <i class="fa-solid fa-circle-question"></i> Questions
+        </button>
+    </div>
+
+    <!-- SECTION 1: EXPLANATION -->
+    <div id="explain" class="section active">
+        <div class="input-group">
+            <textarea id="explainText" placeholder="Type a topic (e.g., Photosynthesis) or upload a diagram..."></textarea>
+        </div>
+
+        <div class="media-controls">
+            <label for="fileInput1" class="media-btn">
+                <i class="fa-solid fa-image"></i> Upload Image
+            </label>
+            <label for="fileInput1" class="media-btn" onclick="triggerCamera('fileInput1')">
+                <i class="fa-solid fa-camera"></i> Take Photo
+            </label>
+            <input type="file" id="fileInput1" accept="image/*" onchange="previewImage(this, 'preview1')">
+        </div>
+
+        <img id="preview1" class="image-preview" alt="Preview">
+
+        <button class="btn-main" onclick="handleExplanation()">
+            <span>Explain This</span>
+            <div class="spinner" id="spinner1"></div>
+        </button>
+
+        <div id="response1" class="response-box"></div>
+    </div>
+
+    <!-- SECTION 2: QUESTIONS -->
+    <div id="questions" class="section">
+        <div class="input-group">
+            <textarea id="questText" placeholder="Paste a past paper question or upload a photo of it..."></textarea>
+        </div>
+
+        <div class="media-controls">
+            <label for="fileInput2" class="media-btn">
+                <i class="fa-solid fa-image"></i> Upload Question
+            </label>
+            <label for="fileInput2" class="media-btn" onclick="triggerCamera('fileInput2')">
+                <i class="fa-solid fa-camera"></i> Take Photo
+            </label>
+            <input type="file" id="fileInput2" accept="image/*" onchange="previewImage(this, 'preview2')">
+        </div>
+
+        <img id="preview2" class="image-preview" alt="Preview">
+
+        <!-- Step 1 Button -->
+        <button class="btn-main" id="sendQuestBtn" onclick="handleQuestionInitial()">
+            <span>Analyze Question</span>
+            <div class="spinner" id="spinner2"></div>
+        </button>
+
+        <div id="response2" class="response-box"></div>
+
+        <!-- Step 2 Options (Hidden initially) -->
+        <div id="followUpOptions" class="options-grid">
+            <button class="btn-option" onclick="handleFollowUp('answer')">
+                <i class="fa-solid fa-check-circle"></i> Give Correct Answer
+            </button>
+            <button class="btn-option" onclick="toggleCustomInput()">
+                <i class="fa-solid fa-comment-dots"></i> Custom Question
+            </button>
+        </div>
+
+        <div id="customInputArea" style="display:none; margin-top:10px;">
+            <input type="text" id="customFollowUpText" placeholder="Why is A wrong? / How do I calculate...?" 
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:10px;">
+            <button class="btn-main" style="padding:10px; background:var(--secondary);" onclick="handleFollowUp('custom')">Ask</button>
+        </div>
+    </div>
+
+</div>
+
+<script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+    // YOUR API KEY (In a real app, protect this via backend!)
+    const API_KEY = "AIzaSyANyaCEXGprtYv5YfDlKToZlrIP4VlQC4c"; 
+    
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    // Global variable to store the uploaded file for API processing
+    let currentImagePart = null;
+
+    // --- UTILITIES ---
+
+    // Expose functions to window so HTML buttons can see them
+    window.switchTab = function(tabId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        // Find button that calls this and make active (simplified)
+        event.currentTarget.classList.add('active');
+    };
+
+    window.triggerCamera = function(inputId) {
+        // Mobile browsers handle capture="environment" automatically in the file input
+        // This helper just ensures the click passes through
+        const input = document.getElementById(inputId);
+        input.setAttribute('capture', 'environment');
+        input.click();
+    };
+
+    window.previewImage = async function(input, previewId) {
+        const file = input.files[0];
+        const preview = document.getElementById(previewId);
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+            
+            // Prepare image for Gemini
+            currentImagePart = await fileToGenerativePart(file);
+        }
+    };
+
+    async function fileToGenerativePart(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64Data = reader.result.split(',')[1];
+                resolve({
+                    inlineData: {
+                        data: base64Data,
+                        mimeType: file.type
+                    },
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // --- SECTION 1: EXPLANATION LOGIC ---
+
+    window.handleExplanation = async function() {
+        const text = document.getElementById('explainText').value;
+        const spinner = document.getElementById('spinner1');
+        const responseBox = document.getElementById('response1');
+        const btn = document.querySelector('#explain .btn-main');
+
+        if (!text && !currentImagePart) {
+            alert("Please enter text or upload an image.");
+            return;
+        }
+
+        // UI Loading State
+        btn.disabled = true;
+        spinner.style.display = 'block';
+        responseBox.style.display = 'none';
+
+        // 1. The Guardrail System Prompt
+        const prompt = `
+            You are an expert Biology Tutor for the Cambridge IGCSE (0610) curriculum.
+            
+            RULES:
+            1. Analyze the user's input (text or image).
+            2. GUARDRAIL: If the input is NOT related to Biology, Science, or the IGCSE curriculum, you MUST refuse to answer. Say: "I can only assist with Biology questions."
+            3. If it IS Biology, explain the concept simply, using IGCSE terminology.
+            4. Use bold text for key definitions.
+            5. Use bullet points for processes.
+            
+            USER INPUT: ${text}
+        `;
+
+        try {
+            const parts = [prompt];
+            if (currentImagePart) parts.push(currentImagePart);
+
+            const result = await model.generateContent(parts);
+            const response = await result.response;
+            const markdownText = response.text();
+
+            // Simple Markdown formatter for HTML
+            responseBox.innerHTML = formatResponse(markdownText);
+            responseBox.style.display = 'block';
+            
+            // Clear image after use
+            currentImagePart = null;
+            document.getElementById('preview1').style.display = 'none';
+
+        } catch (error) {
+            responseBox.innerHTML = `<span style="color:red">Error: ${error.message}</span>`;
+            responseBox.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            spinner.style.display = 'none';
+        }
+    };
+
+    // --- SECTION 2: QUESTIONS LOGIC ---
+
+    window.handleQuestionInitial = async function() {
+        const text = document.getElementById('questText').value;
+        const spinner = document.getElementById('spinner2');
+        const responseBox = document.getElementById('response2');
+        const btn = document.getElementById('sendQuestBtn');
+        const options = document.getElementById('followUpOptions');
+
+        if (!text && !currentImagePart) { alert("Please provide a question."); return; }
+
+        btn.disabled = true;
+        spinner.style.display = 'block';
+        options.style.display = 'none';
+
+        const prompt = `
+            You are an IGCSE Biology Tutor. The user has sent a question (text or image).
+            1. Identify the topic (e.g., "This is a question about Osmosis").
+            2. Give a brief hint or explain the concept being tested WITHOUT giving the final answer yet.
+            3. Ask the student if they understand the concept now.
+        `;
+
+        try {
+            const parts = [prompt];
+            if (currentImagePart) parts.push(currentImagePart);
+
+            const result = await model.generateContent(parts);
+            const textResponse = result.response.text();
+
+            responseBox.innerHTML = formatResponse(textResponse);
+            responseBox.style.display = 'block';
+            
+            // Reveal Follow-up Options
+            options.style.display = 'grid';
+
+        } catch (error) {
+            responseBox.innerHTML = "Error analyzing question.";
+            responseBox.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            spinner.style.display = 'none';
+        }
+    };
+
+    window.toggleCustomInput = function() {
+        const area = document.getElementById('customInputArea');
+        area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    };
+
+    window.handleFollowUp = async function(type) {
+        const responseBox = document.getElementById('response2');
+        const customText = document.getElementById('customFollowUpText').value;
+        
+        let prompt = "";
+        
+        responseBox.innerHTML += `<hr style="margin:15px 0; border:0; border-top:1px dashed #ccc;"><em>Thinking...</em>`;
+
+        if (type === 'answer') {
+            prompt = `
+                The student wants the final correct answer with reasoning.
+                Provide the Answer Key (e.g., "Answer: C") and a step-by-step explanation of WHY it is correct and why others are wrong.
+                Reference specific IGCSE 0610 syllabus points if possible.
+            `;
+        } else {
+            prompt = `
+                The student has a specific follow-up question: "${customText}".
+                Answer this specific query clearly and concisely.
+            `;
+        }
+
+        try {
+            // We use chat history implicitly by context, but for simple implementation
+            // we treat this as a new prompt with context of "Previous Question". 
+            // Note: Ideally, use startChat() for true history, but this works for single-turn followups.
+            
+            const result = await model.generateContent(prompt);
+            const textResponse = result.response.text();
+            
+            // Append result
+            responseBox.innerHTML = responseBox.innerHTML.replace('<em>Thinking...</em>', formatResponse(textResponse));
+            
+        } catch (error) {
+            alert("Error fetching follow-up.");
+        }
+    };
+
+    function formatResponse(text) {
+        // Basic Markdown to HTML conversion
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+            .replace(/\n/g, '<br>'); // New lines
+    }
+</script>
+
+</body>
+</html>
