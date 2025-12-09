@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioChat IGCSE 0610</title>
+    <title>BioChat IGCSE 0610 (Final)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
@@ -60,13 +60,8 @@
         <div class="message-row ai">
             <div class="avatar"><i class="fa-solid fa-robot"></i></div>
             <div class="message-content">
-                Hello! I am your <strong>IGCSE Biology (0610) Assistant</strong>. 
-                <br><br>
-                Select a mode above:
-                <ul>
-                    <li><strong>Tutor:</strong> Ask me to explain concepts.</li>
-                    <li><strong>Past Paper:</strong> Upload a question to solve.</li>
-                </ul>
+                <strong>IGCSE Biology 0610 Assistant</strong> online.<br>
+                I am ready. Ask me anything or upload a question.
             </div>
         </div>
     </div>
@@ -87,17 +82,16 @@
     </div>
 
 <script type="module">
-    // FIX 1: Using JSDelivr for a stable library version
-    import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai/+esm";
+    // Using a specific version (0.17.0) to ensure Flash support is present
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai@0.17.0";
 
-    // YOUR API KEY
     const API_KEY = "AIzaSyANyaCEXGprtYv5YfDlKToZlrIP4VlQC4c"; 
     
     const genAI = new GoogleGenerativeAI(API_KEY);
     
-    // FIX 2: Using the specific VERSIONED model name to prevent 404 errors
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-001" });
-
+    // Primary Model
+    let model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
     let currentMode = 'explain';
     let currentImagePart = null;
     let chatHistory = [];
@@ -106,8 +100,7 @@
         currentMode = mode;
         document.getElementById('modeExplain').classList.toggle('active', mode === 'explain');
         document.getElementById('modeQuestion').classList.toggle('active', mode === 'question');
-        addMessageToUI('ai', `<em>Switched to ${mode === 'explain' ? 'Tutor' : 'Past Paper'} mode.</em>`);
-        chatHistory = []; 
+        chatHistory = []; // Reset history on mode switch
     }
 
     window.autoResize = function(textarea) {
@@ -134,6 +127,7 @@
         document.getElementById('upload-preview-container').style.display = 'none';
     }
 
+    // ROBUST SEND FUNCTION
     window.sendMessage = async function() {
         const inputField = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -141,6 +135,7 @@
 
         if (!text && !currentImagePart) return;
 
+        // Add User Message
         let userHTML = text.replace(/\n/g, '<br>');
         if (currentImagePart) userHTML += `<br><img src="${document.getElementById('upload-preview').src}" class="chat-img">`;
         addMessageToUI('user', userHTML);
@@ -153,19 +148,29 @@
 
         const loadingId = addLoadingIndicator();
 
-        let prompt = "";
+        // Construct Prompt
+        let promptText = "";
         if (currentMode === 'explain') {
-            prompt = `You are an IGCSE Biology (0610) Tutor. Explain simply. Use bold text for keywords. USER: ${text}`;
+            promptText = `You are an IGCSE Biology (0610) Tutor. Explain clearly. Use Markdown bolding. USER: ${text}`;
         } else {
-            prompt = `IGCSE Biology Past Paper Tutor. 1. Identify topic. 2. Give hint. Do not give answer yet unless asked. USER: ${text}`;
+            promptText = `IGCSE Biology Past Paper Tutor. 1. Identify topic. 2. Give hint. Do not give answer yet unless asked. USER: ${text}`;
         }
 
         try {
+            // Construct parts safely
             let parts = [];
-            if(chatHistory.length > 0) parts.push(chatHistory[chatHistory.length -1]); 
-            parts.push({text: prompt}); // Explicit text object
+            
+            // Add previous context if exists
+            if (chatHistory.length > 0) {
+                // Simplified context: just append previous answer as context string to avoid structure errors
+                // This is less buggy than full object history
+                parts.push({ text: `PREVIOUS CONTEXT: ${chatHistory[chatHistory.length - 1]}` });
+            }
+            
+            parts.push({ text: promptText });
             if (imagePartToSend) parts.push(imagePartToSend);
 
+            // Attempt Generation
             const result = await model.generateContent(parts);
             const response = await result.response;
             const markdownText = response.text();
@@ -174,14 +179,38 @@
             const formattedHTML = marked.parse(markdownText);
             addMessageToUI('ai', formattedHTML);
             
-            // Save simplified history
-            chatHistory.push({ role: "user", parts: [{ text: text }] });
-            chatHistory.push({ role: "model", parts: [{ text: markdownText }] });
+            // Save simplified history string
+            chatHistory.push(markdownText);
 
         } catch (error) {
-            removeMessage(loadingId);
-            addMessageToUI('ai', `<span style="color:red">Error: ${error.message}</span>`);
-            console.error(error);
+            console.error("Gemini Error:", error);
+            
+            // AUTO-FIX: If 404 (Model Not Found), switch to Fallback Model and retry ONCE
+            if (error.message.includes("404") || error.message.includes("not found")) {
+                console.log("Switching to fallback model...");
+                try {
+                    // Switch to Gemini Pro (Older but more widely available)
+                    model = genAI.getGenerativeModel({ model: "gemini-pro" });
+                    
+                    // Retry logic
+                    let parts = [{ text: promptText }]; // Don't send image to Pro if Flash failed on text, but Pro doesn't support images well in free tier sometimes.
+                    if (imagePartToSend) parts = [{text: promptText + " [Image attached but model cannot view]"}]; // Fallback for image
+
+                    const result = await model.generateContent(parts);
+                    const response = await result.response;
+                    const text = response.text();
+                    
+                    removeMessage(loadingId);
+                    addMessageToUI('ai', marked.parse(text) + "<br><em>(Note: Switched to Basic Model due to server error)</em>");
+                    return; // Success on retry
+                } catch (retryError) {
+                     removeMessage(loadingId);
+                     addMessageToUI('ai', `<span style="color:red">Server Error. Please refresh. Code: ${error.message}</span>`);
+                }
+            } else {
+                removeMessage(loadingId);
+                addMessageToUI('ai', `<span style="color:red">Error: ${error.message}</span>`);
+            }
         } finally {
             sendBtn.disabled = false;
         }
