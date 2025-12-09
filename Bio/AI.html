@@ -3,511 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IGCSE Biology 0610 AI Tutor</title>
-    <!-- Font Awesome for Icons -->
+    <title>BioChat IGCSE 0610</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked Library for formatting bold text/lists -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
-            --primary: #2E7D32; /* Bio Green */
-            --secondary: #81C784;
-            --accent: #FFC107;
-            --light: #F1F8E9;
-            --dark: #1B5E20;
-            --text: #333;
+            --primary: #10a37f; /* ChatGPT Green */
+            --user-msg: #f0f0f0; /* Light Gray */
+            --ai-msg: #ffffff;
+            --bg: #ffffff;
+            --text: #343541;
+            --border: #d9d9e3;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Söhne', 'Segoe UI', Helvetica, sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            background-color: var(--bg);
             color: var(--text);
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 20px;
         }
 
-        .app-container {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        /* Header */
+        /* HEADER & MODE SWITCHER */
         header {
-            background: var(--primary);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        header h1 { font-size: 1.5rem; margin-bottom: 5px; }
-        header p { font-size: 0.9rem; opacity: 0.9; }
-
-        /* Navigation Tabs */
-        .tabs {
-            display: flex;
-            background: var(--dark);
-        }
-
-        .tab-btn {
-            flex: 1;
             padding: 15px;
-            background: none;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            z-index: 10;
+        }
+
+        .brand { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .brand i { color: var(--primary); }
+
+        .mode-toggle {
+            background: #f0f0f0;
+            padding: 4px;
+            border-radius: 8px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .mode-btn {
             border: none;
-            color: rgba(255,255,255,0.6);
+            background: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
             cursor: pointer;
             font-weight: 600;
-            transition: 0.3s;
-            border-bottom: 4px solid transparent;
+            color: #666;
+            transition: 0.2s;
         }
 
-        .tab-btn.active {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            border-bottom-color: var(--accent);
+        .mode-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* Content Sections */
-        .section {
-            display: none;
-            padding: 25px;
-            animation: fadeIn 0.4s ease;
+        /* CHAT AREA */
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+            scroll-behavior: smooth;
         }
 
-        .section.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .message-row {
+            display: flex;
+            padding: 20px;
+            gap: 15px;
+            border-bottom: 1px solid transparent;
         }
 
-        /* Inputs */
-        .input-group {
+        .message-row.ai { background: #f7f7f8; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .message-row.user { background: white; }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .ai .avatar { background: var(--primary); color: white; }
+        .user .avatar { background: #5436DA; color: white; }
+
+        .message-content {
+            flex: 1;
+            max-width: 800px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Markdown Styling within messages */
+        .message-content strong { color: #2E7D32; font-weight: 700; } /* Bio Green for keywords */
+        .message-content ul { margin-left: 20px; margin-bottom: 10px; }
+        .message-content p { margin-bottom: 10px; }
+        
+        /* Image inside chat */
+        .chat-img { max-width: 300px; border-radius: 8px; border: 1px solid #ddd; margin-top: 10px; }
+
+        /* INPUT AREA */
+        .input-wrapper {
+            background: white;
+            padding: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
             position: relative;
-            margin-bottom: 15px;
+        }
+
+        .input-box {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Image Preview Area above input */
+        #upload-preview-container {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: none;
+        }
+        
+        #upload-preview {
+            height: 60px;
+            border-radius: 4px;
+            border: 1px solid var(--primary);
+        }
+
+        .textarea-row {
+            display: flex;
+            align-items: flex-end;
+            padding: 10px;
         }
 
         textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            resize: none;
-            height: 100px;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        textarea:focus { outline: none; border-color: var(--primary); }
-
-        /* Media Controls */
-        .media-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .media-btn {
             flex: 1;
-            padding: 10px;
-            border: 2px dashed #bbb;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            color: #666;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .media-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--light); }
-
-        /* Hidden File Input */
-        #fileInput1, #fileInput2 { display: none; }
-
-        /* Preview Area */
-        .image-preview {
-            width: 100%;
-            max-height: 200px;
-            object-fit: contain;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: none;
-            border: 2px solid var(--primary);
-        }
-
-        /* Action Buttons */
-        .btn-main {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary);
-            color: white;
             border: none;
-            border-radius: 12px;
+            resize: none;
+            height: 24px;
+            max-height: 200px;
+            padding: 0 10px;
             font-size: 1rem;
-            font-weight: bold;
+            outline: none;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
             cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            padding: 5px 10px;
+            color: #8e8ea0;
+            transition: 0.2s;
         }
 
-        .btn-main:hover { background: var(--dark); transform: translateY(-2px); }
-        .btn-main:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .action-btn:hover { color: var(--text); }
+        .send-btn { color: var(--primary); }
+        .send-btn:disabled { color: #ccc; cursor: default; }
 
-        /* Follow up Options (Section 2) */
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-            display: none; /* Hidden by default */
+        /* Loading Dots */
+        .typing-indicator { display: none; margin-left: 10px; }
+        .dot {
+            height: 8px; width: 8px; background-color: #bbb; border-radius: 50%;
+            display: inline-block; animation: blink 1.4s infinite both;
         }
+        .dot:nth-child(1){animation-delay: 0.2s;} .dot:nth-child(2){animation-delay: 0.4s;} .dot:nth-child(3){animation-delay: 0.6s;}
+        @keyframes blink { 0% {opacity: .2;} 20% {opacity: 1;} 100% {opacity: .2;} }
 
-        .btn-option {
-            padding: 12px;
-            background: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
+        /* Mobile Adjustments */
+        @media(max-width: 600px) {
+            .message-row { padding: 15px 10px; }
+            .input-wrapper { padding: 10px; }
         }
-
-        .btn-option:hover { background: var(--light); }
-
-        /* Response Area */
-        .response-box {
-            margin-top: 25px;
-            background: #f9f9f9;
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 0 10px 10px 0;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            display: none;
-            word-wrap: break-word;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            border: 3px solid rgba(0,0,0,0.1);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Markdown styling support inside response */
-        .response-box h3 { color: var(--dark); margin-top: 0; }
-        .response-box strong { color: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="app-container">
     <header>
-        <h1><i class="fa-solid fa-dna"></i> BioTutor 0610</h1>
-        <p>Cambridge IGCSE Biology Assistant</p>
+        <div class="brand"><i class="fa-solid fa-dna"></i> BioChat</div>
+        <div class="mode-toggle">
+            <button class="mode-btn active" id="modeExplain" onclick="setMode('explain')">Tutor</button>
+            <button class="mode-btn" id="modeQuestion" onclick="setMode('question')">Past Paper</button>
+        </div>
     </header>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('explain')">
-            <i class="fa-solid fa-chalkboard-user"></i> Explanation
-        </button>
-        <button class="tab-btn" onclick="switchTab('questions')">
-            <i class="fa-solid fa-circle-question"></i> Questions
-        </button>
-    </div>
-
-    <!-- SECTION 1: EXPLANATION -->
-    <div id="explain" class="section active">
-        <div class="input-group">
-            <textarea id="explainText" placeholder="Type a topic (e.g., Photosynthesis) or upload a diagram..."></textarea>
-        </div>
-
-        <div class="media-controls">
-            <label for="fileInput1" class="media-btn">
-                <i class="fa-solid fa-image"></i> Upload Image
-            </label>
-            <label for="fileInput1" class="media-btn" onclick="triggerCamera('fileInput1')">
-                <i class="fa-solid fa-camera"></i> Take Photo
-            </label>
-            <input type="file" id="fileInput1" accept="image/*" onchange="previewImage(this, 'preview1')">
-        </div>
-
-        <img id="preview1" class="image-preview" alt="Preview">
-
-        <button class="btn-main" onclick="handleExplanation()">
-            <span>Explain This</span>
-            <div class="spinner" id="spinner1"></div>
-        </button>
-
-        <div id="response1" class="response-box"></div>
-    </div>
-
-    <!-- SECTION 2: QUESTIONS -->
-    <div id="questions" class="section">
-        <div class="input-group">
-            <textarea id="questText" placeholder="Paste a past paper question or upload a photo of it..."></textarea>
-        </div>
-
-        <div class="media-controls">
-            <label for="fileInput2" class="media-btn">
-                <i class="fa-solid fa-image"></i> Upload Question
-            </label>
-            <label for="fileInput2" class="media-btn" onclick="triggerCamera('fileInput2')">
-                <i class="fa-solid fa-camera"></i> Take Photo
-            </label>
-            <input type="file" id="fileInput2" accept="image/*" onchange="previewImage(this, 'preview2')">
-        </div>
-
-        <img id="preview2" class="image-preview" alt="Preview">
-
-        <!-- Step 1 Button -->
-        <button class="btn-main" id="sendQuestBtn" onclick="handleQuestionInitial()">
-            <span>Analyze Question</span>
-            <div class="spinner" id="spinner2"></div>
-        </button>
-
-        <div id="response2" class="response-box"></div>
-
-        <!-- Step 2 Options (Hidden initially) -->
-        <div id="followUpOptions" class="options-grid">
-            <button class="btn-option" onclick="handleFollowUp('answer')">
-                <i class="fa-solid fa-check-circle"></i> Give Correct Answer
-            </button>
-            <button class="btn-option" onclick="toggleCustomInput()">
-                <i class="fa-solid fa-comment-dots"></i> Custom Question
-            </button>
-        </div>
-
-        <div id="customInputArea" style="display:none; margin-top:10px;">
-            <input type="text" id="customFollowUpText" placeholder="Why is A wrong? / How do I calculate...?" 
-                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:10px;">
-            <button class="btn-main" style="padding:10px; background:var(--secondary);" onclick="handleFollowUp('custom')">Ask</button>
+    <div id="chat-container">
+        <!-- Welcome Message -->
+        <div class="message-row ai">
+            <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="message-content">
+                Hello! I am your <strong>IGCSE Biology (0610) Assistant</strong>. 
+                <br><br>
+                Select a mode above:
+                <ul>
+                    <li><strong>Tutor:</strong> Ask me to explain concepts like Osmosis or Enzymes.</li>
+                    <li><strong>Past Paper:</strong> Upload a photo of a question, and I'll help you solve it.</li>
+                </ul>
+            </div>
         </div>
     </div>
 
-</div>
+    <div class="input-wrapper">
+        <div class="input-box">
+            <!-- Hidden Preview -->
+            <div id="upload-preview-container">
+                <img id="upload-preview" alt="Upload">
+                <button onclick="clearImage()" style="border:none; background:none; color:red; cursor:pointer; vertical-align:top; margin-left:5px;"><i class="fa-solid fa-times"></i></button>
+            </div>
+
+            <div class="textarea-row">
+                <!-- File Upload -->
+                <button class="action-btn" onclick="document.getElementById('fileInput').click()">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(this)">
+
+                <textarea id="userInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="if(event.key === 'Enter' && !event.shiftKey){ event.preventDefault(); sendMessage(); }"></textarea>
+                
+                <button class="action-btn send-btn" id="sendBtn" onclick="sendMessage()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <p style="text-align: center; font-size: 0.75rem; color: #999; margin-top: 10px;">
+            AI can make mistakes. Check important info against your IGCSE textbook.
+        </p>
+    </div>
 
 <script type="module">
     /* 
-       ================================================================
-       FIX APPLIED HERE:
-       1. Used "@latest" in the import URL to get the newest library.
-       2. Used "gemini-1.5-flash-latest" as the model name.
-       ================================================================
+       =========================================================
+       1. FIXED MODEL NAME: gemini-1.5-flash
+       2. FIXED IMPORT: Used @latest to ensure compatibility
+       =========================================================
     */
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai@latest";
 
-    // ==========================================
-    // PASTE YOUR API KEY INSIDE THE QUOTES BELOW
-    // ==========================================
-    const API_KEY = "AIzaSyANyaCEXGprtYv5YfDlKToZlrIP4VlQC4c"; 
+    // 🔴 PASTE YOUR API KEY HERE 🔴
+    const API_KEY = "YOUR_API_KEY_GOES_HERE"; 
     
-    // Initialize Gemini
     const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    // Global variable to store the uploaded file for API processing
+    // State Variables
+    let currentMode = 'explain'; // 'explain' or 'question'
     let currentImagePart = null;
+    let chatHistory = []; // To maintain conversation context
 
-    // --- UTILITIES ---
+    // --- UI FUNCTIONS ---
 
-    window.switchTab = function(tabId) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
-    };
-
-    window.triggerCamera = function(inputId) {
-        const input = document.getElementById(inputId);
-        input.setAttribute('capture', 'environment');
-        input.click();
-    };
-
-    window.previewImage = async function(input, previewId) {
-        const file = input.files[0];
-        const preview = document.getElementById(previewId);
+    window.setMode = function(mode) {
+        currentMode = mode;
+        document.getElementById('modeExplain').classList.toggle('active', mode === 'explain');
+        document.getElementById('modeQuestion').classList.toggle('active', mode === 'question');
         
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
-            reader.readAsDataURL(file);
-            currentImagePart = await fileToGenerativePart(file);
-        }
-    };
-
-    async function fileToGenerativePart(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64Data = reader.result.split(',')[1];
-                resolve({
-                    inlineData: {
-                        data: base64Data,
-                        mimeType: file.type
-                    },
-                });
-            };
-            reader.readAsDataURL(file);
-        });
+        // Add a system note to chat to indicate switch
+        addMessageToUI('ai', `<em>Switched to ${mode === 'explain' ? 'Tutor' : 'Past Paper'} mode.</em>`);
+        
+        // Clear history context when switching modes to prevent confusion
+        chatHistory = []; 
     }
 
-    // --- SECTION 1: EXPLANATION LOGIC ---
+    window.autoResize = function(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
 
-    window.handleExplanation = async function() {
-        const text = document.getElementById('explainText').value;
-        const spinner = document.getElementById('spinner1');
-        const responseBox = document.getElementById('response1');
-        const btn = document.querySelector('#explain .btn-main');
+    window.handleFileSelect = async function(input) {
+        const file = input.files[0];
+        if (!file) return;
 
-        if (!text && !currentImagePart) {
-            alert("Please enter text or upload an image.");
-            return;
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            document.getElementById('upload-preview').src = e.target.result;
+            document.getElementById('upload-preview-container').style.display = 'block';
+            
+            // Convert to base64 for Gemini
+            const base64Data = e.target.result.split(',')[1];
+            currentImagePart = {
+                inlineData: { data: base64Data, mimeType: file.type }
+            };
+        }
+        reader.readAsDataURL(file);
+    }
+
+    window.clearImage = function() {
+        currentImagePart = null;
+        document.getElementById('fileInput').value = "";
+        document.getElementById('upload-preview-container').style.display = 'none';
+    }
+
+    // --- MAIN LOGIC ---
+
+    window.sendMessage = async function() {
+        const inputField = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const text = inputField.value.trim();
+
+        if (!text && !currentImagePart) return;
+
+        // 1. Add User Message to UI
+        let userHTML = text.replace(/\n/g, '<br>');
+        if (currentImagePart) {
+            userHTML += `<br><img src="${document.getElementById('upload-preview').src}" class="chat-img">`;
+        }
+        addMessageToUI('user', userHTML);
+
+        // Reset Input
+        inputField.value = '';
+        inputField.style.height = '24px';
+        const imagePartToSend = currentImagePart; // Store ref before clearing
+        clearImage();
+        sendBtn.disabled = true;
+
+        // 2. Add Loading Indicator
+        const loadingId = addLoadingIndicator();
+
+        // 3. Prepare Prompt based on Mode
+        let prompt = "";
+        if (currentMode === 'explain') {
+            prompt = `
+                You are an IGCSE Biology (0610) Tutor. 
+                Answer the following question simply and clearly. 
+                Use bold text for keywords. Use bullet points for steps.
+                If the user sends an image, explain what is in the biological diagram.
+                USER: ${text}
+            `;
+        } else {
+            prompt = `
+                You are helping a student with an IGCSE Biology Past Paper question.
+                1. If this is the start of the question, identify the topic and give a hint. Do NOT give the answer key immediately unless asked.
+                2. If the user asks for the answer, provide the correct letter/answer with a full explanation of why it is right and why others are wrong.
+                USER: ${text}
+            `;
         }
 
-        btn.disabled = true;
-        spinner.style.display = 'block';
-        responseBox.style.display = 'none';
-
-        const prompt = `
-            You are an expert Biology Tutor for the Cambridge IGCSE (0610) curriculum.
-            RULES:
-            1. Analyze the user's input (text or image).
-            2. GUARDRAIL: If the input is NOT related to Biology, Science, or the IGCSE curriculum, you MUST refuse to answer. Say: "I can only assist with Biology questions."
-            3. If it IS Biology, explain the concept simply, using IGCSE terminology.
-            4. Use bold text for key definitions.
-            5. Use bullet points for processes.
-            USER INPUT: ${text}
-        `;
-
         try {
-            const parts = [prompt];
-            if (currentImagePart) parts.push(currentImagePart);
+            // 4. Call Gemini API
+            let parts = [];
+            
+            // Add history (Simple version: just previous turn context)
+            if(chatHistory.length > 0) {
+                 // In a real production app, you'd format this strictly as history objects
+                 parts.push(chatHistory[chatHistory.length -1]); 
+            }
+            
+            parts.push(prompt);
+            if (imagePartToSend) parts.push(imagePartToSend);
 
             const result = await model.generateContent(parts);
             const response = await result.response;
             const markdownText = response.text();
 
-            responseBox.innerHTML = formatResponse(markdownText);
-            responseBox.style.display = 'block';
-            currentImagePart = null;
-            document.getElementById('preview1').style.display = 'none';
+            // 5. Remove Loading & Show AI Response
+            removeMessage(loadingId);
+            
+            // Format Markdown to HTML using the 'marked' library
+            const formattedHTML = marked.parse(markdownText);
+            addMessageToUI('ai', formattedHTML);
+
+            // Update History
+            chatHistory.push(`User asked: ${text}. You answered: ${markdownText}`);
 
         } catch (error) {
+            removeMessage(loadingId);
+            addMessageToUI('ai', `<span style="color:red">Error: ${error.message}. Please check your API Key.</span>`);
             console.error(error);
-            responseBox.innerHTML = `<span style="color:red; font-weight:bold;">Error: ${error.message}. <br>Check your API Key and Console.</span>`;
-            responseBox.style.display = 'block';
         } finally {
-            btn.disabled = false;
-            spinner.style.display = 'none';
+            sendBtn.disabled = false;
         }
     };
 
-    // --- SECTION 2: QUESTIONS LOGIC ---
-
-    window.handleQuestionInitial = async function() {
-        const text = document.getElementById('questText').value;
-        const spinner = document.getElementById('spinner2');
-        const responseBox = document.getElementById('response2');
-        const btn = document.getElementById('sendQuestBtn');
-        const options = document.getElementById('followUpOptions');
-
-        if (!text && !currentImagePart) { alert("Please provide a question."); return; }
-
-        btn.disabled = true;
-        spinner.style.display = 'block';
-        options.style.display = 'none';
-
-        const prompt = `
-            You are an IGCSE Biology Tutor. The user has sent a question (text or image).
-            1. Identify the topic (e.g., "This is a question about Osmosis").
-            2. Give a brief hint or explain the concept being tested WITHOUT giving the final answer yet.
-            3. Ask the student if they understand the concept now.
+    function addMessageToUI(role, htmlContent) {
+        const container = document.getElementById('chat-container');
+        const div = document.createElement('div');
+        div.className = `message-row ${role}`;
+        
+        const avatarIcon = role === 'ai' ? '<i class="fa-solid fa-robot"></i>' : '<i class="fa-solid fa-user"></i>';
+        
+        div.innerHTML = `
+            <div class="avatar">${avatarIcon}</div>
+            <div class="message-content">${htmlContent}</div>
         `;
-
-        try {
-            const parts = [prompt];
-            if (currentImagePart) parts.push(currentImagePart);
-
-            const result = await model.generateContent(parts);
-            const textResponse = result.response.text();
-
-            responseBox.innerHTML = formatResponse(textResponse);
-            responseBox.style.display = 'block';
-            options.style.display = 'grid';
-
-        } catch (error) {
-            console.error(error);
-            responseBox.innerHTML = `<span style="color:red; font-weight:bold;">Error: ${error.message}.</span>`;
-            responseBox.style.display = 'block';
-        } finally {
-            btn.disabled = false;
-            spinner.style.display = 'none';
-        }
-    };
-
-    window.toggleCustomInput = function() {
-        const area = document.getElementById('customInputArea');
-        area.style.display = area.style.display === 'none' ? 'block' : 'none';
-    };
-
-    window.handleFollowUp = async function(type) {
-        const responseBox = document.getElementById('response2');
-        const customText = document.getElementById('customFollowUpText').value;
         
-        let prompt = "";
-        
-        responseBox.innerHTML += `<hr style="margin:15px 0; border:0; border-top:1px dashed #ccc;"><em>Thinking...</em>`;
-
-        if (type === 'answer') {
-            prompt = `
-                The student wants the final correct answer with reasoning.
-                Provide the Answer Key (e.g., "Answer: C") and a step-by-step explanation of WHY it is correct and why others are wrong.
-                Reference specific IGCSE 0610 syllabus points if possible.
-            `;
-        } else {
-            prompt = `
-                The student has a specific follow-up question: "${customText}".
-                Answer this specific query clearly and concisely.
-            `;
-        }
-
-        try {
-            const result = await model.generateContent(prompt);
-            const textResponse = result.response.text();
-            responseBox.innerHTML = responseBox.innerHTML.replace('<em>Thinking...</em>', formatResponse(textResponse));
-        } catch (error) {
-            alert("Error fetching follow-up.");
-        }
-    };
-
-    function formatResponse(text) {
-        return text
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>');
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+        return div.id = 'msg-' + Date.now();
     }
+
+    function addLoadingIndicator() {
+        const container = document.getElementById('chat-container');
+        const div = document.createElement('div');
+        div.className = 'message-row ai';
+        div.innerHTML = `
+            <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="message-content">
+                <div class="typing-indicator" style="display:block">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+        return div.id = 'loading-' + Date.now();
+    }
+
+    function removeMessage(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
 </script>
 
 </body>
