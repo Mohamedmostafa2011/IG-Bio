@@ -5,193 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BioChat IGCSE 0610</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Marked Library for formatting bold text/lists -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        :root {
-            --primary: #10a37f; /* ChatGPT Green */
-            --user-msg: #f0f0f0; 
-            --ai-msg: #ffffff;
-            --bg: #ffffff;
-            --text: #343541;
-            --border: #d9d9e3;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Söhne', 'Segoe UI', Helvetica, sans-serif; }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* HEADER & MODE SWITCHER */
-        header {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            z-index: 10;
-        }
-
+        :root { --primary: #10a37f; --user-msg: #f0f0f0; --ai-msg: #ffffff; --bg: #ffffff; --text: #343541; --border: #d9d9e3; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Helvetica, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
+        
+        header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: white; z-index: 10; }
         .brand { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
         .brand i { color: var(--primary); }
+        .mode-toggle { background: #f0f0f0; padding: 4px; border-radius: 8px; display: flex; gap: 5px; }
+        .mode-btn { border: none; background: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 600; color: #666; transition: 0.2s; }
+        .mode-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        .mode-toggle {
-            background: #f0f0f0;
-            padding: 4px;
-            border-radius: 8px;
-            display: flex;
-            gap: 5px;
-        }
-
-        .mode-btn {
-            border: none;
-            background: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            transition: 0.2s;
-        }
-
-        .mode-btn.active {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        /* CHAT AREA */
-        #chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 0;
-            scroll-behavior: smooth;
-        }
-
-        .message-row {
-            display: flex;
-            padding: 20px;
-            gap: 15px;
-            border-bottom: 1px solid transparent;
-        }
-
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px 0; scroll-behavior: smooth; }
+        .message-row { display: flex; padding: 20px; gap: 15px; border-bottom: 1px solid transparent; }
         .message-row.ai { background: #f7f7f8; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .message-row.user { background: white; }
-
-        .avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
+        .avatar { width: 30px; height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
         .ai .avatar { background: var(--primary); color: white; }
         .user .avatar { background: #5436DA; color: white; }
-
-        .message-content {
-            flex: 1;
-            max-width: 800px;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-
-        /* Markdown Styling within messages */
-        .message-content strong { color: #2E7D32; font-weight: 700; } /* Bio Green for keywords */
-        .message-content ul, .message-content ol { margin-left: 20px; margin-bottom: 10px; }
-        .message-content p { margin-bottom: 10px; }
-        .message-content h1, .message-content h2, .message-content h3 { margin-top: 10px; margin-bottom: 5px; font-size: 1.1rem; }
-        
-        /* Image inside chat */
+        .message-content { flex: 1; max-width: 800px; line-height: 1.6; font-size: 1rem; }
+        .message-content strong { color: #2E7D32; font-weight: 700; }
         .chat-img { max-width: 300px; border-radius: 8px; border: 1px solid #ddd; margin-top: 10px; }
 
-        /* INPUT AREA */
-        .input-wrapper {
-            background: white;
-            padding: 20px;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            position: relative;
-        }
-
-        .input-box {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            background: white;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Image Preview Area above input */
-        #upload-preview-container {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            display: none;
-        }
-        
-        #upload-preview {
-            height: 60px;
-            border-radius: 4px;
-            border: 1px solid var(--primary);
-        }
-
-        .textarea-row {
-            display: flex;
-            align-items: flex-end;
-            padding: 10px;
-        }
-
-        textarea {
-            flex: 1;
-            border: none;
-            resize: none;
-            height: 24px;
-            max-height: 200px;
-            padding: 0 10px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            color: #8e8ea0;
-            transition: 0.2s;
-        }
-
+        .input-wrapper { background: white; padding: 20px; border-top: 1px solid rgba(0,0,0,0.05); position: relative; }
+        .input-box { max-width: 800px; margin: 0 auto; position: relative; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05); background: white; display: flex; flex-direction: column; }
+        #upload-preview-container { padding: 10px; border-bottom: 1px solid #eee; display: none; }
+        #upload-preview { height: 60px; border-radius: 4px; border: 1px solid var(--primary); }
+        .textarea-row { display: flex; align-items: flex-end; padding: 10px; }
+        textarea { flex: 1; border: none; resize: none; height: 24px; max-height: 200px; padding: 0 10px; font-size: 1rem; outline: none; }
+        .action-btn { background: none; border: none; cursor: pointer; padding: 5px 10px; color: #8e8ea0; transition: 0.2s; }
         .action-btn:hover { color: var(--text); }
         .send-btn { color: var(--primary); }
         .send-btn:disabled { color: #ccc; cursor: default; }
 
-        /* Loading Dots */
         .typing-indicator { display: none; margin-left: 10px; }
-        .dot {
-            height: 8px; width: 8px; background-color: #bbb; border-radius: 50%;
-            display: inline-block; animation: blink 1.4s infinite both;
-        }
+        .dot { height: 8px; width: 8px; background-color: #bbb; border-radius: 50%; display: inline-block; animation: blink 1.4s infinite both; }
         .dot:nth-child(1){animation-delay: 0.2s;} .dot:nth-child(2){animation-delay: 0.4s;} .dot:nth-child(3){animation-delay: 0.6s;}
         @keyframes blink { 0% {opacity: .2;} 20% {opacity: 1;} 100% {opacity: .2;} }
-
-        /* Mobile Adjustments */
-        @media(max-width: 600px) {
-            .message-row { padding: 15px 10px; }
-            .input-wrapper { padding: 10px; }
-        }
     </style>
 </head>
 <body>
@@ -205,7 +57,6 @@
     </header>
 
     <div id="chat-container">
-        <!-- Welcome Message -->
         <div class="message-row ai">
             <div class="avatar"><i class="fa-solid fa-robot"></i></div>
             <div class="message-content">
@@ -213,8 +64,8 @@
                 <br><br>
                 Select a mode above:
                 <ul>
-                    <li><strong>Tutor:</strong> Ask me to explain concepts like Osmosis or Enzymes.</li>
-                    <li><strong>Past Paper:</strong> Upload a photo of a question, and I'll help you solve it.</li>
+                    <li><strong>Tutor:</strong> Ask me to explain concepts.</li>
+                    <li><strong>Past Paper:</strong> Upload a question to solve.</li>
                 </ul>
             </div>
         </div>
@@ -222,59 +73,40 @@
 
     <div class="input-wrapper">
         <div class="input-box">
-            <!-- Hidden Preview -->
             <div id="upload-preview-container">
                 <img id="upload-preview" alt="Upload">
                 <button onclick="clearImage()" style="border:none; background:none; color:red; cursor:pointer; vertical-align:top; margin-left:5px;"><i class="fa-solid fa-times"></i></button>
             </div>
-
             <div class="textarea-row">
-                <!-- File Upload -->
-                <button class="action-btn" onclick="document.getElementById('fileInput').click()">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
+                <button class="action-btn" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-plus"></i></button>
                 <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(this)">
-
                 <textarea id="userInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="if(event.key === 'Enter' && !event.shiftKey){ event.preventDefault(); sendMessage(); }"></textarea>
-                
-                <button class="action-btn send-btn" id="sendBtn" onclick="sendMessage()">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+                <button class="action-btn send-btn" id="sendBtn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
-        <p style="text-align: center; font-size: 0.75rem; color: #999; margin-top: 10px;">
-            AI can make mistakes. Check important info against your IGCSE textbook.
-        </p>
     </div>
 
 <script type="module">
-    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai@latest";
+    // FIX 1: Using JSDelivr for a stable library version
+    import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai/+esm";
 
-    // ============================================
-    // YOUR API KEY IS INSERTED HERE
-    // ============================================
+    // YOUR API KEY
     const API_KEY = "AIzaSyANyaCEXGprtYv5YfDlKToZlrIP4VlQC4c"; 
-    // ============================================
     
     const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
+    // FIX 2: Using the specific VERSIONED model name to prevent 404 errors
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-001" });
 
-    // State Variables
-    let currentMode = 'explain'; // 'explain' or 'question'
+    let currentMode = 'explain';
     let currentImagePart = null;
-    let chatHistory = []; // To maintain conversation context
-
-    // --- UI FUNCTIONS ---
+    let chatHistory = [];
 
     window.setMode = function(mode) {
         currentMode = mode;
         document.getElementById('modeExplain').classList.toggle('active', mode === 'explain');
         document.getElementById('modeQuestion').classList.toggle('active', mode === 'question');
-        
-        // Add a system note to chat to indicate switch
         addMessageToUI('ai', `<em>Switched to ${mode === 'explain' ? 'Tutor' : 'Past Paper'} mode.</em>`);
-        
-        // Clear history context when switching modes to prevent confusion
         chatHistory = []; 
     }
 
@@ -286,17 +118,12 @@
     window.handleFileSelect = async function(input) {
         const file = input.files[0];
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = async function(e) {
             document.getElementById('upload-preview').src = e.target.result;
             document.getElementById('upload-preview-container').style.display = 'block';
-            
-            // Convert to base64 for Gemini
             const base64Data = e.target.result.split(',')[1];
-            currentImagePart = {
-                inlineData: { data: base64Data, mimeType: file.type }
-            };
+            currentImagePart = { inlineData: { data: base64Data, mimeType: file.type } };
         }
         reader.readAsDataURL(file);
     }
@@ -307,8 +134,6 @@
         document.getElementById('upload-preview-container').style.display = 'none';
     }
 
-    // --- MAIN LOGIC ---
-
     window.sendMessage = async function() {
         const inputField = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -316,71 +141,46 @@
 
         if (!text && !currentImagePart) return;
 
-        // 1. Add User Message to UI
         let userHTML = text.replace(/\n/g, '<br>');
-        if (currentImagePart) {
-            userHTML += `<br><img src="${document.getElementById('upload-preview').src}" class="chat-img">`;
-        }
+        if (currentImagePart) userHTML += `<br><img src="${document.getElementById('upload-preview').src}" class="chat-img">`;
         addMessageToUI('user', userHTML);
 
-        // Reset Input
         inputField.value = '';
         inputField.style.height = '24px';
-        const imagePartToSend = currentImagePart; // Store ref before clearing
+        const imagePartToSend = currentImagePart;
         clearImage();
         sendBtn.disabled = true;
 
-        // 2. Add Loading Indicator
         const loadingId = addLoadingIndicator();
 
-        // 3. Prepare Prompt based on Mode
         let prompt = "";
         if (currentMode === 'explain') {
-            prompt = `
-                You are an IGCSE Biology (0610) Tutor. 
-                Answer the following question simply and clearly. 
-                Use bold text for keywords. Use bullet points for steps.
-                If the user sends an image, explain what is in the biological diagram.
-                USER: ${text}
-            `;
+            prompt = `You are an IGCSE Biology (0610) Tutor. Explain simply. Use bold text for keywords. USER: ${text}`;
         } else {
-            prompt = `
-                You are helping a student with an IGCSE Biology Past Paper question.
-                1. If this is the start of the question, identify the topic and give a hint. Do NOT give the answer key immediately unless asked.
-                2. If the user asks for the answer, provide the correct letter/answer with a full explanation of why it is right and why others are wrong.
-                USER: ${text}
-            `;
+            prompt = `IGCSE Biology Past Paper Tutor. 1. Identify topic. 2. Give hint. Do not give answer yet unless asked. USER: ${text}`;
         }
 
         try {
-            // 4. Call Gemini API
             let parts = [];
-            
-            // Add history (Simple version: just previous turn context)
-            if(chatHistory.length > 0) {
-                 parts.push(chatHistory[chatHistory.length -1]); 
-            }
-            
-            parts.push(prompt);
+            if(chatHistory.length > 0) parts.push(chatHistory[chatHistory.length -1]); 
+            parts.push({text: prompt}); // Explicit text object
             if (imagePartToSend) parts.push(imagePartToSend);
 
             const result = await model.generateContent(parts);
             const response = await result.response;
             const markdownText = response.text();
 
-            // 5. Remove Loading & Show AI Response
             removeMessage(loadingId);
-            
-            // Format Markdown to HTML using the 'marked' library
             const formattedHTML = marked.parse(markdownText);
             addMessageToUI('ai', formattedHTML);
-
-            // Update History
-            chatHistory.push(`User asked: ${text}. You answered: ${markdownText}`);
+            
+            // Save simplified history
+            chatHistory.push({ role: "user", parts: [{ text: text }] });
+            chatHistory.push({ role: "model", parts: [{ text: markdownText }] });
 
         } catch (error) {
             removeMessage(loadingId);
-            addMessageToUI('ai', `<span style="color:red">Error: ${error.message}. <br>Make sure your API key is active.</span>`);
+            addMessageToUI('ai', `<span style="color:red">Error: ${error.message}</span>`);
             console.error(error);
         } finally {
             sendBtn.disabled = false;
@@ -391,14 +191,8 @@
         const container = document.getElementById('chat-container');
         const div = document.createElement('div');
         div.className = `message-row ${role}`;
-        
         const avatarIcon = role === 'ai' ? '<i class="fa-solid fa-robot"></i>' : '<i class="fa-solid fa-user"></i>';
-        
-        div.innerHTML = `
-            <div class="avatar">${avatarIcon}</div>
-            <div class="message-content">${htmlContent}</div>
-        `;
-        
+        div.innerHTML = `<div class="avatar">${avatarIcon}</div><div class="message-content">${htmlContent}</div>`;
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
         return div.id = 'msg-' + Date.now();
@@ -408,14 +202,7 @@
         const container = document.getElementById('chat-container');
         const div = document.createElement('div');
         div.className = 'message-row ai';
-        div.innerHTML = `
-            <div class="avatar"><i class="fa-solid fa-robot"></i></div>
-            <div class="message-content">
-                <div class="typing-indicator" style="display:block">
-                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-                </div>
-            </div>
-        `;
+        div.innerHTML = `<div class="avatar"><i class="fa-solid fa-robot"></i></div><div class="message-content"><div class="typing-indicator" style="display:block"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
         return div.id = 'loading-' + Date.now();
@@ -425,7 +212,6 @@
         const el = document.getElementById(id);
         if (el) el.remove();
     }
-
 </script>
 
 </body>
