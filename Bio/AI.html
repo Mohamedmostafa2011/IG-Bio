@@ -197,6 +197,7 @@
             line-height: 1.6;
             font-size: 0.95rem;
             display: none;
+            word-wrap: break-word;
         }
 
         /* Loading Spinner */
@@ -306,32 +307,37 @@
 </div>
 
 <script type="module">
-    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    /* 
+       ================================================================
+       FIX APPLIED HERE:
+       1. Used "@latest" in the import URL to get the newest library.
+       2. Used "gemini-1.5-flash-latest" as the model name.
+       ================================================================
+    */
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai@latest";
 
-    // YOUR API KEY (In a real app, protect this via backend!)
+    // ==========================================
+    // PASTE YOUR API KEY INSIDE THE QUOTES BELOW
+    // ==========================================
     const API_KEY = "AIzaSyANyaCEXGprtYv5YfDlKToZlrIP4VlQC4c"; 
     
+    // Initialize Gemini
     const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
     // Global variable to store the uploaded file for API processing
     let currentImagePart = null;
 
     // --- UTILITIES ---
 
-    // Expose functions to window so HTML buttons can see them
     window.switchTab = function(tabId) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        
         document.getElementById(tabId).classList.add('active');
-        // Find button that calls this and make active (simplified)
         event.currentTarget.classList.add('active');
     };
 
     window.triggerCamera = function(inputId) {
-        // Mobile browsers handle capture="environment" automatically in the file input
-        // This helper just ensures the click passes through
         const input = document.getElementById(inputId);
         input.setAttribute('capture', 'environment');
         input.click();
@@ -348,8 +354,6 @@
                 preview.style.display = 'block';
             }
             reader.readAsDataURL(file);
-            
-            // Prepare image for Gemini
             currentImagePart = await fileToGenerativePart(file);
         }
     };
@@ -383,22 +387,18 @@
             return;
         }
 
-        // UI Loading State
         btn.disabled = true;
         spinner.style.display = 'block';
         responseBox.style.display = 'none';
 
-        // 1. The Guardrail System Prompt
         const prompt = `
             You are an expert Biology Tutor for the Cambridge IGCSE (0610) curriculum.
-            
             RULES:
             1. Analyze the user's input (text or image).
             2. GUARDRAIL: If the input is NOT related to Biology, Science, or the IGCSE curriculum, you MUST refuse to answer. Say: "I can only assist with Biology questions."
             3. If it IS Biology, explain the concept simply, using IGCSE terminology.
             4. Use bold text for key definitions.
             5. Use bullet points for processes.
-            
             USER INPUT: ${text}
         `;
 
@@ -410,16 +410,14 @@
             const response = await result.response;
             const markdownText = response.text();
 
-            // Simple Markdown formatter for HTML
             responseBox.innerHTML = formatResponse(markdownText);
             responseBox.style.display = 'block';
-            
-            // Clear image after use
             currentImagePart = null;
             document.getElementById('preview1').style.display = 'none';
 
         } catch (error) {
-            responseBox.innerHTML = `<span style="color:red">Error: ${error.message}</span>`;
+            console.error(error);
+            responseBox.innerHTML = `<span style="color:red; font-weight:bold;">Error: ${error.message}. <br>Check your API Key and Console.</span>`;
             responseBox.style.display = 'block';
         } finally {
             btn.disabled = false;
@@ -458,12 +456,11 @@
 
             responseBox.innerHTML = formatResponse(textResponse);
             responseBox.style.display = 'block';
-            
-            // Reveal Follow-up Options
             options.style.display = 'grid';
 
         } catch (error) {
-            responseBox.innerHTML = "Error analyzing question.";
+            console.error(error);
+            responseBox.innerHTML = `<span style="color:red; font-weight:bold;">Error: ${error.message}.</span>`;
             responseBox.style.display = 'block';
         } finally {
             btn.disabled = false;
@@ -498,26 +495,18 @@
         }
 
         try {
-            // We use chat history implicitly by context, but for simple implementation
-            // we treat this as a new prompt with context of "Previous Question". 
-            // Note: Ideally, use startChat() for true history, but this works for single-turn followups.
-            
             const result = await model.generateContent(prompt);
             const textResponse = result.response.text();
-            
-            // Append result
             responseBox.innerHTML = responseBox.innerHTML.replace('<em>Thinking...</em>', formatResponse(textResponse));
-            
         } catch (error) {
             alert("Error fetching follow-up.");
         }
     };
 
     function formatResponse(text) {
-        // Basic Markdown to HTML conversion
         return text
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-            .replace(/\n/g, '<br>'); // New lines
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
     }
 </script>
 
