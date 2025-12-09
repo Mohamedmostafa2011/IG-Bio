@@ -448,7 +448,7 @@
                 }
             });
 
-                        async function loadAllContent() {
+            async function loadAllContent() {
                 // --- START FIX: Clear existing cards before loading new ones ---
                 // This removes all cards that are NOT the "Add (+)" button
                 document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => card.remove());
@@ -476,9 +476,17 @@
             }
 
             function createCard(gridId, data, docId) {
-                const grid = document.getElementById(gridId);
+                let grid = document.getElementById(gridId);
                 if(!grid) return;
                 
+                // === FIX START: Handle duplicate IDs in dynamic sections ===
+                // If the element found is the section wrapper instead of the grid container, 
+                // switch to the inner container
+                if (!grid.classList.contains('chapter-grid') && grid.querySelector('.chapter-grid')) {
+                    grid = grid.querySelector('.chapter-grid');
+                }
+                // === FIX END ===
+
                 const div = document.createElement('div');
                 div.className = 'chapter-card';
                 if(data.isHidden) div.classList.add('unavailable');
@@ -505,7 +513,15 @@
                 `;
 
                 const addBtn = grid.querySelector('.add-card');
-                grid.insertBefore(div, addBtn);
+                
+                // === FIX START: Safe insertion ===
+                // Ensure the button exists AND is a direct child of the grid we are appending to
+                if (addBtn && addBtn.parentNode === grid) {
+                    grid.insertBefore(div, addBtn);
+                } else {
+                    grid.appendChild(div);
+                }
+                // === FIX END ===
                 
                 if(isAdmin) injectAdminControls(div);
             }
@@ -688,6 +704,3 @@
     </script>
 </body>
 </html>
-
-
-
