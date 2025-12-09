@@ -10,7 +10,7 @@
     <style>
         :root {
             --primary: #10a37f; /* ChatGPT Green */
-            --user-msg: #f0f0f0; /* Light Gray */
+            --user-msg: #f0f0f0; 
             --ai-msg: #ffffff;
             --bg: #ffffff;
             --text: #343541;
@@ -108,8 +108,9 @@
 
         /* Markdown Styling within messages */
         .message-content strong { color: #2E7D32; font-weight: 700; } /* Bio Green for keywords */
-        .message-content ul { margin-left: 20px; margin-bottom: 10px; }
+        .message-content ul, .message-content ol { margin-left: 20px; margin-bottom: 10px; }
         .message-content p { margin-bottom: 10px; }
+        .message-content h1, .message-content h2, .message-content h3 { margin-top: 10px; margin-bottom: 5px; font-size: 1.1rem; }
         
         /* Image inside chat */
         .chat-img { max-width: 300px; border-radius: 8px; border: 1px solid #ddd; margin-top: 10px; }
@@ -247,16 +248,13 @@
     </div>
 
 <script type="module">
-    /* 
-       =========================================================
-       1. FIXED MODEL NAME: gemini-1.5-flash
-       2. FIXED IMPORT: Used @latest to ensure compatibility
-       =========================================================
-    */
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai@latest";
 
-    // 🔴 PASTE YOUR API KEY HERE 🔴
-    const API_KEY = "YOUR_API_KEY_GOES_HERE"; 
+    // ============================================
+    // YOUR API KEY IS INSERTED HERE
+    // ============================================
+    const API_KEY = "AIzaSyANyaCEXGprtYv5YfDlKToZlrIP4VlQC4c"; 
+    // ============================================
     
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -360,7 +358,6 @@
             
             // Add history (Simple version: just previous turn context)
             if(chatHistory.length > 0) {
-                 // In a real production app, you'd format this strictly as history objects
                  parts.push(chatHistory[chatHistory.length -1]); 
             }
             
@@ -383,7 +380,7 @@
 
         } catch (error) {
             removeMessage(loadingId);
-            addMessageToUI('ai', `<span style="color:red">Error: ${error.message}. Please check your API Key.</span>`);
+            addMessageToUI('ai', `<span style="color:red">Error: ${error.message}. <br>Make sure your API key is active.</span>`);
             console.error(error);
         } finally {
             sendBtn.disabled = false;
