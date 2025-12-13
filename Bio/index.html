@@ -449,10 +449,8 @@
             });
 
             async function loadAllContent() {
-                // --- START FIX: Clear existing cards before loading new ones ---
-                // This removes all cards that are NOT the "Add (+)" button
+                // Clear existing cards
                 document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => card.remove());
-                // --- END FIX ---
 
                 const snapshot = await db.collection('siteContent').get();
                 const docs = [];
@@ -462,7 +460,10 @@
 
                 docs.forEach(item => {
                     if (!item.deleted && item.sectionId) {
-                        if(item.sectionId === 'NEW_SECTION') createNewSection(item.title);
+                        if(item.sectionId === 'NEW_SECTION') {
+                            // UPDATE: PASS ITEM ID FOR DELETION
+                            createNewSection(item.title, item.id);
+                        }
                         else {
                             let gridId = (item.sectionId === 'chapters') ? 'grid' : 
                                          (item.sectionId === 'general-topics') ? 'topicGrid' : 
@@ -479,13 +480,10 @@
                 let grid = document.getElementById(gridId);
                 if(!grid) return;
                 
-                // === FIX START: Handle duplicate IDs in dynamic sections ===
-                // If the element found is the section wrapper instead of the grid container, 
-                // switch to the inner container
+                // Handle duplicate IDs in dynamic sections
                 if (!grid.classList.contains('chapter-grid') && grid.querySelector('.chapter-grid')) {
                     grid = grid.querySelector('.chapter-grid');
                 }
-                // === FIX END ===
 
                 const div = document.createElement('div');
                 div.className = 'chapter-card';
@@ -498,7 +496,7 @@
                 let iconHtml = (gridId === 'gameGrid') ? '<i class="fa-solid fa-gamepad"></i>' : '<i class="fa-solid fa-chevron-right"></i>';
                 let subtitleHtml = data.subtitle ? `<div class="chapter-num">${data.subtitle}</div>` : '';
 
-                // CHECKBOX LOGIC: ONLY FOR 'grid' (CHAPTERS)
+                // CHECKBOX LOGIC
                 let checkboxHtml = '';
                 if(gridId === 'grid') {
                     const isChecked = userProgress.includes(docId) ? 'checked' : '';
@@ -514,14 +512,12 @@
 
                 const addBtn = grid.querySelector('.add-card');
                 
-                // === FIX START: Safe insertion ===
-                // Ensure the button exists AND is a direct child of the grid we are appending to
+                // Safe insertion
                 if (addBtn && addBtn.parentNode === grid) {
                     grid.insertBefore(div, addBtn);
                 } else {
                     grid.appendChild(div);
                 }
-                // === FIX END ===
                 
                 if(isAdmin) injectAdminControls(div);
             }
@@ -684,15 +680,69 @@
             }
             window.openProfileSettings = function() { document.getElementById('profileModal').style.display = 'flex'; }
             window.enableDragAndDrop = function(elId, handle) { const el = document.getElementById(elId); if(el) Sortable.create(el, { handle: handle, animation: 150 }); }
-            function createNewSection(title) {
+            
+            // UPDATED createNewSection FUNCTION
+            function createNewSection(title, docId) {
                 const safeId = title.replace(/\s+/g, '-').toLowerCase();
+                
+                // If section already exists in DOM, don't recreate
                 if(document.getElementById(safeId)) return;
-                document.getElementById('nav-links').innerHTML += `<li><a href="#${safeId}"><i class="fa-solid fa-book"></i> ${title}</a></li>`;
+
+                // Create Nav Link
+                document.getElementById('nav-links').innerHTML += `<li id="nav-li-${safeId}"><a href="#${safeId}"><i class="fa-solid fa-book"></i> ${title}</a></li>`;
+                
+                // Create Delete Button HTML (Only if Admin)
+                let deleteHtml = '';
+                if(isAdmin && docId) {
+                    deleteHtml = `<i class="fa-solid fa-trash" 
+                        onclick="deleteSection('${docId}', '${safeId}')" 
+                        style="color:var(--danger); cursor:pointer; font-size:1.2rem; margin-left:15px;" 
+                        title="Delete Section"></i>`;
+                }
+
                 const w = document.getElementById('content-sections-wrapper');
-                const s = document.createElement('section'); s.className = 'chapters-section'; s.id = safeId;
-                s.innerHTML = `<div class="section-header"><i class="fa-solid fa-bars section-drag-handle"></i><h2>${title}</h2></div><div class="chapter-grid" id="${safeId}"><div class="chapter-card add-card" onclick="openAdminModal('${safeId}')"><i class="fa-solid fa-plus"></i></div></div>`;
+                const s = document.createElement('section'); 
+                s.className = 'chapters-section'; 
+                s.id = `section-wrapper-${safeId}`; // Wrapper ID
+
+                s.innerHTML = `
+                    <div class="section-header">
+                        <i class="fa-solid fa-bars section-drag-handle"></i>
+                        <div style="display:flex; align-items:center; justify-content:center;">
+                            <h2>${title}</h2>
+                            ${deleteHtml}
+                        </div>
+                    </div>
+                    <div class="chapter-grid" id="${safeId}">
+                        <div class="chapter-card add-card" onclick="openAdminModal('${safeId}')">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                    </div>`;
                 w.appendChild(s);
             }
+
+            // NEW deleteSection FUNCTION
+            window.deleteSection = async function(docId, safeId) {
+                if(!confirm("Are you sure you want to delete this ENTIRE section? content inside will be hidden.")) return;
+                
+                try {
+                    // 1. Mark the section definition as deleted in Firebase
+                    await db.collection('siteContent').doc(docId).update({ deleted: true });
+
+                    // 2. Remove from UI immediately
+                    const sectionEl = document.getElementById(`section-wrapper-${safeId}`);
+                    if(sectionEl) sectionEl.remove();
+
+                    // 3. Remove from Navigation
+                    const navEl = document.getElementById(`nav-li-${safeId}`);
+                    if(navEl) navEl.remove();
+
+                    console.log("Section deleted successfully");
+                } catch(e) {
+                    alert("Error deleting section: " + e.message);
+                }
+            }
+
             window.filterGrid = function(gid, val) {
                 const v = val.toUpperCase();
                 document.querySelectorAll('#'+gid+' .chapter-card:not(.add-card)').forEach(c => {
