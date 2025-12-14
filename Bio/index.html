@@ -106,11 +106,16 @@
         }
         .cta-btn:hover { background: transparent; border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
         .auth-btn { width: 100%; margin-top: 15px; background: var(--primary); border:none; color:white; }
+        .guest-btn { width: 100%; margin-top: 10px; background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .guest-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+
         .hero-btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
         .btn-games { background: var(--success); border-color: var(--success); }
         .btn-games:hover { color: var(--success); background: transparent; }
         .btn-danger { background: var(--danger); border-color: var(--danger); }
         .btn-danger:hover { color: var(--danger); background: transparent; }
+        .btn-secondary { background: #94a3b8; border-color: #94a3b8; color: white; }
+        .btn-secondary:hover { background: transparent; color: #94a3b8; }
 
         #userDashboard {
             background: white; padding: 20px; margin: 20px auto; max-width: 1200px;
@@ -252,6 +257,7 @@
             </div>
             <input type="password" id="password" class="auth-input" placeholder="Password">
             <button onclick="handleAuthAction()" class="cta-btn auth-btn" id="authActionBtn">Login</button>
+            <button onclick="enterAsGuest()" class="cta-btn guest-btn">Enter as a Guest</button>
             <p id="authError"></p>
             <p style="margin-top:20px; font-size:0.9rem; cursor:pointer; color:var(--primary); text-decoration: underline;" onclick="toggleAuthMode()" id="authToggle">New here? Create an account</p>
         </div>
@@ -402,6 +408,19 @@
         </div>
     </div>
 
+    <!-- GUEST LIMIT MODAL -->
+    <div id="guestLimitModal" class="modal-overlay">
+        <div class="modal-box">
+            <i class="fa-solid fa-lock" style="font-size:3rem; color:var(--primary); margin-bottom:15px;"></i>
+            <h2 style="margin-bottom:10px;">Account Required</h2>
+            <p style="margin-bottom:20px; color:var(--text-light);">You must be signed in to track your progress and save completed chapters.</p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button onclick="location.reload()" class="cta-btn">Sign In / Create Account</button>
+                <button onclick="document.getElementById('guestLimitModal').style.display='none'" class="cta-btn btn-secondary">Complete as Guest</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
           apiKey: "AIzaSyBOkZSP6ZMvdoZ8QAt0e8iRxzFa1-lRNnk",
@@ -414,6 +433,7 @@
 
         let currentEditElement = null; 
         let userProgress = []; // Global progress store
+        let isGuestMode = false; // Guest mode flag
 
         try {
             firebase.initializeApp(firebaseConfig);
@@ -424,6 +444,9 @@
             let isSignupMode = false;
 
             auth.onAuthStateChanged(async (user) => {
+                // If we are in guest mode, don't trigger the auth login flow
+                if (isGuestMode) return;
+
                 if (user) {
                     currentUser = user;
                     const doc = await db.collection('users').doc(user.uid).get();
@@ -447,6 +470,22 @@
                     document.getElementById('main-app').style.display = 'none';
                 }
             });
+
+            // GUEST LOGIN FUNCTION
+            window.enterAsGuest = function() {
+                isGuestMode = true;
+                userProgress = []; // No saved progress
+                isAdmin = false;
+                currentUser = null;
+                
+                // Update UI for Guest
+                updateUI({ username: "Guest", gender: "male", isAdmin: false });
+                
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                
+                loadAllContent(); // Load content without user specific progress
+            }
 
             async function loadAllContent() {
                 // Clear existing cards
@@ -573,9 +612,21 @@
 
             window.toggleProgress = async function(e, id) {
                 e.stopPropagation(); 
+                
+                // GUEST CHECK INTERCEPTION
+                if (isGuestMode) {
+                    e.preventDefault(); // Stop the checkmark from appearing visually
+                    document.getElementById('guestLimitModal').style.display = 'flex';
+                    return;
+                }
+
                 const box = document.getElementById(id);
                 const action = box.checked ? 'arrayUnion' : 'arrayRemove';
-                await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue[action](id) });
+                
+                if (currentUser) {
+                    await db.collection('users').doc(currentUser.uid).update({ progress: firebase.firestore.FieldValue[action](id) });
+                }
+                
                 // Update local global var
                 if(box.checked) userProgress.push(id);
                 else userProgress = userProgress.filter(item => item !== id);
