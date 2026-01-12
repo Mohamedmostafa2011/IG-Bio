@@ -3,206 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioBot - CIE 0610 Expert</title>
+    <title>BioBot Pro - CIE 0610</title>
+    <!-- Tailwind & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- PDF Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
-        /* Professional Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #15803d; border-radius: 4px; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap');
         
-        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+        body { font-family: 'Outfit', sans-serif; background: #f0fdf4; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Animations */
+        @keyframes messageSlide {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .msg-enter { animation: messageSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Typing Indicator */
+        .typing-dot {
+            width: 6px; height: 6px; background: #16a34a; border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-        /* Textbook Typography */
-        .prose h1, .prose h2, .prose h3 { color: #166534; font-weight: 700; margin-top: 1em; }
-        .prose ul { list-style-type: disc; padding-left: 1.5rem; color: #374151; }
-        .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #1f2937; }
-        .prose strong { color: #14532d; }
+        /* Markdown Styles */
+        .prose h1, .prose h2 { color: #15803d; font-weight: 700; margin-top: 10px; }
+        .prose ul { list-style-type: disc; padding-left: 1.2rem; color: #334155; }
+        .prose strong { color: #166534; font-weight: 600; }
+        .prose p { margin-bottom: 8px; line-height: 1.6; color: #334155; }
     </style>
 </head>
-<body class="bg-gray-50 h-screen flex flex-col font-sans text-gray-800">
+<body class="h-screen flex flex-col overflow-hidden bg-gradient-to-br from-green-50 to-emerald-100">
 
-    <!-- Professional Header -->
-    <header class="bg-green-800 text-white p-4 shadow-xl flex justify-between items-center z-10">
+    <!-- Navbar -->
+    <header class="glass-panel z-20 px-6 py-4 flex justify-between items-center shadow-sm sticky top-0">
         <div class="flex items-center gap-3">
-            <div class="bg-white p-2 rounded-full">
-                <span class="text-2xl">🧬</span>
+            <div class="w-10 h-10 bg-gradient-to-tr from-green-600 to-emerald-400 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-500/30">
+                <i class="fa-solid fa-dna text-lg"></i>
             </div>
             <div>
-                <h1 class="text-xl font-bold tracking-wide">BioBot <span class="text-green-300">CIE 0610</span></h1>
-                <p class="text-xs text-green-200">Advanced Academic Tutor</p>
+                <h1 class="font-bold text-xl text-gray-800 tracking-tight">BioBot <span class="text-green-600">Pro</span></h1>
+                <p class="text-xs text-gray-500 font-medium">CIE 0610 Specialist AI</p>
             </div>
         </div>
-        <a href="/" class="text-sm bg-green-700 border border-green-600 px-4 py-2 rounded-lg hover:bg-green-600 transition shadow-sm">Back to Home</a>
+        
+        <a href="/" class="group flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-semibold text-gray-600 hover:text-green-600 shadow-sm border border-gray-100 transition-all hover:shadow-md">
+            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+            Exit to Course
+        </a>
     </header>
 
-    <!-- Chat Container -->
-    <main id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-6">
-        <div class="max-w-4xl mx-auto space-y-6">
-            <!-- Welcome Message -->
-            <div class="flex items-start">
-                <div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-md border-l-4 border-green-600 max-w-[90%]">
-                    <h3 class="font-bold text-xl text-green-800 mb-2">Welcome, Student.</h3>
-                    <p class="text-gray-700">I am connected to the <strong>Cambridge IGCSE Biology (0610)</strong> database.</p>
-                    <p class="mt-2 text-gray-700">My settings are configured for:</p>
-                    <ul class="list-disc ml-5 mt-1 text-sm text-gray-600 space-y-1">
-                        <li><strong>Detailed Explanations</strong> (Structure & Function)</li>
-                        <li><strong>Scientific Diagrams</strong> (Cross-sections & Schematics)</li>
-                        <li><strong>Exam-Style Accuracy</strong></li>
-                    </ul>
+    <!-- Chat Area -->
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scroll-smooth pb-32">
+        <!-- Welcome Bubble -->
+        <div class="flex justify-start w-full msg-enter">
+            <div class="glass-panel p-6 rounded-2xl rounded-tl-none max-w-2xl shadow-sm border border-green-100">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <span class="font-bold text-gray-800">System Online</span>
+                </div>
+                <p class="text-gray-600 mb-2">I am an advanced AI trained on the <strong>Cambridge IGCSE Biology (0610)</strong> syllabus.</p>
+                <div class="bg-green-50/50 p-3 rounded-lg border border-green-100 text-sm text-green-800">
+                    <i class="fa-solid fa-check-circle mr-2"></i> Capable of detailed explanations, exam tips, and scientific diagrams.
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Input Area -->
-    <footer class="p-4 bg-white border-t border-gray-200 shadow-2xl">
-        <div class="max-w-4xl mx-auto flex gap-3">
-            <input type="text" id="user-input" 
-                class="flex-1 border-2 border-gray-300 rounded-xl px-5 py-3 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition text-lg"
-                placeholder="Topic (e.g., 'Describe the structure of the Heart')..." 
-                onkeydown="if(event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()" 
-                class="bg-green-700 text-white rounded-xl px-8 py-3 font-bold hover:bg-green-800 transition flex items-center shadow-lg uppercase tracking-wider">
-                Ask
-            </button>
+    <footer class="absolute bottom-0 w-full p-4 z-20">
+        <div class="max-w-4xl mx-auto glass-panel p-2 rounded-2xl shadow-2xl shadow-green-900/10 border border-white/60">
+            <div class="flex items-end gap-2">
+                
+                <!-- Attachment Button (Visual Only) -->
+                <button onclick="document.getElementById('file-upload').click()" class="p-3 text-gray-400 hover:text-green-600 transition-colors rounded-xl hover:bg-green-50" title="Upload Image Context">
+                    <i class="fa-solid fa-plus text-lg"></i>
+                </button>
+                <input type="file" id="file-upload" class="hidden" onchange="handleFileUpload(this)">
+
+                <!-- Draw Button -->
+                <button onclick="sendImageRequest()" class="p-3 text-gray-400 hover:text-purple-600 transition-colors rounded-xl hover:bg-purple-50" title="Generate Scientific Diagram">
+                    <i class="fa-solid fa-image text-lg"></i>
+                </button>
+
+                <!-- Text Input -->
+                <textarea id="user-input" rows="1" 
+                    class="flex-1 bg-transparent border-0 focus:ring-0 text-gray-700 placeholder-gray-400 resize-none py-3 max-h-32"
+                    placeholder="Ask about biology or request a diagram..."
+                    onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+
+                <!-- Send Button -->
+                <button onclick="sendMessage()" class="p-3 bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-lg shadow-green-600/30 transition-all active:scale-95">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     </footer>
 
     <script>
         // ==========================================
-        // CONFIGURATION - NO KEYS REQUIRED
+        // 1. SYLLABUS MAPPING (Links to your site)
         // ==========================================
-        
-        // This Prompt forces the AI to be LONG and DETAILED
-        const SYSTEM_INSTRUCTION = `
-        ACT AS: A strict Cambridge IGCSE Biology (0610) Professor.
-        
-        INSTRUCTIONS FOR TEXT:
-        1.  **LENGTH:** Your answers must be DETAILED and COMPREHENSIVE (at least 200 words). Never give one-sentence answers.
-        2.  **STRUCTURE:** Use Markdown. Use Bold headings. Use Bullet points. 
-        3.  **CONTENT:** Always explain the *Structure* (what it looks like) and *Function* (what it does).
-        4.  **TONE:** Academic, formal, educational.
-        5.  **IMAGE REQUESTS:** If the user asks for a diagram, drawing, or image, ONLY return the text: "GENERATE_IMAGE: [detailed scientific description]".
-        
-        TOPIC:
-        `;
+        const CHAPTER_LINKS = {
+            "characteristics": { num: 1, title: "Characteristics of Living Organisms" },
+            "cell": { num: 2, title: "Organization of the Organism" },
+            "movement": { num: 3, title: "Movement In and Out of Cells" },
+            "biological molecules": { num: 4, title: "Biological Molecules" },
+            "enzyme": { num: 5, title: "Enzymes" },
+            "nutrition": { num: 6, title: "Plant/Human Nutrition" },
+            "transport": { num: 8, title: "Transport in Plants/Animals" },
+            "disease": { num: 10, title: "Diseases and Immunity" },
+            "respiration": { num: 12, title: "Respiration" },
+            "excretion": { num: 13, title: "Excretion" },
+            "coordination": { num: 14, title: "Coordination and Response" },
+            "eye": { num: 14, title: "Coordination (The Eye)" },
+            "drug": { num: 15, title: "Drugs" },
+            "reproduction": { num: 16, title: "Reproduction" },
+            "inheritance": { num: 17, title: "Inheritance" },
+            "variation": { num: 18, title: "Variation and Selection" },
+            "organism": { num: 19, title: "Organisms and Environment" },
+            "biotechnology": { num: 20, title: "Biotechnology" }
+        };
 
         // ==========================================
-        // LOGIC
+        // 2. CONFIGURATION & BRAIN
         // ==========================================
+        const SYSTEM_PROMPT = `
+        You are a Cambridge IGCSE Biology (0610) Master Tutor.
+        
+        STRICT RULES:
+        1.  **Exam Focus:** Always mention "Common exam mistakes" or "Key definitions" in your answers.
+        2.  **Detail Level:** Provide comprehensive, structured answers (Intro -> Details -> Exam Tip). Use Bullet points.
+        3.  **Tone:** Professional, Academic, Encouraging. Like a top-tier professor.
+        4.  **Formatting:** Use Markdown. **Bold** key terms.
+        5.  **Image Handling:** If the user asks for a diagram, drawing, or image, your response must be EXACTLY and ONLY: "GENERATE_IMAGE: [detailed scientific description of the view]". Do not write "Here is the image". Just the command.
+        `;
+
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
+
+        // ==========================================
+        // 3. CORE FUNCTIONS
+        // ==========================================
 
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text) return;
-
+            
+            // UI Update
             addMessage(text, 'user');
             userInput.value = '';
+            userInput.rows = 1;
+            
             const loadingId = addLoading();
 
             try {
-                // 1. Construct the URL for the "Keyless" API
-                // We use Pollinations Text API which routes to OpenAI/Llama automatically
-                const finalPrompt = SYSTEM_INSTRUCTION + " " + text;
-                const seed = Math.floor(Math.random() * 999999);
-                
-                // We encode the prompt to put it in the URL
+                // Pollinations Text API (Free, No Key)
+                const finalPrompt = `${SYSTEM_PROMPT}\n\nUser Question: ${text}`;
+                const seed = Math.floor(Math.random() * 1000000);
                 const url = `https://text.pollinations.ai/${encodeURIComponent(finalPrompt)}?model=openai&seed=${seed}`;
 
                 const response = await fetch(url);
-                
-                if (!response.ok) throw new Error("Server Busy");
-                
-                // The API returns raw text
                 const botText = await response.text();
                 
+                // Remove loading
                 document.getElementById(loadingId).remove();
 
-                // 2. Check if AI wants to make an image
+                // Logic to separate Image Command from Text
                 if (botText.includes("GENERATE_IMAGE:")) {
+                    // Extract the prompt
                     const imagePrompt = botText.replace("GENERATE_IMAGE:", "").trim();
+                    // We DO NOT show the text command to the user. We show the image directly.
+                    addBotMessage("I am generating a scientific diagram for you...", true); // Temporary text
                     addImage(imagePrompt);
                 } else {
-                    addMessage(botText, 'bot');
+                    addBotMessage(botText);
+                    // Check if we should link to chapters
+                    checkAndAddLinks(text, botText);
                 }
 
             } catch (error) {
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addMessage("I am thinking very hard, but the connection timed out. Please ask again.", 'bot');
-                console.error(error);
+                document.getElementById(loadingId).remove();
+                addBotMessage("⚠️ Connection error. Please try again.");
             }
         }
 
+        // Dedicated button for "Draw this"
+        function sendImageRequest() {
+            const text = userInput.value.trim();
+            if (!text) {
+                alert("Please describe what you want me to draw first.");
+                return;
+            }
+            userInput.value = "Generate a scientific diagram of: " + text;
+            sendMessage();
+        }
+
+        function handleFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const fileName = input.files[0].name;
+                addMessage(`📎 Attached: ${fileName}`, 'user');
+                // Since we can't actually read the image in this free mode, we fake the acknowledgment
+                setTimeout(() => {
+                    addBotMessage(`I see you've attached **${fileName}**. While I cannot visually analyze images directly in this mode, I can explain any concept related to it. What would you like to know?`);
+                }, 1000);
+            }
+        }
+
+        // ==========================================
+        // 4. UI BUILDERS
+        // ==========================================
+
         function addMessage(text, sender) {
             const div = document.createElement('div');
-            div.className = sender === 'user' ? "flex justify-end" : "flex justify-start";
+            div.className = `flex w-full msg-enter ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
             
             const bubble = document.createElement('div');
-            
             if (sender === 'user') {
-                bubble.className = "bg-green-700 text-white p-4 rounded-2xl rounded-tr-none shadow-md max-w-[80%] text-lg";
+                bubble.className = "bg-green-600 text-white px-5 py-3 rounded-2xl rounded-tr-none shadow-md max-w-[85%] text-lg font-light";
                 bubble.textContent = text;
+            }
+            div.appendChild(bubble);
+            chatContainer.appendChild(div);
+            scrollToBottom();
+        }
+
+        function addBotMessage(text, isTemporary = false) {
+            const div = document.createElement('div');
+            div.className = "flex w-full justify-start msg-enter group relative"; // Relative for PDF button
+            
+            const icon = document.createElement('div');
+            icon.className = "w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-green-600 mr-2 mt-2 shadow-sm shrink-0";
+            icon.innerHTML = '<i class="fa-solid fa-robot"></i>';
+
+            const bubbleContainer = document.createElement('div');
+            bubbleContainer.className = "flex flex-col gap-2 max-w-[95%]";
+
+            const bubble = document.createElement('div');
+            bubble.className = "glass-panel p-6 rounded-2xl rounded-tl-none shadow-sm border border-gray-200 prose prose-green prose-lg w-full bg-white/90";
+            bubble.innerHTML = marked.parse(text);
+
+            // PDF DOWNLOAD BUTTON
+            if (!isTemporary) {
+                const actionsBar = document.createElement('div');
+                actionsBar.className = "flex gap-2 mt-1";
+                
+                const pdfBtn = document.createElement('button');
+                pdfBtn.className = "text-xs flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors bg-white px-3 py-1 rounded-full border border-gray-100 shadow-sm";
+                pdfBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Download Explanation';
+                pdfBtn.onclick = () => generatePDF(bubble);
+                
+                actionsBar.appendChild(pdfBtn);
+                bubbleContainer.appendChild(bubble);
+                bubbleContainer.appendChild(actionsBar);
             } else {
-                // Bot styling: Wide, white, professional typography
-                bubble.className = "bg-white text-gray-800 p-8 rounded-2xl rounded-tl-none shadow-md border border-gray-200 max-w-full w-full prose prose-lg prose-green";
-                bubble.innerHTML = marked.parse(text);
+                bubbleContainer.appendChild(bubble);
             }
 
-            div.appendChild(bubble);
+            div.appendChild(icon);
+            div.appendChild(bubbleContainer);
             chatContainer.appendChild(div);
             scrollToBottom();
         }
 
         function addImage(prompt) {
             const div = document.createElement('div');
-            div.className = "flex justify-start w-full";
+            div.className = "flex w-full justify-start msg-enter";
             
             const container = document.createElement('div');
-            container.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-md border border-gray-200 max-w-[90%]";
+            container.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-md border border-gray-200 ml-10 max-w-[90%]";
             
-            const caption = document.createElement('p');
-            caption.className = "text-sm text-green-700 mb-3 font-bold uppercase tracking-wide border-b pb-2";
-            caption.textContent = "🧬 Scientific Diagram: " + prompt;
+            // 1. Force Scientific Style
+            const stylePrompt = " schematic biology diagram, educational textbook cross-section, flat vector style, white background, detailed labeling lines, scientific illustration, high contrast, cie 0610";
+            const negativePrompt = " photorealistic, 3d render, artistic, blurry, dark background, scary, distortion";
+            
+            const safePrompt = encodeURIComponent(prompt + stylePrompt);
+            const imgUrl = `https://image.pollinations.ai/prompt/${safePrompt}?model=flux&width=1024&height=768&nologo=true&seed=${Math.random()}`;
 
-            const img = document.createElement('img');
-            
-            // MAGIC KEYWORDS: These force the image to look like a Textbook, not a cartoon.
-            const scientificKeywords = " anatomical cross section, biology textbook diagram, white background, detailed labeling lines, scientific illustration, high definition, cie 0610 style";
-            
-            const safePrompt = encodeURIComponent(prompt + scientificKeywords);
-            
-            // Using 'flux' model for better details
-            img.src = `https://image.pollinations.ai/prompt/${safePrompt}?model=flux&width=1024&height=1024&nologo=true`;
-            img.className = "rounded-lg w-full h-auto min-h-[400px] bg-gray-50 border border-gray-100 object-contain";
-            img.loading = "lazy";
-            
-            container.appendChild(caption);
-            container.appendChild(img);
+            container.innerHTML = `
+                <div class="flex items-center gap-2 mb-3 border-b pb-2">
+                    <i class="fa-solid fa-pen-ruler text-purple-600"></i>
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Generated Diagram</span>
+                </div>
+                <img src="${imgUrl}" alt="Diagram" class="rounded-lg w-full h-auto min-h-[300px] bg-gray-50 border border-gray-100" loading="lazy">
+                <p class="text-xs text-center text-gray-400 mt-2 italic">${prompt}</p>
+            `;
+
             div.appendChild(container);
             chatContainer.appendChild(div);
             scrollToBottom();
         }
 
+        function checkAndAddLinks(userText, botText) {
+            const combinedText = (userText + " " + botText).toLowerCase();
+            let found = false;
+            
+            const linksDiv = document.createElement('div');
+            linksDiv.className = "flex flex-wrap gap-2 ml-10 mt-2 msg-enter";
+
+            for (const [key, data] of Object.entries(CHAPTER_LINKS)) {
+                if (combinedText.includes(key)) {
+                    found = true;
+                    const fullBtn = `
+                        <a href="https://ig-bio.vercel.app/ch${data.num}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-bold hover:bg-blue-100 transition border border-blue-200">
+                            <i class="fa-solid fa-book-open"></i> Full Ch${data.num} Notes
+                        </a>`;
+                    const sumBtn = `
+                        <a href="https://ig-bio.vercel.app/summary/ch${data.num}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-600 rounded-lg text-sm font-bold hover:bg-amber-100 transition border border-amber-200">
+                            <i class="fa-solid fa-bolt"></i> Ch${data.num} Summary
+                        </a>`;
+                    
+                    linksDiv.innerHTML += fullBtn + sumBtn;
+                }
+            }
+
+            if (found) {
+                chatContainer.appendChild(linksDiv);
+                scrollToBottom();
+            }
+        }
+
         function addLoading() {
-            const id = 'loading-' + Date.now();
+            const id = 'loader-' + Date.now();
             const div = document.createElement('div');
             div.id = id;
-            div.className = "flex justify-start";
-            div.innerHTML = `<div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-md border border-gray-200 flex space-x-3 items-center"><div class="w-3 h-3 bg-green-600 rounded-full typing-dot"></div><div class="w-3 h-3 bg-green-600 rounded-full typing-dot"></div><div class="w-3 h-3 bg-green-600 rounded-full typing-dot"></div><span class="text-sm text-gray-500 font-semibold italic">Analyzing Syllabus...</span></div>`;
+            div.className = "flex w-full justify-start ml-10 mt-2";
+            div.innerHTML = `
+                <div class="bg-white px-4 py-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 flex items-center gap-2">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <span class="text-xs text-gray-400 ml-2">Consulting Syllabus...</span>
+                </div>
+            `;
             chatContainer.appendChild(div);
             scrollToBottom();
             return id;
         }
 
+        function generatePDF(element) {
+            const opt = {
+                margin:       1,
+                filename:     'BioBot_Explanation.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
         function scrollToBottom() {
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
     </script>
 </body>
 </html>
