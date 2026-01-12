@@ -4,27 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BioBot - CIE 0610 Expert</title>
-    <!-- Using Tailwind CSS for fast, beautiful styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Markdown parsing for nice text formatting -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* Custom scrollbar for a cleaner look */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
-        
-        .typing-dot {
-            animation: typing 1.4s infinite ease-in-out both;
-        }
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes typing {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
 </head>
 <body class="bg-slate-100 h-screen flex flex-col font-sans">
@@ -40,17 +30,11 @@
 
     <!-- Chat Container -->
     <main id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4">
-        <!-- Welcome Message -->
         <div class="flex flex-col space-y-2 max-w-3xl mx-auto">
             <div class="flex items-start">
                 <div class="bg-green-100 text-green-900 p-3 rounded-lg rounded-tl-none shadow-sm border border-green-200 max-w-[85%]">
-                    <p>Hello! I am trained specifically on the <strong>Cambridge IGCSE Biology (0610)</strong> syllabus.</p>
-                    <p class="mt-2">You can ask me to:</p>
-                    <ul class="list-disc ml-5 text-sm mt-1">
-                        <li>Explain topics (e.g., "Explain Photosynthesis")</li>
-                        <li>Quiz you (e.g., "Give me a quiz on the Heart")</li>
-                        <li><strong>Generate Diagrams</strong> (Just type: "Image of a plant cell")</li>
-                    </ul>
+                    <p><strong>System Ready.</strong> I am trained on the Cambridge IGCSE Biology (0610) syllabus.</p>
+                    <p class="mt-2 text-sm">Ask me anything about Biology, or type "Image of..." to generate a diagram.</p>
                 </div>
             </div>
         </div>
@@ -61,14 +45,11 @@
         <div class="max-w-3xl mx-auto flex gap-2">
             <input type="text" id="user-input" 
                 class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                placeholder="Ask a biology question or ask for an image..." 
+                placeholder="Ask a biology question..." 
                 onkeydown="if(event.key === 'Enter') sendMessage()">
-            
             <button onclick="sendMessage()" 
                 class="bg-green-600 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center hover:bg-green-700 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                </svg>
+                ➤
             </button>
         </div>
     </footer>
@@ -78,23 +59,22 @@
         // CONFIGURATION
         // ==========================================
         
-        // PASTE YOUR GOOGLE GEMINI API KEY BELOW inside the quotes
-        const API_KEY = "AIzaSyDkaqPm8vQGn9rU3tv8PBJPKWmJFW5VOtY"; 
+        // ⬇️ PASTE YOUR NEW KEY HERE ⬇️
+        let API_KEY = "AIzaSyAQoHG6eI3vYdznWrhmLkBvaME0_UPA1Gs"; 
+        
+        // This removes accidental spaces you might copy
+        API_KEY = API_KEY.trim();
 
-        // This instructs the AI how to behave (The "Brain" Tuning)
         const SYSTEM_PROMPT = `
-        You are an expert IGCSE Biology Tutor for the CIE 0610 syllabus. 
-        Your goal is to help students achieve A* grades.
-        1. Only answer questions related to Biology. If asked about other topics, politely decline.
-        2. Use terminology from the CIE 0610 syllabus.
-        3. Keep answers concise but complete.
-        4. If the user asks for an image, diagram, or drawing, simply reply with exactly: "GENERATE_IMAGE: [detailed description of the biology diagram]". Do not add any other text if generating an image.
+        You are an expert IGCSE Biology Tutor for CIE 0610. 
+        1. Only answer biology questions. 
+        2. Keep answers concise and suitable for IGCSE level students.
+        3. If the user asks for an image/diagram, reply ONLY with: "GENERATE_IMAGE: [description]".
         `;
 
         // ==========================================
         // LOGIC
         // ==========================================
-        
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
 
@@ -102,41 +82,32 @@
             const text = userInput.value.trim();
             if (!text) return;
 
-            // 1. Add User Message to UI
             addMessage(text, 'user');
             userInput.value = '';
-            
-            // 2. Show Loading Animation
             const loadingId = addLoading();
 
             try {
-                // 3. Call Gemini API
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [
-                            {
-                                role: "user",
-                                parts: [{ text: SYSTEM_PROMPT + "\n\nUser Question: " + text }]
-                            }
-                        ]
-                    })
-                });
-
-                const data = await response.json();
+                // We try the standard model first
+                let modelName = "gemini-1.5-flash";
+                let response = await callGemini(modelName, text);
                 
+                // If that fails, we try the backup model automatically
+                if (response.error) {
+                    console.log("Switching to backup model...");
+                    modelName = "gemini-pro";
+                    response = await callGemini(modelName, text);
+                }
+
                 // Remove Loading
                 document.getElementById(loadingId).remove();
 
-                if (data.error) {
-                    addMessage("Error: " + data.error.message, 'bot');
+                if (response.error) {
+                    addMessage("⚠️ System Error: " + response.error.message + ". Please check your API Key.", 'bot');
                     return;
                 }
 
-                const botText = data.candidates[0].content.parts[0].text;
+                const botText = response.candidates[0].content.parts[0].text;
 
-                // 4. Check if AI wants to generate an image
                 if (botText.includes("GENERATE_IMAGE:")) {
                     const imagePrompt = botText.replace("GENERATE_IMAGE:", "").trim();
                     addImage(imagePrompt);
@@ -145,10 +116,22 @@
                 }
 
             } catch (error) {
-                document.getElementById(loadingId).remove();
-                addMessage("Sorry, I encountered an error. Please check your API Key.", 'bot');
+                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+                addMessage("Connection Error. Please check your internet or API Key.", 'bot');
                 console.error(error);
             }
+        }
+
+        async function callGemini(model, text) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nQuestion: " + text }] }]
+                })
+            });
+            return await res.json();
         }
 
         function addMessage(text, sender) {
@@ -160,12 +143,8 @@
                 ? "bg-green-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm max-w-[85%]" 
                 : "bg-white text-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 max-w-[85%] prose prose-sm";
             
-            // Render Markdown if bot, plain text if user
-            if (sender === 'bot') {
-                bubble.innerHTML = marked.parse(text);
-            } else {
-                bubble.textContent = text;
-            }
+            if (sender === 'bot') bubble.innerHTML = marked.parse(text);
+            else bubble.textContent = text;
 
             div.appendChild(bubble);
             chatContainer.appendChild(div);
@@ -180,17 +159,14 @@
             container.className = "bg-white p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 max-w-[85%]";
             
             const caption = document.createElement('p');
-            caption.className = "text-xs text-gray-500 mb-2";
-            caption.textContent = "Generating diagram for: " + prompt;
+            caption.className = "text-xs text-gray-500 mb-2 font-bold";
+            caption.textContent = "🧬 Generated Diagram: " + prompt;
 
-            // Using Pollinations.ai for free unlimited image generation
             const img = document.createElement('img');
-            // Encode the prompt to make it URL safe
-            const safePrompt = encodeURIComponent(prompt + " scientific biological diagram white background high quality");
+            const safePrompt = encodeURIComponent(prompt + " biology diagram scientific white background clean lines illustration");
             img.src = `https://image.pollinations.ai/prompt/${safePrompt}`;
-            img.className = "rounded-md w-full h-auto min-h-[200px] bg-gray-100";
-            img.alt = prompt;
-
+            img.className = "rounded-md w-full h-auto min-h-[200px] bg-gray-50";
+            
             container.appendChild(caption);
             container.appendChild(img);
             div.appendChild(container);
@@ -203,13 +179,7 @@
             const div = document.createElement('div');
             div.id = id;
             div.className = "flex justify-start";
-            div.innerHTML = `
-                <div class="bg-white p-4 rounded-lg rounded-tl-none shadow-sm border border-gray-200 flex space-x-1">
-                    <div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div>
-                    <div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div>
-                    <div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div>
-                </div>
-            `;
+            div.innerHTML = `<div class="bg-white p-4 rounded-lg rounded-tl-none shadow-sm border border-gray-200 flex space-x-1"><div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div><div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div><div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div></div>`;
             chatContainer.appendChild(div);
             scrollToBottom();
             return id;
