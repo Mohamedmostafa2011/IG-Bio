@@ -231,6 +231,60 @@
             #userDashboard { flex-direction: column; align-items: flex-start; gap: 10px; }
             .progress-container { width: 100%; margin: 0; }
         }
+
+        /* ================= AI TUTOR FLOAT BUTTON ================= */
+        .ai-tutor-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            
+            /* Glassmorphism */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            z-index: 9990; /* High z-index but below the auth screen (9999) */
+            
+            animation: floatUpDown 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .ai-tutor-float i {
+            font-size: 28px;
+            color: var(--primary);
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+        }
+
+        .ai-tutor-float:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #fff;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+        }
+
+        @keyframes floatUpDown {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            .ai-tutor-float {
+                width: 55px; height: 55px;
+                bottom: 20px; left: 20px;
+            }
+            .ai-tutor-float i { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
@@ -420,6 +474,11 @@
             </div>
         </div>
     </div>
+
+    <!-- AI TUTOR FLOATING BUTTON -->
+    <a href="ai-tutor.html" class="ai-tutor-float" title="Ask AI Tutor">
+        <i class="fa-solid fa-robot"></i>
+    </a>
 
     <script>
         const firebaseConfig = {
