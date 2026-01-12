@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioBot OneUI</title>
-    <!-- CSS & Icons -->
+    <title>IG-Bio GPT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Logic Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- OCR Library -->
-    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
@@ -25,7 +21,6 @@
             overflow: hidden;
         }
 
-        /* ONE UI GLASS STYLE - HEAVY BLUR */
         .glass-panel {
             background: rgba(30, 30, 30, 0.4);
             backdrop-filter: blur(50px);
@@ -48,11 +43,6 @@
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        .img-preview {
-            width: 60px; height: 60px; object-fit: cover; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
     </style>
 </head>
 <body class="flex flex-col relative">
@@ -60,10 +50,12 @@
     <!-- HEADER -->
     <header class="glass-panel z-50 h-20 flex justify-between items-center px-6 absolute top-0 w-full rounded-b-3xl">
         <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl">B</div>
+            <div class="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl">
+                <i class="fa-solid fa-dna"></i>
+            </div>
             <div>
-                <h1 class="font-bold text-lg tracking-wide">BioBot</h1>
-                <p class="text-[10px] text-gray-400 uppercase tracking-widest">CIE 0610 AI</p>
+                <h1 class="font-bold text-lg tracking-wide">IG-Bio GPT</h1>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest">CIE 0610 Expert</p>
             </div>
         </div>
         <a href="/" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
@@ -73,35 +65,30 @@
 
     <!-- CHAT AREA -->
     <main id="chat-container" class="flex-1 overflow-y-auto pt-24 pb-48 px-4 sm:px-6 space-y-6">
+        <!-- New Welcome Message -->
         <div class="flex justify-start w-full msg-anim">
             <div class="glass-panel p-6 rounded-[2rem] rounded-tl-none max-w-2xl">
-                <h3 class="font-bold text-xl mb-2">System Online.</h3>
-                <p class="text-gray-400">Ask any Biology question. You can attach images for analysis.</p>
+                <h3 class="font-bold text-xl mb-2">Hello, Student.</h3>
+                <p class="text-gray-400">I am <strong>IG-Bio GPT</strong>. I am trained specifically on the Cambridge 0610 syllabus.</p>
+                <p class="text-gray-500 text-sm mt-2">Ask me to explain a concept, compare structures, or provide exam tips.</p>
             </div>
         </div>
     </main>
 
     <!-- INPUT AREA -->
     <footer class="absolute bottom-0 w-full z-50">
-        <!-- Preview -->
-        <div id="preview-container" class="hidden px-6 pb-2 flex gap-3 overflow-x-auto"></div>
-
-        <!-- Bar -->
         <div class="bg-black/80 backdrop-blur-xl border-t border-white/10 p-4 pb-8 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
             <div class="max-w-4xl mx-auto flex items-end gap-3">
                 
-                <button onclick="document.getElementById('file-upload').click()" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white transition flex items-center justify-center shrink-0">
-                    <i class="fa-solid fa-plus text-xl"></i>
-                </button>
-                <input type="file" id="file-upload" class="hidden" multiple accept="image/*" onchange="handleFiles(this)">
-
+                <!-- Text Input -->
                 <textarea id="user-input" rows="1" 
                     class="flex-1 bg-white/5 border border-white/10 rounded-3xl focus:ring-1 focus:ring-white/30 focus:outline-none text-white placeholder-gray-500 text-lg py-3 px-5 resize-none max-h-32 transition-all"
-                    placeholder="Message..."
-                    onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+                    placeholder="Ask a biology question..."
+                    onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); handleAction(); }"></textarea>
 
-                <button onclick="sendMessage()" class="w-12 h-12 bg-white text-black rounded-full hover:bg-gray-200 transition flex items-center justify-center shrink-0 shadow-lg shadow-white/10">
-                    <i class="fa-solid fa-arrow-up text-lg"></i>
+                <!-- Action Button (Send or Stop) -->
+                <button id="action-btn" onclick="handleAction()" class="w-12 h-12 bg-white text-black rounded-full hover:bg-gray-200 transition flex items-center justify-center shrink-0 shadow-lg shadow-white/10">
+                    <i id="action-icon" class="fa-solid fa-arrow-up text-lg"></i>
                 </button>
             </div>
         </div>
@@ -110,7 +97,6 @@
     <script>
         // CONFIG
         const BASE_URL = "https://ig-bio.vercel.app";
-        // Maps keywords to website anchors
         const CHAPTER_MAP = {
             "cell": "cells", "movement": "diffusion", "enzyme": "enzymes",
             "plant": "plant-nutrition", "human nutrition": "human-nutrition",
@@ -121,124 +107,135 @@
         };
 
         const SYSTEM_PROMPT = `
-        ACT AS: An Expert Cambridge IGCSE Biology (0610) Tutor.
+        ACT AS: An Expert Cambridge IGCSE Biology (0610) Tutor named IG-Bio GPT.
         RULES:
         1. Answer strictly based on Biology.
         2. Answers must be DETAILED (Structure, Function, Mechanism).
         3. Use Bullet points and Bold text.
-        4. NEVER output JSON or debug data. Output only the final explanation.
+        4. NEVER output JSON, code blocks, or debug data. Output only the final explanation.
         `;
+
+        // STATE VARIABLES
+        let abortController = null; // Controls the API request
+        let isGenerating = false;   // Tracks if AI is busy
 
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
-        const previewContainer = document.getElementById('preview-container');
-        let attachedFiles = []; 
+        const actionBtn = document.getElementById('action-btn');
+        const actionIcon = document.getElementById('action-icon');
 
-        function handleFiles(input) {
-            const files = Array.from(input.files);
-            if (files.length === 0) return;
-            files.forEach(file => attachedFiles.push(file));
-            renderPreviews();
-            input.value = ''; 
+        // ==========================================
+        // MAIN ACTION HANDLER (Switch between Send & Stop)
+        // ==========================================
+        function handleAction() {
+            if (isGenerating) {
+                stopGeneration();
+            } else {
+                sendMessage();
+            }
         }
 
-        function renderPreviews() {
-            previewContainer.innerHTML = '';
-            if (attachedFiles.length > 0) previewContainer.classList.remove('hidden');
-            else previewContainer.classList.add('hidden');
+        // ==========================================
+        // STOP LOGIC
+        // ==========================================
+        function stopGeneration() {
+            if (abortController) {
+                abortController.abort(); // Kills the fetch request
+                abortController = null;
+            }
+            
+            // Remove the loading bubble
+            const loader = document.getElementById('current-loading');
+            if (loader) loader.remove();
 
-            attachedFiles.forEach((file, index) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = "relative group shrink-0";
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.className = "img-preview";
-                const removeBtn = document.createElement('button');
-                removeBtn.className = "absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full text-white text-xs flex items-center justify-center shadow-md hover:scale-110 transition";
-                removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                removeBtn.onclick = () => removeFile(index);
-                wrapper.appendChild(img);
-                wrapper.appendChild(removeBtn);
-                previewContainer.appendChild(wrapper);
-            });
+            // Reset UI
+            isGenerating = false;
+            updateButtonStyle(false);
+            userInput.focus();
         }
 
-        function removeFile(index) {
-            attachedFiles.splice(index, 1);
-            renderPreviews();
-        }
-
+        // ==========================================
+        // SEND LOGIC
+        // ==========================================
         async function sendMessage() {
             const text = userInput.value.trim();
-            if (!text && attachedFiles.length === 0) return;
+            if (!text) return;
 
-            addMessage(text, 'user', [...attachedFiles]);
+            addMessage(text, 'user');
             userInput.value = '';
             userInput.style.height = 'auto';
-            const filesToProcess = [...attachedFiles]; 
-            attachedFiles = [];
-            renderPreviews();
             
-            const loadingId = addLoading(filesToProcess.length > 0 ? "Analyzing..." : "Thinking...");
+            // Set UI to "Generating" State
+            isGenerating = true;
+            updateButtonStyle(true);
+            
+            // Create Loading Bubble
+            const loadingId = addLoading("Thinking...");
+
+            // Create new AbortController for this specific request
+            abortController = new AbortController();
+            const signal = abortController.signal;
 
             try {
-                let imageContext = "";
-                
-                // OCR Logic
-                if (filesToProcess.length > 0) {
-                    imageContext = "\n[IMAGE CONTEXT]:\n";
-                    for (const file of filesToProcess) {
-                        try {
-                            const { data: { text } } = await Tesseract.recognize(file, 'eng');
-                            const cleanText = text.replace(/[^a-zA-Z0-9\s]/g, '');
-                            if(cleanText.length > 5) {
-                                imageContext += `Diagram Labels: "${cleanText}"\n`;
-                            }
-                        } catch (err) { console.error(err); }
-                    }
-                }
-
-                const fullPrompt = SYSTEM_PROMPT + imageContext + "\nUser Question: " + (text || "Explain this image.");
+                const fullPrompt = SYSTEM_PROMPT + "\nUser Question: " + text;
                 const seed = Math.floor(Math.random() * 99999);
                 const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai&seed=${seed}`;
 
-                const response = await fetch(url);
+                // Fetch with signal (allows aborting)
+                const response = await fetch(url, { signal });
                 let botText = await response.text();
                 
-                document.getElementById(loadingId).remove();
+                // Clean up loading UI
+                const loader = document.getElementById(loadingId);
+                if (loader) loader.remove();
 
-                // === GLITCH FIX: REMOVE RAW JSON LEAKS ===
-                // This removes the code that looked like {"role":"assistant"...}
+                // Clean Text
                 botText = botText.replace(/\{"role":[\s\S]*?\}/g, ""); 
                 botText = botText.replace(/reasoning_content/g, "");
-                botText = botText.replace(/^"|"$/g, ""); // Remove wrapping quotes if any
+                botText = botText.replace(/^"|"$/g, "");
                 
                 addBotMessage(botText);
                 generateSmartLinks(text + " " + botText);
 
             } catch (error) {
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addBotMessage("Network error. Please try again.");
+                const loader = document.getElementById(loadingId);
+                if (loader) loader.remove();
+
+                // If error is "AbortError", it means user clicked stop. Don't show error message.
+                if (error.name === 'AbortError') {
+                    console.log("Generation stopped by user.");
+                } else {
+                    addBotMessage("Network error. Please try again.");
+                }
+            } finally {
+                // Reset UI to "Ready" State
+                isGenerating = false;
+                updateButtonStyle(false);
+                abortController = null;
             }
         }
 
-        function addMessage(text, sender, files = []) {
+        // Updates button icon (Arrow vs Stop Square)
+        function updateButtonStyle(generating) {
+            if (generating) {
+                actionIcon.classList.remove('fa-arrow-up');
+                actionIcon.classList.add('fa-stop'); // Square icon
+                actionBtn.classList.replace('bg-white', 'bg-red-500'); // Optional: Red color for stop
+                actionBtn.classList.replace('text-black', 'text-white');
+            } else {
+                actionIcon.classList.remove('fa-stop');
+                actionIcon.classList.add('fa-arrow-up');
+                actionBtn.classList.replace('bg-red-500', 'bg-white');
+                actionBtn.classList.replace('text-white', 'text-black');
+            }
+        }
+
+        function addMessage(text, sender) {
             const div = document.createElement('div');
             div.className = `flex w-full msg-anim ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
             const bubble = document.createElement('div');
             if (sender === 'user') {
                 bubble.className = "flex flex-col items-end gap-2 max-w-[85%]";
-                if (files.length > 0) {
-                    const imgGrid = document.createElement('div');
-                    imgGrid.className = "flex gap-2 flex-wrap justify-end";
-                    files.forEach(file => {
-                        const img = document.createElement('img');
-                        img.src = URL.createObjectURL(file);
-                        img.className = "rounded-2xl w-32 h-32 object-cover border border-white/20";
-                        imgGrid.appendChild(img);
-                    });
-                    bubble.appendChild(imgGrid);
-                }
                 if (text) {
                     const txtDiv = document.createElement('div');
                     txtDiv.className = "bg-white text-black px-5 py-3 rounded-[1.5rem] rounded-tr-sm font-medium shadow-lg";
@@ -269,7 +266,6 @@
             pdfBtn.className = "text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition flex items-center gap-2";
             pdfBtn.innerHTML = '<i class="fa-solid fa-file-arrow-down"></i> Save as PDF';
             
-            // High Quality PDF Logic
             pdfBtn.onclick = () => {
                 const clone = content.cloneNode(true);
                 const pdfContainer = document.createElement('div');
@@ -309,15 +305,13 @@
             for (const [key, slug] of Object.entries(CHAPTER_MAP)) {
                 if (contextText.includes(key)) {
                     found = true;
-                    // SINGLE BUTTON: IG-BIO
                     const btn1 = document.createElement('a');
                     btn1.href = `${BASE_URL}/#${slug}`; 
                     btn1.target = "_blank";
                     btn1.className = "glass-panel px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition flex items-center gap-2 text-white no-underline";
                     btn1.innerHTML = `<i class="fa-solid fa-globe"></i> IG-Bio`;
-
                     linksDiv.appendChild(btn1);
-                    break; // Only one button
+                    break; 
                 }
             }
             if (found) {
@@ -328,7 +322,7 @@
         }
 
         function addLoading(text) {
-            const id = 'load-' + Date.now();
+            const id = 'current-loading'; 
             const div = document.createElement('div');
             div.id = id;
             div.className = "flex w-full justify-start mt-2";
