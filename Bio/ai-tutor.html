@@ -17,108 +17,84 @@
         
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #000000;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
+            background-color: #050505;
             color: white;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        /* HEAVY GLASS EFFECT */
+        /* GLASS EFFECT */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
 
-        .glass-input {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
         /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         /* TYPOGRAPHY */
-        .prose h1, .prose h2, .prose h3 { color: white; font-weight: 800; margin-top: 1em; letter-spacing: -0.02em; }
-        .prose strong { color: white; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.3); }
-        .prose ul { list-style-type: square; padding-left: 1.2rem; color: #aaa; }
-        .prose p { color: #ccc; line-height: 1.7; margin-bottom: 0.8em; }
+        .prose h1, .prose h2, .prose h3 { color: white; font-weight: 800; margin-top: 1.5em; }
+        .prose strong { color: white; border-bottom: 1px solid #444; }
+        .prose ul { list-style-type: square; color: #888; }
+        .prose p { color: #bbb; line-height: 1.8; }
 
         /* ANIMATIONS */
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .msg-anim { animation: slideUp 0.4s ease-out forwards; }
         
-        .typing-dot {
-            width: 4px; height: 4px; background: white; border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        .typing-dot { width: 5px; height: 5px; background: white; border-radius: 50%; animation: bounce 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
+<body class="flex flex-col relative">
 
     <!-- HEADER -->
-    <header class="glass-panel z-20 h-16 flex justify-between items-center px-6 sticky top-0 border-b-0 border-white/10">
-        <div class="flex items-center gap-4">
-            <div class="w-8 h-8 bg-white text-black rounded flex items-center justify-center font-bold text-lg">
-                IO
-            </div>
-            <div>
-                <h1 class="font-bold text-lg tracking-wider text-white">BIO<span class="font-light opacity-50">BOT</span></h1>
-                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">CIE 0610 / Intelligent System</p>
-            </div>
+    <header class="glass-panel z-50 h-16 flex justify-between items-center px-6 absolute top-0 w-full">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-white text-black rounded flex items-center justify-center font-bold">IO</div>
+            <h1 class="font-bold tracking-widest text-sm">BIO<span class="opacity-50">BOT</span></h1>
         </div>
-        <a href="/" class="text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded hover:bg-white hover:text-black transition duration-300">
-            Exit
-        </a>
+        <a href="/" class="text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded hover:bg-white hover:text-black transition">Exit</a>
     </header>
 
     <!-- CHAT AREA -->
-    <main id="chat-container" class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8 scroll-smooth pb-32">
-        <!-- Intro Message -->
+    <!-- Added pb-48 (padding-bottom: 12rem) to ensure buttons are never hidden -->
+    <main id="chat-container" class="flex-1 overflow-y-auto pt-20 pb-64 px-4 sm:px-8 space-y-8 scroll-smooth">
         <div class="flex justify-start w-full msg-anim">
             <div class="glass-panel p-6 rounded-lg max-w-2xl border-l-2 border-white">
-                <h3 class="font-bold text-xl mb-2">System Initialized.</h3>
-                <p class="text-gray-300 text-sm">Target Syllabus: <strong>Cambridge IGCSE Biology (0610)</strong>.</p>
-                <p class="text-gray-300 text-sm mt-2">I am ready to generate strict anatomical diagrams and detailed explanations.</p>
+                <h3 class="font-bold text-lg mb-2">System Online.</h3>
+                <p class="text-gray-400 text-sm">I am trained on CIE 0610. Ask me for definitions, explanations, or diagrams.</p>
             </div>
         </div>
     </main>
 
-    <!-- INPUT AREA -->
-    <footer class="absolute bottom-0 w-full p-6 z-30">
-        <div class="max-w-4xl mx-auto glass-input rounded-2xl p-2 flex items-end gap-2 shadow-2xl">
+    <!-- INPUT AREA (FIXED BOTTOM) -->
+    <footer class="absolute bottom-0 w-full p-4 z-50 bg-gradient-to-t from-black via-black to-transparent pt-10">
+        <div class="max-w-4xl mx-auto glass-panel rounded-2xl p-2 flex items-end gap-2 shadow-2xl bg-black/80">
             
-            <!-- Tools -->
-            <div class="flex flex-col gap-1 p-1">
-                <button onclick="document.getElementById('file-upload').click()" class="w-10 h-10 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition flex items-center justify-center">
-                    <i class="fa-solid fa-paperclip"></i>
-                </button>
-                <input type="file" id="file-upload" class="hidden" onchange="handleFile(this)">
-                
-                <button onclick="requestImage()" class="w-10 h-10 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition flex items-center justify-center" title="Generate Diagram">
-                    <i class="fa-solid fa-pen-nib"></i>
-                </button>
-            </div>
+            <button onclick="document.getElementById('file-upload').click()" class="w-12 h-12 rounded-xl hover:bg-white/10 text-gray-400 transition flex items-center justify-center">
+                <i class="fa-solid fa-paperclip"></i>
+            </button>
+            <input type="file" id="file-upload" class="hidden" onchange="handleFile(this)">
+            
+            <button onclick="requestImage()" class="w-12 h-12 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition flex items-center justify-center" title="Generate Diagram">
+                <i class="fa-solid fa-pen-nib"></i>
+            </button>
 
-            <!-- Text Input -->
             <textarea id="user-input" rows="1" 
-                class="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder-gray-500 text-lg py-3 px-2 resize-none max-h-40"
-                placeholder="Enter query..."
+                class="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder-gray-600 text-lg py-3 px-2 resize-none max-h-32"
+                placeholder="Ask a biology question..."
                 onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
 
-            <!-- Send Button -->
-            <button onclick="sendMessage()" class="w-12 h-12 bg-white text-black rounded-xl hover:bg-gray-200 transition shadow-lg flex items-center justify-center mb-1">
+            <button onclick="sendMessage()" class="w-12 h-12 bg-white text-black rounded-xl hover:bg-gray-200 transition flex items-center justify-center mb-0.5">
                 <i class="fa-solid fa-arrow-up"></i>
             </button>
         </div>
@@ -126,32 +102,32 @@
 
     <script>
         // ==========================================
-        // 1. CIE 0610 SYLLABUS MAPPING
+        // 1. LINKING CONFIGURATION
         // ==========================================
-        // Matches keywords to your website links: ig-bio.vercel.app/chX
-        const SYLLABUS_MAP = {
-            "characteristic": 1, "classification": 1,
-            "cell": 2, "organisation": 2,
-            "movement": 3, "diffusion": 3, "osmosis": 3,
-            "biological molecule": 4, "chemical": 4,
-            "enzyme": 5,
-            "nutrition": 6, "photosynthesis": 6, "diet": 6, "digest": 6,
-            "transport": 8, "xylem": 8, "phloem": 8, "heart": 8, "blood": 8,
-            "pathogen": 10, "disease": 10, "immunity": 10,
-            "respiration": 12, "aerobic": 12,
-            "excretion": 13, "kidney": 13,
-            "coordination": 14, "nervous": 14, "eye": 14, "hormone": 14, "homeostasis": 14,
-            "drug": 15, "antibiotic": 15,
-            "reproduction": 16, "flower": 16, "sexual": 16,
-            "inheritance": 17, "dna": 17, "gene": 17, "mitosis": 17,
-            "variation": 18, "selection": 18,
-            "ecosystem": 19, "food web": 19,
-            "biotechnology": 20, "genetic": 20
+        const BASE_URL = "https://ig-bio.vercel.app";
+        
+        // This maps a topic keyword to a specific Hash/ID on your website.
+        // Example: If user asks about "Eye", button goes to ig-bio.vercel.app/#eye
+        const CHAPTER_MAP = {
+            "cell": "cells",
+            "movement": "diffusion",
+            "enzyme": "enzymes",
+            "plant": "plant-nutrition",
+            "human nutrition": "human-nutrition",
+            "heart": "transport",
+            "disease": "diseases",
+            "respiration": "respiration",
+            "kidney": "excretion",
+            "eye": "coordination",
+            "hormone": "hormones",
+            "drug": "drugs",
+            "reproduction": "reproduction",
+            "dna": "inheritance",
+            "ecosystem": "ecology"
         };
 
         const SYSTEM_PROMPT = `
         ACT AS: A strict Cambridge IGCSE Biology (0610) Professor.
-        STYLE: Academic, Detailed, Serious.
         OUTPUT RULES:
         1. Use Markdown. Bold Keywords.
         2. Answers must be LONG (200+ words). Structure: Definition -> Mechanism -> Exam Tip.
@@ -161,22 +137,16 @@
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
 
-        // ==========================================
-        // 2. MAIN LOGIC
-        // ==========================================
-
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text) return;
 
-            // UI
             addMessage(text, 'user');
             userInput.value = '';
             userInput.style.height = 'auto';
             const loadingId = addLoading();
 
             try {
-                // Pollinations API (Free, Unlimited)
                 const fullPrompt = SYSTEM_PROMPT + "\n\nQuestion: " + text;
                 const seed = Math.floor(Math.random() * 99999);
                 const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai&seed=${seed}`;
@@ -186,33 +156,28 @@
                 
                 document.getElementById(loadingId).remove();
 
-                // Image Handler
                 if (botText.includes("GENERATE_IMAGE:")) {
                     const imgPrompt = botText.replace("GENERATE_IMAGE:", "").trim();
-                    addBotMessage("Processing anatomical data...", true);
+                    addBotMessage("Generating schematic...", true);
                     addImage(imgPrompt);
                 } else {
                     addBotMessage(botText);
-                    generateResourceLinks(text, botText); // Checks for Chapters
+                    // Generate links based on the User's Question + Bot's Answer
+                    generateSmartLinks(text + " " + botText);
                 }
 
             } catch (error) {
                 if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addBotMessage("Server Error. Retrying...");
+                addBotMessage("Network Error. Retrying...");
             }
         }
-
-        // ==========================================
-        // 3. UI GENERATORS (Black & White Theme)
-        // ==========================================
 
         function addMessage(text, sender) {
             const div = document.createElement('div');
             div.className = `flex w-full msg-anim ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
-            
             const bubble = document.createElement('div');
             if (sender === 'user') {
-                bubble.className = "bg-white text-black px-6 py-4 rounded-2xl rounded-tr-none max-w-[80%] text-base font-medium shadow-lg";
+                bubble.className = "bg-white text-black px-5 py-3 rounded-2xl rounded-tr-none max-w-[85%] font-medium";
                 bubble.textContent = text;
             }
             div.appendChild(bubble);
@@ -223,34 +188,26 @@
         function addBotMessage(text, isTemp = false) {
             const div = document.createElement('div');
             div.className = "flex w-full justify-start msg-anim";
-
             const container = document.createElement('div');
-            container.className = "glass-panel p-8 rounded-2xl rounded-tl-none max-w-3xl w-full border border-white/10";
+            container.className = "glass-panel p-6 rounded-2xl rounded-tl-none max-w-3xl w-full border border-white/10";
             
-            // Content
             const content = document.createElement('div');
-            content.className = "prose prose-invert max-w-none"; // prose-invert makes text white for dark mode
+            content.className = "prose prose-invert max-w-none"; 
             content.innerHTML = marked.parse(text);
-
             container.appendChild(content);
 
-            // PDF Button
             if (!isTemp) {
                 const btnBar = document.createElement('div');
                 btnBar.className = "mt-6 pt-4 border-t border-white/10 flex justify-end";
-                
                 const pdfBtn = document.createElement('button');
-                pdfBtn.className = "text-xs font-bold uppercase tracking-widest text-white/70 hover:text-white border border-white/20 px-4 py-2 rounded-full hover:bg-white/10 transition flex items-center gap-2";
-                pdfBtn.innerHTML = '<i class="fa-solid fa-download"></i> Save as PDF';
+                pdfBtn.className = "text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white border border-white/10 px-4 py-2 rounded hover:bg-white/5 transition flex items-center gap-2";
+                pdfBtn.innerHTML = '<i class="fa-solid fa-download"></i> PDF';
                 pdfBtn.onclick = () => {
-                    const opt = { margin: 0.5, filename: 'IGCSE_Bio_Notes.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-                    html2pdf().set(opt).from(content).save();
+                    html2pdf().from(content).save('Biology_Explanation.pdf');
                 };
-                
                 btnBar.appendChild(pdfBtn);
                 container.appendChild(btnBar);
             }
-
             div.appendChild(container);
             chatContainer.appendChild(div);
             scrollToBottom();
@@ -259,73 +216,62 @@
         function addImage(prompt) {
             const div = document.createElement('div');
             div.className = "flex w-full justify-start msg-anim";
-            
             const container = document.createElement('div');
-            container.className = "glass-panel p-4 rounded-2xl rounded-tl-none max-w-3xl border border-white/20";
+            container.className = "glass-panel p-4 rounded-2xl rounded-tl-none max-w-2xl border border-white/20";
             
-            // Forces Black & White Schematic style
-            const style = " technical drawing, blueprint style, white on black background, schematic, high contrast, scientific diagram, detailed lines";
+            const style = " technical drawing, blueprint style, white on black background, schematic, high contrast";
             const safePrompt = encodeURIComponent(prompt + style);
-            // Using Flux model, forced grayscale
             const imgUrl = `https://image.pollinations.ai/prompt/${safePrompt}?model=flux&width=1000&height=700&nologo=true&seed=${Math.random()}`;
 
-            container.innerHTML = `
-                <div class="mb-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 border-b border-white/10 pb-2">Generated Schematic</div>
-                <img src="${imgUrl}" class="w-full rounded bg-black border border-white/10 grayscale invert filter brightness-90" loading="lazy">
-            `;
-
+            container.innerHTML = `<img src="${imgUrl}" class="w-full rounded bg-black border border-white/10 grayscale invert filter brightness-90">`;
             div.appendChild(container);
             chatContainer.appendChild(div);
             scrollToBottom();
         }
 
         // ==========================================
-        // 4. SMART LINKING SYSTEM
+        // 2. SMART LINK LOGIC (The "Logical" Search)
         // ==========================================
+        function generateSmartLinks(contextText) {
+            contextText = contextText.toLowerCase();
+            const linksDiv = document.createElement('div');
+            linksDiv.className = "flex flex-wrap gap-3 ml-0 mt-4 animate-pulse justify-end";
+            let found = false;
 
-        function generateResourceLinks(userQ, botA) {
-            const text = (userQ + " " + botA).toLowerCase();
-            const foundChapters = new Set(); // Use Set to avoid duplicates
+            // Loop through our map. If the topic is found in the text, show the button.
+            for (const [key, slug] of Object.entries(CHAPTER_MAP)) {
+                if (contextText.includes(key)) {
+                    found = true;
+                    
+                    // Button 1: Full Notes (Goes to specific section)
+                    const btn1 = document.createElement('a');
+                    btn1.href = `${BASE_URL}/#${slug}`; 
+                    btn1.target = "_blank";
+                    btn1.className = "glass-panel px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition flex items-center gap-2 text-white no-underline";
+                    btn1.innerHTML = `<i class="fa-solid fa-book-open"></i> Full Topic`;
 
-            // Scan for keywords
-            for (const [key, chNum] of Object.entries(SYLLABUS_MAP)) {
-                if (text.includes(key)) {
-                    foundChapters.add(chNum);
+                    // Button 2: Summary (Goes to home with Summary hash)
+                    const btn2 = document.createElement('a');
+                    btn2.href = `${BASE_URL}/summary/#${slug}`; 
+                    btn2.target = "_blank";
+                    btn2.className = "glass-panel px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition flex items-center gap-2 text-white no-underline";
+                    btn2.innerHTML = `<i class="fa-solid fa-bolt"></i> Summary`;
+
+                    linksDiv.appendChild(btn1);
+                    linksDiv.appendChild(btn2);
+                    
+                    // Only show buttons for the first relevant topic found to avoid clutter
+                    break; 
                 }
             }
 
-            if (foundChapters.size > 0) {
-                const linksDiv = document.createElement('div');
-                linksDiv.className = "flex flex-wrap gap-3 ml-0 mt-4 animate-pulse";
-                
-                foundChapters.forEach(num => {
-                    // LINK 1: FULL NOTES
-                    const btnFull = document.createElement('a');
-                    btnFull.href = `https://ig-bio.vercel.app/ch${num}`; // Assumes /ch14 format
-                    btnFull.target = "_blank";
-                    btnFull.className = "glass-panel px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition flex items-center gap-2";
-                    btnFull.innerHTML = `<i class="fa-solid fa-book"></i> Chapter ${num} Full`;
-                    
-                    // LINK 2: SUMMARY
-                    const btnSum = document.createElement('a');
-                    btnSum.href = `https://ig-bio.vercel.app/summary/ch${num}`; // Assumes /summary/ch14 format
-                    btnSum.target = "_blank";
-                    btnSum.className = "glass-panel px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition flex items-center gap-2";
-                    btnSum.innerHTML = `<i class="fa-solid fa-list-check"></i> Ch${num} Summary`;
-
-                    linksDiv.appendChild(btnFull);
-                    linksDiv.appendChild(btnSum);
-                });
-
-                // Append to the last message container
+            if (found) {
+                // Append buttons to the last message
                 const lastMsg = chatContainer.lastElementChild.querySelector('.glass-panel');
                 if(lastMsg) lastMsg.appendChild(linksDiv);
+                scrollToBottom();
             }
         }
-
-        // ==========================================
-        // 5. UTILS
-        // ==========================================
 
         function addLoading() {
             const id = 'load-' + Date.now();
@@ -340,18 +286,14 @@
 
         function requestImage() {
             const val = userInput.value;
-            if(!val) return alert("Type what you want to draw first");
+            if(!val) return alert("Describe the diagram first.");
             userInput.value = "Generate a scientific diagram of: " + val;
             sendMessage();
         }
 
-        function handleFile(input) {
-            if(input.files[0]) addMessage(`[Attached: ${input.files[0].name}]`, 'user');
-        }
-
+        function handleFile(input) { if(input.files[0]) addMessage(`[Attached: ${input.files[0].name}]`, 'user'); }
         function scrollToBottom() { chatContainer.scrollTop = chatContainer.scrollHeight; }
 
-        // Auto-resize input
         userInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
