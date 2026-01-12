@@ -34,7 +34,7 @@
             <div class="flex items-start">
                 <div class="bg-green-100 text-green-900 p-3 rounded-lg rounded-tl-none shadow-sm border border-green-200 max-w-[85%]">
                     <p><strong>System Ready.</strong> I am trained on the Cambridge IGCSE Biology (0610) syllabus.</p>
-                    <p class="mt-2 text-sm">Ask me anything about Biology!</p>
+                    <p class="mt-2 text-sm">Ask me anything about Biology, or ask for a diagram!</p>
                 </div>
             </div>
         </div>
@@ -56,19 +56,16 @@
 
     <script>
         // ==========================================
-        // CONFIGURATION
+        // CONFIGURATION (NO KEY NEEDED!)
         // ==========================================
         
-        // ⬇️ PASTE YOUR *PERSONAL GMAIL* KEY HERE ⬇️
-        let API_KEY = "AIzaSyAQoHG6eI3vYdznWrhmLkBvaME0_UPA1Gs"; 
-        
-        API_KEY = API_KEY.trim(); // Removes spaces
-
         const SYSTEM_PROMPT = `
         You are an expert IGCSE Biology Tutor for CIE 0610. 
+        Your rules:
         1. Only answer biology questions. 
-        2. Keep answers concise and suitable for IGCSE level students.
-        3. If the user asks for an image/diagram, reply ONLY with: "GENERATE_IMAGE: [description]".
+        2. Keep answers concise and suitable for IGCSE students.
+        3. If the user explicitly asks for an image, diagram, or drawing, reply ONLY with: "GENERATE_IMAGE: [description]".
+        4. Do not include markdown bolding like **this**, just plain text.
         `;
 
         // ==========================================
@@ -86,30 +83,23 @@
             const loadingId = addLoading();
 
             try {
-                // Using v1 (Stable) endpoint instead of v1beta
-                // Using gemini-1.5-flash as it is the most reliable free model
-                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+                // Combine system prompt and user question
+                const fullPrompt = `${SYSTEM_PROMPT}\n\nUser Question: ${text}`;
                 
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nQuestion: " + text }] }]
-                    })
-                });
+                // Using Pollinations.ai Text API (Free, No Key)
+                // We generate a random seed to make the cache fresh every time
+                const randomSeed = Math.floor(Math.random() * 1000000);
+                const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?seed=${randomSeed}&model=openai`;
 
-                const data = await response.json();
+                const response = await fetch(url);
+                
+                if (!response.ok) throw new Error("Pollinations API Error");
+
+                const botText = await response.text();
+                
                 document.getElementById(loadingId).remove();
 
-                if (!response.ok) {
-                    // This helps debugging directly in the chat
-                    let errorMsg = data.error ? data.error.message : "Unknown Error";
-                    addMessage(`⚠️ Google Error: ${errorMsg}. (Tip: If it says 'Model not found', use a Personal Gmail Key)`, 'bot');
-                    return;
-                }
-
-                const botText = data.candidates[0].content.parts[0].text;
-
+                // Check for Image command
                 if (botText.includes("GENERATE_IMAGE:")) {
                     const imagePrompt = botText.replace("GENERATE_IMAGE:", "").trim();
                     addImage(imagePrompt);
@@ -119,7 +109,7 @@
 
             } catch (error) {
                 if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addMessage("Connection Error. Please check your internet.", 'bot');
+                addMessage("Sorry, the AI is taking a nap. Please try again.", 'bot');
                 console.error(error);
             }
         }
@@ -133,8 +123,12 @@
                 ? "bg-green-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm max-w-[85%]" 
                 : "bg-white text-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 max-w-[85%] prose prose-sm";
             
-            if (sender === 'bot') bubble.innerHTML = marked.parse(text);
-            else bubble.textContent = text;
+            // Basic markdown parsing
+            if (sender === 'bot') {
+                bubble.innerHTML = marked.parse(text);
+            } else {
+                bubble.textContent = text;
+            }
 
             div.appendChild(bubble);
             chatContainer.appendChild(div);
@@ -153,6 +147,7 @@
             caption.textContent = "🧬 Generated Diagram: " + prompt;
 
             const img = document.createElement('img');
+            // Pollinations Image API
             const safePrompt = encodeURIComponent(prompt + " biology diagram scientific white background clean lines illustration");
             img.src = `https://image.pollinations.ai/prompt/${safePrompt}`;
             img.className = "rounded-md w-full h-auto min-h-[200px] bg-gray-50";
