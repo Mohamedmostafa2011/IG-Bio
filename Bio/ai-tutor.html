@@ -3,248 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioBot Pro - CIE 0610</title>
-    <!-- Tailwind & Icons -->
+    <title>BioBot Noir</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Markdown Parser -->
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Markdown & PDF -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- PDF Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
         
-        body { font-family: 'Outfit', sans-serif; background: #f0fdf4; }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Animations */
-        @keyframes messageSlide {
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #000000;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
+            color: white;
         }
-        
-        .msg-enter { animation: messageSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-        /* Glassmorphism */
+        /* HEAVY GLASS EFFECT */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
 
-        /* Typing Indicator */
+        .glass-input {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+
+        /* TYPOGRAPHY */
+        .prose h1, .prose h2, .prose h3 { color: white; font-weight: 800; margin-top: 1em; letter-spacing: -0.02em; }
+        .prose strong { color: white; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.3); }
+        .prose ul { list-style-type: square; padding-left: 1.2rem; color: #aaa; }
+        .prose p { color: #ccc; line-height: 1.7; margin-bottom: 0.8em; }
+
+        /* ANIMATIONS */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .msg-anim { animation: slideUp 0.4s ease-out forwards; }
+        
         .typing-dot {
-            width: 6px; height: 6px; background: #16a34a; border-radius: 50%;
+            width: 4px; height: 4px; background: white; border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
         }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-
-        /* Markdown Styles */
-        .prose h1, .prose h2 { color: #15803d; font-weight: 700; margin-top: 10px; }
-        .prose ul { list-style-type: disc; padding-left: 1.2rem; color: #334155; }
-        .prose strong { color: #166534; font-weight: 600; }
-        .prose p { margin-bottom: 8px; line-height: 1.6; color: #334155; }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden bg-gradient-to-br from-green-50 to-emerald-100">
+<body class="h-screen flex flex-col overflow-hidden">
 
-    <!-- Navbar -->
-    <header class="glass-panel z-20 px-6 py-4 flex justify-between items-center shadow-sm sticky top-0">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-tr from-green-600 to-emerald-400 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-500/30">
-                <i class="fa-solid fa-dna text-lg"></i>
+    <!-- HEADER -->
+    <header class="glass-panel z-20 h-16 flex justify-between items-center px-6 sticky top-0 border-b-0 border-white/10">
+        <div class="flex items-center gap-4">
+            <div class="w-8 h-8 bg-white text-black rounded flex items-center justify-center font-bold text-lg">
+                IO
             </div>
             <div>
-                <h1 class="font-bold text-xl text-gray-800 tracking-tight">BioBot <span class="text-green-600">Pro</span></h1>
-                <p class="text-xs text-gray-500 font-medium">CIE 0610 Specialist AI</p>
+                <h1 class="font-bold text-lg tracking-wider text-white">BIO<span class="font-light opacity-50">BOT</span></h1>
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">CIE 0610 / Intelligent System</p>
             </div>
         </div>
-        
-        <a href="/" class="group flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-semibold text-gray-600 hover:text-green-600 shadow-sm border border-gray-100 transition-all hover:shadow-md">
-            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-            Exit to Course
+        <a href="/" class="text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded hover:bg-white hover:text-black transition duration-300">
+            Exit
         </a>
     </header>
 
-    <!-- Chat Area -->
-    <main id="chat-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scroll-smooth pb-32">
-        <!-- Welcome Bubble -->
-        <div class="flex justify-start w-full msg-enter">
-            <div class="glass-panel p-6 rounded-2xl rounded-tl-none max-w-2xl shadow-sm border border-green-100">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <span class="font-bold text-gray-800">System Online</span>
-                </div>
-                <p class="text-gray-600 mb-2">I am an advanced AI trained on the <strong>Cambridge IGCSE Biology (0610)</strong> syllabus.</p>
-                <div class="bg-green-50/50 p-3 rounded-lg border border-green-100 text-sm text-green-800">
-                    <i class="fa-solid fa-check-circle mr-2"></i> Capable of detailed explanations, exam tips, and scientific diagrams.
-                </div>
+    <!-- CHAT AREA -->
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8 scroll-smooth pb-32">
+        <!-- Intro Message -->
+        <div class="flex justify-start w-full msg-anim">
+            <div class="glass-panel p-6 rounded-lg max-w-2xl border-l-2 border-white">
+                <h3 class="font-bold text-xl mb-2">System Initialized.</h3>
+                <p class="text-gray-300 text-sm">Target Syllabus: <strong>Cambridge IGCSE Biology (0610)</strong>.</p>
+                <p class="text-gray-300 text-sm mt-2">I am ready to generate strict anatomical diagrams and detailed explanations.</p>
             </div>
         </div>
     </main>
 
-    <!-- Input Area -->
-    <footer class="absolute bottom-0 w-full p-4 z-20">
-        <div class="max-w-4xl mx-auto glass-panel p-2 rounded-2xl shadow-2xl shadow-green-900/10 border border-white/60">
-            <div class="flex items-end gap-2">
+    <!-- INPUT AREA -->
+    <footer class="absolute bottom-0 w-full p-6 z-30">
+        <div class="max-w-4xl mx-auto glass-input rounded-2xl p-2 flex items-end gap-2 shadow-2xl">
+            
+            <!-- Tools -->
+            <div class="flex flex-col gap-1 p-1">
+                <button onclick="document.getElementById('file-upload').click()" class="w-10 h-10 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition flex items-center justify-center">
+                    <i class="fa-solid fa-paperclip"></i>
+                </button>
+                <input type="file" id="file-upload" class="hidden" onchange="handleFile(this)">
                 
-                <!-- Attachment Button (Visual Only) -->
-                <button onclick="document.getElementById('file-upload').click()" class="p-3 text-gray-400 hover:text-green-600 transition-colors rounded-xl hover:bg-green-50" title="Upload Image Context">
-                    <i class="fa-solid fa-plus text-lg"></i>
-                </button>
-                <input type="file" id="file-upload" class="hidden" onchange="handleFileUpload(this)">
-
-                <!-- Draw Button -->
-                <button onclick="sendImageRequest()" class="p-3 text-gray-400 hover:text-purple-600 transition-colors rounded-xl hover:bg-purple-50" title="Generate Scientific Diagram">
-                    <i class="fa-solid fa-image text-lg"></i>
-                </button>
-
-                <!-- Text Input -->
-                <textarea id="user-input" rows="1" 
-                    class="flex-1 bg-transparent border-0 focus:ring-0 text-gray-700 placeholder-gray-400 resize-none py-3 max-h-32"
-                    placeholder="Ask about biology or request a diagram..."
-                    onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
-
-                <!-- Send Button -->
-                <button onclick="sendMessage()" class="p-3 bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-lg shadow-green-600/30 transition-all active:scale-95">
-                    <i class="fa-solid fa-paper-plane"></i>
+                <button onclick="requestImage()" class="w-10 h-10 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition flex items-center justify-center" title="Generate Diagram">
+                    <i class="fa-solid fa-pen-nib"></i>
                 </button>
             </div>
+
+            <!-- Text Input -->
+            <textarea id="user-input" rows="1" 
+                class="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder-gray-500 text-lg py-3 px-2 resize-none max-h-40"
+                placeholder="Enter query..."
+                onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+
+            <!-- Send Button -->
+            <button onclick="sendMessage()" class="w-12 h-12 bg-white text-black rounded-xl hover:bg-gray-200 transition shadow-lg flex items-center justify-center mb-1">
+                <i class="fa-solid fa-arrow-up"></i>
+            </button>
         </div>
     </footer>
 
     <script>
         // ==========================================
-        // 1. SYLLABUS MAPPING (Links to your site)
+        // 1. CIE 0610 SYLLABUS MAPPING
         // ==========================================
-        const CHAPTER_LINKS = {
-            "characteristics": { num: 1, title: "Characteristics of Living Organisms" },
-            "cell": { num: 2, title: "Organization of the Organism" },
-            "movement": { num: 3, title: "Movement In and Out of Cells" },
-            "biological molecules": { num: 4, title: "Biological Molecules" },
-            "enzyme": { num: 5, title: "Enzymes" },
-            "nutrition": { num: 6, title: "Plant/Human Nutrition" },
-            "transport": { num: 8, title: "Transport in Plants/Animals" },
-            "disease": { num: 10, title: "Diseases and Immunity" },
-            "respiration": { num: 12, title: "Respiration" },
-            "excretion": { num: 13, title: "Excretion" },
-            "coordination": { num: 14, title: "Coordination and Response" },
-            "eye": { num: 14, title: "Coordination (The Eye)" },
-            "drug": { num: 15, title: "Drugs" },
-            "reproduction": { num: 16, title: "Reproduction" },
-            "inheritance": { num: 17, title: "Inheritance" },
-            "variation": { num: 18, title: "Variation and Selection" },
-            "organism": { num: 19, title: "Organisms and Environment" },
-            "biotechnology": { num: 20, title: "Biotechnology" }
+        // Matches keywords to your website links: ig-bio.vercel.app/chX
+        const SYLLABUS_MAP = {
+            "characteristic": 1, "classification": 1,
+            "cell": 2, "organisation": 2,
+            "movement": 3, "diffusion": 3, "osmosis": 3,
+            "biological molecule": 4, "chemical": 4,
+            "enzyme": 5,
+            "nutrition": 6, "photosynthesis": 6, "diet": 6, "digest": 6,
+            "transport": 8, "xylem": 8, "phloem": 8, "heart": 8, "blood": 8,
+            "pathogen": 10, "disease": 10, "immunity": 10,
+            "respiration": 12, "aerobic": 12,
+            "excretion": 13, "kidney": 13,
+            "coordination": 14, "nervous": 14, "eye": 14, "hormone": 14, "homeostasis": 14,
+            "drug": 15, "antibiotic": 15,
+            "reproduction": 16, "flower": 16, "sexual": 16,
+            "inheritance": 17, "dna": 17, "gene": 17, "mitosis": 17,
+            "variation": 18, "selection": 18,
+            "ecosystem": 19, "food web": 19,
+            "biotechnology": 20, "genetic": 20
         };
 
-        // ==========================================
-        // 2. CONFIGURATION & BRAIN
-        // ==========================================
         const SYSTEM_PROMPT = `
-        You are a Cambridge IGCSE Biology (0610) Master Tutor.
-        
-        STRICT RULES:
-        1.  **Exam Focus:** Always mention "Common exam mistakes" or "Key definitions" in your answers.
-        2.  **Detail Level:** Provide comprehensive, structured answers (Intro -> Details -> Exam Tip). Use Bullet points.
-        3.  **Tone:** Professional, Academic, Encouraging. Like a top-tier professor.
-        4.  **Formatting:** Use Markdown. **Bold** key terms.
-        5.  **Image Handling:** If the user asks for a diagram, drawing, or image, your response must be EXACTLY and ONLY: "GENERATE_IMAGE: [detailed scientific description of the view]". Do not write "Here is the image". Just the command.
+        ACT AS: A strict Cambridge IGCSE Biology (0610) Professor.
+        STYLE: Academic, Detailed, Serious.
+        OUTPUT RULES:
+        1. Use Markdown. Bold Keywords.
+        2. Answers must be LONG (200+ words). Structure: Definition -> Mechanism -> Exam Tip.
+        3. If asked for image/diagram: Return ONLY "GENERATE_IMAGE: [scientific description]".
         `;
 
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
 
         // ==========================================
-        // 3. CORE FUNCTIONS
+        // 2. MAIN LOGIC
         // ==========================================
 
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text) return;
-            
-            // UI Update
+
+            // UI
             addMessage(text, 'user');
             userInput.value = '';
-            userInput.rows = 1;
-            
+            userInput.style.height = 'auto';
             const loadingId = addLoading();
 
             try {
-                // Pollinations Text API (Free, No Key)
-                const finalPrompt = `${SYSTEM_PROMPT}\n\nUser Question: ${text}`;
-                const seed = Math.floor(Math.random() * 1000000);
-                const url = `https://text.pollinations.ai/${encodeURIComponent(finalPrompt)}?model=openai&seed=${seed}`;
+                // Pollinations API (Free, Unlimited)
+                const fullPrompt = SYSTEM_PROMPT + "\n\nQuestion: " + text;
+                const seed = Math.floor(Math.random() * 99999);
+                const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai&seed=${seed}`;
 
                 const response = await fetch(url);
                 const botText = await response.text();
                 
-                // Remove loading
                 document.getElementById(loadingId).remove();
 
-                // Logic to separate Image Command from Text
+                // Image Handler
                 if (botText.includes("GENERATE_IMAGE:")) {
-                    // Extract the prompt
-                    const imagePrompt = botText.replace("GENERATE_IMAGE:", "").trim();
-                    // We DO NOT show the text command to the user. We show the image directly.
-                    addBotMessage("I am generating a scientific diagram for you...", true); // Temporary text
-                    addImage(imagePrompt);
+                    const imgPrompt = botText.replace("GENERATE_IMAGE:", "").trim();
+                    addBotMessage("Processing anatomical data...", true);
+                    addImage(imgPrompt);
                 } else {
                     addBotMessage(botText);
-                    // Check if we should link to chapters
-                    checkAndAddLinks(text, botText);
+                    generateResourceLinks(text, botText); // Checks for Chapters
                 }
 
             } catch (error) {
-                document.getElementById(loadingId).remove();
-                addBotMessage("⚠️ Connection error. Please try again.");
-            }
-        }
-
-        // Dedicated button for "Draw this"
-        function sendImageRequest() {
-            const text = userInput.value.trim();
-            if (!text) {
-                alert("Please describe what you want me to draw first.");
-                return;
-            }
-            userInput.value = "Generate a scientific diagram of: " + text;
-            sendMessage();
-        }
-
-        function handleFileUpload(input) {
-            if (input.files && input.files[0]) {
-                const fileName = input.files[0].name;
-                addMessage(`📎 Attached: ${fileName}`, 'user');
-                // Since we can't actually read the image in this free mode, we fake the acknowledgment
-                setTimeout(() => {
-                    addBotMessage(`I see you've attached **${fileName}**. While I cannot visually analyze images directly in this mode, I can explain any concept related to it. What would you like to know?`);
-                }, 1000);
+                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+                addBotMessage("Server Error. Retrying...");
             }
         }
 
         // ==========================================
-        // 4. UI BUILDERS
+        // 3. UI GENERATORS (Black & White Theme)
         // ==========================================
 
         function addMessage(text, sender) {
             const div = document.createElement('div');
-            div.className = `flex w-full msg-enter ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            div.className = `flex w-full msg-anim ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
             
             const bubble = document.createElement('div');
             if (sender === 'user') {
-                bubble.className = "bg-green-600 text-white px-5 py-3 rounded-2xl rounded-tr-none shadow-md max-w-[85%] text-lg font-light";
+                bubble.className = "bg-white text-black px-6 py-4 rounded-2xl rounded-tr-none max-w-[80%] text-base font-medium shadow-lg";
                 bubble.textContent = text;
             }
             div.appendChild(bubble);
@@ -252,65 +220,58 @@
             scrollToBottom();
         }
 
-        function addBotMessage(text, isTemporary = false) {
+        function addBotMessage(text, isTemp = false) {
             const div = document.createElement('div');
-            div.className = "flex w-full justify-start msg-enter group relative"; // Relative for PDF button
+            div.className = "flex w-full justify-start msg-anim";
+
+            const container = document.createElement('div');
+            container.className = "glass-panel p-8 rounded-2xl rounded-tl-none max-w-3xl w-full border border-white/10";
             
-            const icon = document.createElement('div');
-            icon.className = "w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-green-600 mr-2 mt-2 shadow-sm shrink-0";
-            icon.innerHTML = '<i class="fa-solid fa-robot"></i>';
+            // Content
+            const content = document.createElement('div');
+            content.className = "prose prose-invert max-w-none"; // prose-invert makes text white for dark mode
+            content.innerHTML = marked.parse(text);
 
-            const bubbleContainer = document.createElement('div');
-            bubbleContainer.className = "flex flex-col gap-2 max-w-[95%]";
+            container.appendChild(content);
 
-            const bubble = document.createElement('div');
-            bubble.className = "glass-panel p-6 rounded-2xl rounded-tl-none shadow-sm border border-gray-200 prose prose-green prose-lg w-full bg-white/90";
-            bubble.innerHTML = marked.parse(text);
-
-            // PDF DOWNLOAD BUTTON
-            if (!isTemporary) {
-                const actionsBar = document.createElement('div');
-                actionsBar.className = "flex gap-2 mt-1";
+            // PDF Button
+            if (!isTemp) {
+                const btnBar = document.createElement('div');
+                btnBar.className = "mt-6 pt-4 border-t border-white/10 flex justify-end";
                 
                 const pdfBtn = document.createElement('button');
-                pdfBtn.className = "text-xs flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors bg-white px-3 py-1 rounded-full border border-gray-100 shadow-sm";
-                pdfBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Download Explanation';
-                pdfBtn.onclick = () => generatePDF(bubble);
+                pdfBtn.className = "text-xs font-bold uppercase tracking-widest text-white/70 hover:text-white border border-white/20 px-4 py-2 rounded-full hover:bg-white/10 transition flex items-center gap-2";
+                pdfBtn.innerHTML = '<i class="fa-solid fa-download"></i> Save as PDF';
+                pdfBtn.onclick = () => {
+                    const opt = { margin: 0.5, filename: 'IGCSE_Bio_Notes.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+                    html2pdf().set(opt).from(content).save();
+                };
                 
-                actionsBar.appendChild(pdfBtn);
-                bubbleContainer.appendChild(bubble);
-                bubbleContainer.appendChild(actionsBar);
-            } else {
-                bubbleContainer.appendChild(bubble);
+                btnBar.appendChild(pdfBtn);
+                container.appendChild(btnBar);
             }
 
-            div.appendChild(icon);
-            div.appendChild(bubbleContainer);
+            div.appendChild(container);
             chatContainer.appendChild(div);
             scrollToBottom();
         }
 
         function addImage(prompt) {
             const div = document.createElement('div');
-            div.className = "flex w-full justify-start msg-enter";
+            div.className = "flex w-full justify-start msg-anim";
             
             const container = document.createElement('div');
-            container.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-md border border-gray-200 ml-10 max-w-[90%]";
+            container.className = "glass-panel p-4 rounded-2xl rounded-tl-none max-w-3xl border border-white/20";
             
-            // 1. Force Scientific Style
-            const stylePrompt = " schematic biology diagram, educational textbook cross-section, flat vector style, white background, detailed labeling lines, scientific illustration, high contrast, cie 0610";
-            const negativePrompt = " photorealistic, 3d render, artistic, blurry, dark background, scary, distortion";
-            
-            const safePrompt = encodeURIComponent(prompt + stylePrompt);
-            const imgUrl = `https://image.pollinations.ai/prompt/${safePrompt}?model=flux&width=1024&height=768&nologo=true&seed=${Math.random()}`;
+            // Forces Black & White Schematic style
+            const style = " technical drawing, blueprint style, white on black background, schematic, high contrast, scientific diagram, detailed lines";
+            const safePrompt = encodeURIComponent(prompt + style);
+            // Using Flux model, forced grayscale
+            const imgUrl = `https://image.pollinations.ai/prompt/${safePrompt}?model=flux&width=1000&height=700&nologo=true&seed=${Math.random()}`;
 
             container.innerHTML = `
-                <div class="flex items-center gap-2 mb-3 border-b pb-2">
-                    <i class="fa-solid fa-pen-ruler text-purple-600"></i>
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Generated Diagram</span>
-                </div>
-                <img src="${imgUrl}" alt="Diagram" class="rounded-lg w-full h-auto min-h-[300px] bg-gray-50 border border-gray-100" loading="lazy">
-                <p class="text-xs text-center text-gray-400 mt-2 italic">${prompt}</p>
+                <div class="mb-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 border-b border-white/10 pb-2">Generated Schematic</div>
+                <img src="${imgUrl}" class="w-full rounded bg-black border border-white/10 grayscale invert filter brightness-90" loading="lazy">
             `;
 
             div.appendChild(container);
@@ -318,69 +279,79 @@
             scrollToBottom();
         }
 
-        function checkAndAddLinks(userText, botText) {
-            const combinedText = (userText + " " + botText).toLowerCase();
-            let found = false;
-            
-            const linksDiv = document.createElement('div');
-            linksDiv.className = "flex flex-wrap gap-2 ml-10 mt-2 msg-enter";
+        // ==========================================
+        // 4. SMART LINKING SYSTEM
+        // ==========================================
 
-            for (const [key, data] of Object.entries(CHAPTER_LINKS)) {
-                if (combinedText.includes(key)) {
-                    found = true;
-                    const fullBtn = `
-                        <a href="https://ig-bio.vercel.app/ch${data.num}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-bold hover:bg-blue-100 transition border border-blue-200">
-                            <i class="fa-solid fa-book-open"></i> Full Ch${data.num} Notes
-                        </a>`;
-                    const sumBtn = `
-                        <a href="https://ig-bio.vercel.app/summary/ch${data.num}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-600 rounded-lg text-sm font-bold hover:bg-amber-100 transition border border-amber-200">
-                            <i class="fa-solid fa-bolt"></i> Ch${data.num} Summary
-                        </a>`;
-                    
-                    linksDiv.innerHTML += fullBtn + sumBtn;
+        function generateResourceLinks(userQ, botA) {
+            const text = (userQ + " " + botA).toLowerCase();
+            const foundChapters = new Set(); // Use Set to avoid duplicates
+
+            // Scan for keywords
+            for (const [key, chNum] of Object.entries(SYLLABUS_MAP)) {
+                if (text.includes(key)) {
+                    foundChapters.add(chNum);
                 }
             }
 
-            if (found) {
-                chatContainer.appendChild(linksDiv);
-                scrollToBottom();
+            if (foundChapters.size > 0) {
+                const linksDiv = document.createElement('div');
+                linksDiv.className = "flex flex-wrap gap-3 ml-0 mt-4 animate-pulse";
+                
+                foundChapters.forEach(num => {
+                    // LINK 1: FULL NOTES
+                    const btnFull = document.createElement('a');
+                    btnFull.href = `https://ig-bio.vercel.app/ch${num}`; // Assumes /ch14 format
+                    btnFull.target = "_blank";
+                    btnFull.className = "glass-panel px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition flex items-center gap-2";
+                    btnFull.innerHTML = `<i class="fa-solid fa-book"></i> Chapter ${num} Full`;
+                    
+                    // LINK 2: SUMMARY
+                    const btnSum = document.createElement('a');
+                    btnSum.href = `https://ig-bio.vercel.app/summary/ch${num}`; // Assumes /summary/ch14 format
+                    btnSum.target = "_blank";
+                    btnSum.className = "glass-panel px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition flex items-center gap-2";
+                    btnSum.innerHTML = `<i class="fa-solid fa-list-check"></i> Ch${num} Summary`;
+
+                    linksDiv.appendChild(btnFull);
+                    linksDiv.appendChild(btnSum);
+                });
+
+                // Append to the last message container
+                const lastMsg = chatContainer.lastElementChild.querySelector('.glass-panel');
+                if(lastMsg) lastMsg.appendChild(linksDiv);
             }
         }
 
+        // ==========================================
+        // 5. UTILS
+        // ==========================================
+
         function addLoading() {
-            const id = 'loader-' + Date.now();
+            const id = 'load-' + Date.now();
             const div = document.createElement('div');
             div.id = id;
-            div.className = "flex w-full justify-start ml-10 mt-2";
-            div.innerHTML = `
-                <div class="bg-white px-4 py-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 flex items-center gap-2">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <span class="text-xs text-gray-400 ml-2">Consulting Syllabus...</span>
-                </div>
-            `;
+            div.className = "flex w-full justify-start mt-2";
+            div.innerHTML = `<div class="glass-panel px-4 py-3 rounded-full flex gap-2"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
             chatContainer.appendChild(div);
             scrollToBottom();
             return id;
         }
 
-        function generatePDF(element) {
-            const opt = {
-                margin:       1,
-                filename:     'BioBot_Explanation.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
+        function requestImage() {
+            const val = userInput.value;
+            if(!val) return alert("Type what you want to draw first");
+            userInput.value = "Generate a scientific diagram of: " + val;
+            sendMessage();
         }
 
-        function scrollToBottom() {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        function handleFile(input) {
+            if(input.files[0]) addMessage(`[Attached: ${input.files[0].name}]`, 'user');
         }
 
-        // Auto-resize textarea
+        function scrollToBottom() { chatContainer.scrollTop = chatContainer.scrollHeight; }
+
+        // Auto-resize input
         userInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
