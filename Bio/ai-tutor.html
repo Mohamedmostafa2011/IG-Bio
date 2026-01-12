@@ -34,7 +34,7 @@
             <div class="flex items-start">
                 <div class="bg-green-100 text-green-900 p-3 rounded-lg rounded-tl-none shadow-sm border border-green-200 max-w-[85%]">
                     <p><strong>System Ready.</strong> I am trained on the Cambridge IGCSE Biology (0610) syllabus.</p>
-                    <p class="mt-2 text-sm">Ask me anything about Biology, or type "Image of..." to generate a diagram.</p>
+                    <p class="mt-2 text-sm">Ask me anything about Biology!</p>
                 </div>
             </div>
         </div>
@@ -59,11 +59,10 @@
         // CONFIGURATION
         // ==========================================
         
-        // ⬇️ PASTE YOUR NEW KEY HERE ⬇️
+        // ⬇️ PASTE YOUR *PERSONAL GMAIL* KEY HERE ⬇️
         let API_KEY = "AIzaSyAQoHG6eI3vYdznWrhmLkBvaME0_UPA1Gs"; 
         
-        // This removes accidental spaces you might copy
-        API_KEY = API_KEY.trim();
+        API_KEY = API_KEY.trim(); // Removes spaces
 
         const SYSTEM_PROMPT = `
         You are an expert IGCSE Biology Tutor for CIE 0610. 
@@ -87,26 +86,29 @@
             const loadingId = addLoading();
 
             try {
-                // We try the standard model first
-                let modelName = "gemini-1.5-flash";
-                let response = await callGemini(modelName, text);
+                // Using v1 (Stable) endpoint instead of v1beta
+                // Using gemini-1.5-flash as it is the most reliable free model
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
                 
-                // If that fails, we try the backup model automatically
-                if (response.error) {
-                    console.log("Switching to backup model...");
-                    modelName = "gemini-pro";
-                    response = await callGemini(modelName, text);
-                }
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nQuestion: " + text }] }]
+                    })
+                });
 
-                // Remove Loading
+                const data = await response.json();
                 document.getElementById(loadingId).remove();
 
-                if (response.error) {
-                    addMessage("⚠️ System Error: " + response.error.message + ". Please check your API Key.", 'bot');
+                if (!response.ok) {
+                    // This helps debugging directly in the chat
+                    let errorMsg = data.error ? data.error.message : "Unknown Error";
+                    addMessage(`⚠️ Google Error: ${errorMsg}. (Tip: If it says 'Model not found', use a Personal Gmail Key)`, 'bot');
                     return;
                 }
 
-                const botText = response.candidates[0].content.parts[0].text;
+                const botText = data.candidates[0].content.parts[0].text;
 
                 if (botText.includes("GENERATE_IMAGE:")) {
                     const imagePrompt = botText.replace("GENERATE_IMAGE:", "").trim();
@@ -117,21 +119,9 @@
 
             } catch (error) {
                 if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addMessage("Connection Error. Please check your internet or API Key.", 'bot');
+                addMessage("Connection Error. Please check your internet.", 'bot');
                 console.error(error);
             }
-        }
-
-        async function callGemini(model, text) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nQuestion: " + text }] }]
-                })
-            });
-            return await res.json();
         }
 
         function addMessage(text, sender) {
