@@ -7,65 +7,89 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
+        /* Professional Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #15803d; border-radius: 4px; }
+        
         .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* Textbook Typography */
+        .prose h1, .prose h2, .prose h3 { color: #166534; font-weight: 700; margin-top: 1em; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; color: #374151; }
+        .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #1f2937; }
+        .prose strong { color: #14532d; }
     </style>
 </head>
-<body class="bg-slate-100 h-screen flex flex-col font-sans">
+<body class="bg-gray-50 h-screen flex flex-col font-sans text-gray-800">
 
-    <!-- Header -->
-    <header class="bg-green-600 text-white p-4 shadow-md flex justify-between items-center">
-        <div>
-            <h1 class="text-xl font-bold">🧬 BioBot CIE 0610</h1>
-            <p class="text-xs text-green-100">IGCSE Biology Specialist</p>
+    <!-- Professional Header -->
+    <header class="bg-green-800 text-white p-4 shadow-xl flex justify-between items-center z-10">
+        <div class="flex items-center gap-3">
+            <div class="bg-white p-2 rounded-full">
+                <span class="text-2xl">🧬</span>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wide">BioBot <span class="text-green-300">CIE 0610</span></h1>
+                <p class="text-xs text-green-200">Advanced Academic Tutor</p>
+            </div>
         </div>
-        <a href="/" class="text-sm bg-green-700 px-3 py-1 rounded hover:bg-green-800 transition">Back to Home</a>
+        <a href="/" class="text-sm bg-green-700 border border-green-600 px-4 py-2 rounded-lg hover:bg-green-600 transition shadow-sm">Back to Home</a>
     </header>
 
     <!-- Chat Container -->
-    <main id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4">
-        <div class="flex flex-col space-y-2 max-w-3xl mx-auto">
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-6">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Welcome Message -->
             <div class="flex items-start">
-                <div class="bg-green-100 text-green-900 p-3 rounded-lg rounded-tl-none shadow-sm border border-green-200 max-w-[85%]">
-                    <p><strong>System Ready.</strong> I am trained on the Cambridge IGCSE Biology (0610) syllabus.</p>
-                    <p class="mt-2 text-sm">Ask me anything about Biology, or ask for a diagram!</p>
+                <div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-md border-l-4 border-green-600 max-w-[90%]">
+                    <h3 class="font-bold text-xl text-green-800 mb-2">Welcome, Student.</h3>
+                    <p class="text-gray-700">I am connected to the <strong>Cambridge IGCSE Biology (0610)</strong> database.</p>
+                    <p class="mt-2 text-gray-700">My settings are configured for:</p>
+                    <ul class="list-disc ml-5 mt-1 text-sm text-gray-600 space-y-1">
+                        <li><strong>Detailed Explanations</strong> (Structure & Function)</li>
+                        <li><strong>Scientific Diagrams</strong> (Cross-sections & Schematics)</li>
+                        <li><strong>Exam-Style Accuracy</strong></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Input Area -->
-    <footer class="p-4 bg-white border-t border-gray-200">
-        <div class="max-w-3xl mx-auto flex gap-2">
+    <footer class="p-4 bg-white border-t border-gray-200 shadow-2xl">
+        <div class="max-w-4xl mx-auto flex gap-3">
             <input type="text" id="user-input" 
-                class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                placeholder="Ask a biology question..." 
+                class="flex-1 border-2 border-gray-300 rounded-xl px-5 py-3 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition text-lg"
+                placeholder="Topic (e.g., 'Describe the structure of the Heart')..." 
                 onkeydown="if(event.key === 'Enter') sendMessage()">
             <button onclick="sendMessage()" 
-                class="bg-green-600 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center hover:bg-green-700 transition">
-                ➤
+                class="bg-green-700 text-white rounded-xl px-8 py-3 font-bold hover:bg-green-800 transition flex items-center shadow-lg uppercase tracking-wider">
+                Ask
             </button>
         </div>
     </footer>
 
     <script>
         // ==========================================
-        // CONFIGURATION (NO KEY NEEDED!)
+        // CONFIGURATION - NO KEYS REQUIRED
         // ==========================================
         
-        const SYSTEM_PROMPT = `
-        You are an expert IGCSE Biology Tutor for CIE 0610. 
-        Your rules:
-        1. Only answer biology questions. 
-        2. Keep answers concise and suitable for IGCSE students.
-        3. If the user explicitly asks for an image, diagram, or drawing, reply ONLY with: "GENERATE_IMAGE: [description]".
-        4. Do not include markdown bolding like **this**, just plain text.
+        // This Prompt forces the AI to be LONG and DETAILED
+        const SYSTEM_INSTRUCTION = `
+        ACT AS: A strict Cambridge IGCSE Biology (0610) Professor.
+        
+        INSTRUCTIONS FOR TEXT:
+        1.  **LENGTH:** Your answers must be DETAILED and COMPREHENSIVE (at least 200 words). Never give one-sentence answers.
+        2.  **STRUCTURE:** Use Markdown. Use Bold headings. Use Bullet points. 
+        3.  **CONTENT:** Always explain the *Structure* (what it looks like) and *Function* (what it does).
+        4.  **TONE:** Academic, formal, educational.
+        5.  **IMAGE REQUESTS:** If the user asks for a diagram, drawing, or image, ONLY return the text: "GENERATE_IMAGE: [detailed scientific description]".
+        
+        TOPIC:
         `;
 
         // ==========================================
@@ -83,23 +107,24 @@
             const loadingId = addLoading();
 
             try {
-                // Combine system prompt and user question
-                const fullPrompt = `${SYSTEM_PROMPT}\n\nUser Question: ${text}`;
+                // 1. Construct the URL for the "Keyless" API
+                // We use Pollinations Text API which routes to OpenAI/Llama automatically
+                const finalPrompt = SYSTEM_INSTRUCTION + " " + text;
+                const seed = Math.floor(Math.random() * 999999);
                 
-                // Using Pollinations.ai Text API (Free, No Key)
-                // We generate a random seed to make the cache fresh every time
-                const randomSeed = Math.floor(Math.random() * 1000000);
-                const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?seed=${randomSeed}&model=openai`;
+                // We encode the prompt to put it in the URL
+                const url = `https://text.pollinations.ai/${encodeURIComponent(finalPrompt)}?model=openai&seed=${seed}`;
 
                 const response = await fetch(url);
                 
-                if (!response.ok) throw new Error("Pollinations API Error");
-
+                if (!response.ok) throw new Error("Server Busy");
+                
+                // The API returns raw text
                 const botText = await response.text();
                 
                 document.getElementById(loadingId).remove();
 
-                // Check for Image command
+                // 2. Check if AI wants to make an image
                 if (botText.includes("GENERATE_IMAGE:")) {
                     const imagePrompt = botText.replace("GENERATE_IMAGE:", "").trim();
                     addImage(imagePrompt);
@@ -109,7 +134,7 @@
 
             } catch (error) {
                 if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addMessage("Sorry, the AI is taking a nap. Please try again.", 'bot');
+                addMessage("I am thinking very hard, but the connection timed out. Please ask again.", 'bot');
                 console.error(error);
             }
         }
@@ -119,15 +144,14 @@
             div.className = sender === 'user' ? "flex justify-end" : "flex justify-start";
             
             const bubble = document.createElement('div');
-            bubble.className = sender === 'user' 
-                ? "bg-green-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm max-w-[85%]" 
-                : "bg-white text-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 max-w-[85%] prose prose-sm";
             
-            // Basic markdown parsing
-            if (sender === 'bot') {
-                bubble.innerHTML = marked.parse(text);
-            } else {
+            if (sender === 'user') {
+                bubble.className = "bg-green-700 text-white p-4 rounded-2xl rounded-tr-none shadow-md max-w-[80%] text-lg";
                 bubble.textContent = text;
+            } else {
+                // Bot styling: Wide, white, professional typography
+                bubble.className = "bg-white text-gray-800 p-8 rounded-2xl rounded-tl-none shadow-md border border-gray-200 max-w-full w-full prose prose-lg prose-green";
+                bubble.innerHTML = marked.parse(text);
             }
 
             div.appendChild(bubble);
@@ -137,20 +161,26 @@
 
         function addImage(prompt) {
             const div = document.createElement('div');
-            div.className = "flex justify-start";
+            div.className = "flex justify-start w-full";
             
             const container = document.createElement('div');
-            container.className = "bg-white p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 max-w-[85%]";
+            container.className = "bg-white p-4 rounded-2xl rounded-tl-none shadow-md border border-gray-200 max-w-[90%]";
             
             const caption = document.createElement('p');
-            caption.className = "text-xs text-gray-500 mb-2 font-bold";
-            caption.textContent = "🧬 Generated Diagram: " + prompt;
+            caption.className = "text-sm text-green-700 mb-3 font-bold uppercase tracking-wide border-b pb-2";
+            caption.textContent = "🧬 Scientific Diagram: " + prompt;
 
             const img = document.createElement('img');
-            // Pollinations Image API
-            const safePrompt = encodeURIComponent(prompt + " biology diagram scientific white background clean lines illustration");
-            img.src = `https://image.pollinations.ai/prompt/${safePrompt}`;
-            img.className = "rounded-md w-full h-auto min-h-[200px] bg-gray-50";
+            
+            // MAGIC KEYWORDS: These force the image to look like a Textbook, not a cartoon.
+            const scientificKeywords = " anatomical cross section, biology textbook diagram, white background, detailed labeling lines, scientific illustration, high definition, cie 0610 style";
+            
+            const safePrompt = encodeURIComponent(prompt + scientificKeywords);
+            
+            // Using 'flux' model for better details
+            img.src = `https://image.pollinations.ai/prompt/${safePrompt}?model=flux&width=1024&height=1024&nologo=true`;
+            img.className = "rounded-lg w-full h-auto min-h-[400px] bg-gray-50 border border-gray-100 object-contain";
+            img.loading = "lazy";
             
             container.appendChild(caption);
             container.appendChild(img);
@@ -164,7 +194,7 @@
             const div = document.createElement('div');
             div.id = id;
             div.className = "flex justify-start";
-            div.innerHTML = `<div class="bg-white p-4 rounded-lg rounded-tl-none shadow-sm border border-gray-200 flex space-x-1"><div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div><div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div><div class="w-2 h-2 bg-green-500 rounded-full typing-dot"></div></div>`;
+            div.innerHTML = `<div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-md border border-gray-200 flex space-x-3 items-center"><div class="w-3 h-3 bg-green-600 rounded-full typing-dot"></div><div class="w-3 h-3 bg-green-600 rounded-full typing-dot"></div><div class="w-3 h-3 bg-green-600 rounded-full typing-dot"></div><span class="text-sm text-gray-500 font-semibold italic">Analyzing Syllabus...</span></div>`;
             chatContainer.appendChild(div);
             scrollToBottom();
             return id;
