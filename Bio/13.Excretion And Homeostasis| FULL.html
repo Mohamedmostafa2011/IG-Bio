@@ -2,645 +2,506 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IGCSE Biology: Excretion & Homeostasis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IG-Bio | Ch 13: Excretion in Humans</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- PDF & Image Generation Libraries -->
+    <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         :root {
-            /* Renal Theme: Water balance (Teal/Blue) & Organ (Red/Rose) */
-            --primary: #0891b2; /* Cyan-600 */
-            --primary-dark: #164e63; /* Dark Cyan */
-            --secondary: #0f172a; /* Slate 900 */
-            --accent: #f43f5e; /* Rose/Red (Kidney/Blood) */
-            --bg: #ecfeff; /* Very light cyan bg */
-            --surface: #ffffff;
+            /* Theme: Blue for Water/Excretion, Red for Blood Filtration */
+            --primary: #0284c7; /* Sky 600 */
+            --primary-dark: #075985; /* Sky 800 */
+            --accent: #e11d48; /* Rose 600 (Blood/Organ accent) */
+            --bg: #f0f9ff; /* Very light sky tint */
             --text: #334155;
-            --border: #a5f3fc;
+            --sidebar-w: 280px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3 { font-family: 'Exo 2', sans-serif; }
-
-        /* --- Header --- */
-        header {
-            background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
-            color: white;
-            padding: 4rem 1rem;
-            text-align: center;
-            position: relative;
+            height: 100vh;
+            display: flex;
             overflow: hidden;
         }
-        
-        /* Animated Liquid Effect */
-        header::after {
-            content: '';
-            position: absolute;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(8, 145, 178, 0.4) 0%, rgba(0,0,0,0) 70%);
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            animation: flow 6s infinite ease-in-out;
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-        }
-        @keyframes flow { 
-            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); } 
-            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.2); } 
-            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); } 
-        }
 
-        header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; z-index: 2; position: relative; text-transform: uppercase; letter-spacing: 1px; }
-        header p { opacity: 0.9; z-index: 2; position: relative; color: var(--accent); font-weight: 600; }
+        /* --- NAVIGATION BUTTON (Fixed Circular) --- */
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+            position: fixed; top: 20px; left: 20px; z-index: 3000;
+            background: var(--primary); color: white; border: none;
+            width: 50px; height: 50px; border-radius: 50%;
+            font-size: 1.4rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .menu-toggle:active { transform: scale(0.9); }
 
-        /* --- Nav --- */
-        nav {
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            box-shadow: 0 4px 10px -2px rgba(0,0,0,0.1);
+        /* --- MOBILE OVERLAY --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1999;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* --- SIDEBAR --- */
+        aside {
+            width: var(--sidebar-w);
+            background: #0c4a6e; /* Very Dark Blue */
+            color: white;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 0 1rem;
-            border-bottom: 2px solid var(--accent);
+            flex-direction: column;
+            padding: 30px 20px;
+            flex-shrink: 0;
+            z-index: 2000;
+            border-right: 1px solid #075985;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        nav a {
-            padding: 1.2rem 1.5rem;
-            text-decoration: none;
-            color: var(--secondary);
-            font-weight: 700;
-            font-family: 'Exo 2', sans-serif;
-            border-bottom: 4px solid transparent;
-            transition: 0.3s;
+
+        .brand {
+            font-size: 1.5rem; font-weight: 800; color: #7dd3fc; margin-bottom: 40px;
+            display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;
         }
-        nav a:hover { color: var(--primary); border-color: var(--primary); }
 
-        /* --- Container --- */
-        .container { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+        .nav-item {
+            padding: 16px; margin-bottom: 8px; border-radius: 8px;
+            cursor: pointer; color: #bae6fd; font-weight: 600;
+            display: flex; align-items: center; gap: 15px; transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4); }
 
-        section {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-            scroll-margin-top: 100px;
-            position: relative;
+        /* --- MAIN CONTENT --- */
+        main { flex: 1; position: relative; overflow: hidden; width: 100%; }
+
+        .view-panel {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto; padding: 0; display: none; opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .view-panel.active { display: block; opacity: 1; }
+
+        /* --- TEXTBOOK STYLING --- */
+        .paper {
+            max-width: 950px; margin: 0 auto; background: white;
+            padding: 80px; min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px; letter-spacing: -1px; }
+        .meta { color: var(--primary); text-transform: uppercase; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; }
+        
+        h2 { 
+            font-family: 'Inter', sans-serif; font-size: 1.8rem; color: #0c4a6e; 
+            margin-top: 60px; margin-bottom: 25px; padding-bottom: 15px; 
+            border-bottom: 2px solid #bae6fd; display: flex; align-items: center; gap: 10px;
         }
         
-        section::before {
-            content: ''; position: absolute; left: 0; top: 20px; bottom: 20px; width: 4px; background: var(--primary); border-radius: 0 4px 4px 0;
-        }
+        h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; color: var(--primary); margin-top: 35px; margin-bottom: 15px; }
 
-        h2 {
-            font-size: 2rem;
-            color: var(--primary-dark);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        p {
+            font-family: 'Crimson Pro', serif; font-size: 1.2rem; line-height: 1.8;
+            color: #334155; margin-bottom: 20px;
         }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-right: 10px;
-            margin-top: 15px;
-            font-family: 'Exo 2', sans-serif;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3); }
-        .btn-accent { background: var(--accent); color: white; }
-        .btn-accent:hover { background: #be123c; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(244, 63, 94, 0.4); }
-        .btn-outline { background: transparent; border: 2px solid var(--secondary); color: var(--secondary); }
-        .btn-outline:hover { background: var(--secondary); color: white; }
-
-        /* --- Audio Player --- */
-        .player-wrapper {
-            background: #f0f9ff;
-            padding: 2rem;
-            border-radius: 16px;
-            border: 1px solid #cffafe;
-        }
-        .track-list { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .track-btn {
-            background: white;
-            border: 2px solid transparent;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-family: 'Exo 2', sans-serif;
-        }
-        .track-btn.active { border-color: var(--primary); color: var(--primary); background: #ecfeff; }
+        li { font-family: 'Crimson Pro', serif; font-size: 1.15rem; line-height: 1.7; margin-bottom: 8px; margin-left: 20px; }
         
-        /* --- Notes --- */
-        .note-topic { margin-bottom: 40px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 25px; }
-        .note-topic h3 { color: var(--primary); font-size: 1.5rem; margin-bottom: 15px; }
+        /* Concept Boxes */
+        .concept-box {
+            background: #f0f9ff; border-left: 5px solid var(--accent);
+            padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
+        }
+        .concept-box strong { color: var(--accent); font-family: 'Inter', sans-serif; }
+
+        .exam-tip {
+            background: #fff1f2; border: 1px solid #fda4af; border-radius: 8px;
+            padding: 20px; margin: 30px 0; display: flex; gap: 15px; align-items: flex-start;
+        }
+        .exam-tip i { color: #e11d48; font-size: 1.5rem; margin-top: 3px; }
+        .exam-tip strong { color: #be123c; }
+
+        /* Tables */
+        .t-wrap { overflow-x: auto; margin: 30px 0; border: 1px solid #bae6fd; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #e0f2fe; color: var(--primary-dark); padding: 16px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 700; border-bottom: 2px solid #7dd3fc; }
+        td { padding: 16px; border-bottom: 1px solid #bae6fd; vertical-align: top; font-family: 'Crimson Pro', serif; font-size: 1.1rem; }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- MIND MAP --- */
+        .mm-wrapper { padding: 80px; display: inline-flex; min-width: 100%; justify-content: center; background: #f0f9ff; }
+        .tree ul { padding-top: 20px; position: relative; display: flex; justify-content: center; }
+        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px; }
+        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #38bdf8; width: 50%; height: 20px; }
+        .tree li::after { right: auto; left: 50%; border-left: 2px solid #38bdf8; }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; } .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid #38bdf8; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #38bdf8; width: 0; height: 20px; }
+
+        .node {
+            background: white; border: 1px solid #0ea5e9; padding: 12px 18px; border-radius: 8px;
+            display: inline-block; min-width: 140px; font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; z-index: 2;
+        }
+        .root-node { background: var(--primary); color: white; transform: scale(1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: none; }
+
+        /* --- QUIZ --- */
+        .quiz-area { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .q-card { background: white; padding: 30px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #bae6fd; }
+        .q-opt {
+            display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid #e2e8f0;
+            margin-top: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s;
+        }
+        .q-opt:hover { background: #e0f2fe; border-color: #38bdf8; }
+        .q-let { font-weight: 900; color: #94a3b8; background: #f1f5f9; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         
-        .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; }
-        .comparison-table th { background: var(--secondary); color: var(--bg); padding: 12px; text-align: left; text-transform: uppercase; font-size: 0.85rem; }
-        .comparison-table td { border: 1px solid #e5e7eb; padding: 12px; }
-        .comparison-table tr:nth-child(even) { background: #f8fafc; }
+        .q-opt.correct { background: #dcfce7; border-color: #16a34a; }
+        .q-opt.correct .q-let { background: #16a34a; color: white; }
+        .q-opt.wrong { background: #fee2e2; border-color: #ef4444; }
+        .q-opt.wrong .q-let { background: #ef4444; color: white; }
 
-        .highlight-box {
-            background: #fff1f2; /* Light red/rose tint */
-            border-left: 5px solid var(--accent);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            aside { position: fixed; top: 0; left: -100%; height: 100%; width: 85%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+            aside.active { left: 0; }
+            .paper { padding: 30px 20px; }
+            h1 { font-size: 2.2rem; }
+            .mm-wrapper { justify-content: flex-start; padding: 40px; }
         }
-
-        /* --- Mind Map --- */
-        .mindmap-scroll-container {
-            width: 100%;
-            overflow-x: auto;
-            background: #0f172a; /* Dark background */
-            border-radius: 12px;
-            padding: 20px;
-        }
-        
-        #mindmap-capture-zone {
-            background: #0f172a;
-            padding: 50px;
-            display: inline-block;
-            min-width: 1000px;
-        }
-
-        .mm-root {
-            background: var(--accent);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 1.4rem;
-            margin: 0 auto 50px auto;
-            width: fit-content;
-            box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
-            border: 2px solid white;
-        }
-
-        .mm-branches { display: flex; gap: 40px; justify-content: center; }
-        .mm-column { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; }
-        
-        /* Lines */
-        .mm-column::before { content: ''; position: absolute; top: -50px; height: 50px; width: 2px; background: var(--primary); left: 50%; }
-        .mm-branches::before { content: ''; position: absolute; top: 102px; left: 20%; right: 20%; height: 2px; background: var(--primary); }
-
-        .mm-category {
-            background: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            z-index: 2;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .mm-node {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            width: 100%;
-            text-align: left;
-            margin-bottom: 10px;
-            backdrop-filter: blur(5px);
-        }
-        .mm-node strong { color: var(--border); display: block; }
-
-        /* --- Quiz --- */
-        .q-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 12px;
-            display: none;
-        }
-        .q-card.active { display: block; animation: fade 0.3s ease; }
-        @keyframes fade { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
-
-        .q-option {
-            padding: 12px;
-            border: 2px solid #f1f5f9;
-            margin-top: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .q-option:hover { border-color: var(--primary); background: #ecfeff; }
-        .q-option.correct { background: #ccfbf1; border-color: #14b8a6; color: #134e4a; }
-        .q-option.wrong { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
-        
-        .q-expl { display: none; margin-top: 15px; padding: 15px; background: #f0f9ff; border-left: 4px solid var(--primary); color: var(--primary-dark); font-size: 0.9rem; }
-
-        /* Loader */
-        #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:2000; display:none; justify-content:center; align-items:center; flex-direction:column; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #e5e7eb; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight:700; color:var(--primary);">Processing Renal Data...</p>
-    </div>
+    <!-- MENU BUTTON -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <header>
-        <h1>Excretion in Humans</h1>
-        <p>Kidneys, Dialysis & Homeostasis</p>
-    </header>
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <div class="brand"><i class="fa-solid fa-droplet"></i> IG-BIO CH13</div>
+        
+        <div class="nav-item active" onclick="switchTab('notes', this)">
+            <i class="fa-solid fa-book-medical"></i> Full Notes
+        </div>
+        <div class="nav-item" onclick="switchTab('mindmap', this)">
+            <i class="fa-solid fa-sitemap"></i> Mind Map
+        </div>
+        <div class="nav-item" onclick="switchTab('quiz', this)">
+            <i class="fa-solid fa-flask"></i> 50 Qs Quiz
+        </div>
+        
+        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #075985;">
+             <div class="nav-item" onclick="genPDF()" style="color:#7dd3fc; border-color:#075985;">
+                 <i class="fa-solid fa-file-pdf"></i> Save as PDF
+             </div>
+        </div>
+    </aside>
 
-    <nav>
-        <a href="#audio"><i class="fa-solid fa-volume-high"></i> Lectures</a>
-        <a href="#notes"><i class="fa-solid fa-file-medical"></i> Notes</a>
-        <a href="#mindmap"><i class="fa-solid fa-sitemap"></i> Mind Map</a>
-        <a href="#quiz"><i class="fa-solid fa-vial"></i> Quiz (50)</a>
-    </nav>
+    <main>
+        
+        <!-- 1. DETAILED NOTES -->
+        <div id="notes" class="view-panel active">
+            <div class="paper" id="pdf-source">
+                <span class="meta">IGCSE Biology 0610 • Chapter 13</span>
+                <h1>Excretion in Humans</h1>
+                <p>Excretion is the removal from organisms of the waste products of metabolism (chemical reactions in cells), toxic materials, and substances in excess of requirements.</p>
 
-    <div class="container">
-
-        <!-- SECTION 1: AUDIO -->
-        <section id="audio">
-            <h2><i class="fa-solid fa-headphones-simple"></i> Audio Learning Modules</h2>
-            <p>Select a topic to listen to the explanation.</p>
-            
-            <div class="player-wrapper">
-                <div class="track-list">
-                    <button class="track-btn active" onclick="setTrack(0)">1. Definitions & Organs</button>
-                    <button class="track-btn" onclick="setTrack(1)">2. Structure of the Kidney</button>
-                    <button class="track-btn" onclick="setTrack(2)">3. The Nephron (Filtration)</button>
-                    <button class="track-btn" onclick="setTrack(3)">4. Dialysis & Treatment</button>
+                <div class="exam-tip">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Excretion vs. Egestion:</strong> Do not confuse them!<br>
+                        <strong>Excretion:</strong> Removal of metabolic waste (from cells/blood) e.g., Urea, CO2.<br>
+                        <strong>Egestion:</strong> Removal of undigested food (feces) via the anus. This food never entered the body's cells.
+                    </div>
                 </div>
 
-                <h3 id="track-title" style="color:var(--primary);">1. Definitions & Organs</h3>
-                <p id="track-status" style="font-size:0.9rem; color:#6b7280; margin-bottom:15px;">Paused</p>
-
-                <div class="controls">
-                    <button class="btn btn-primary" id="play-btn" onclick="togglePlay()"><i class="fa-solid fa-play"></i> Play</button>
-                    <button class="btn btn-outline" onclick="stopAudio()"><i class="fa-solid fa-stop"></i> Stop</button>
+                <h2>1. The Excretory Organs</h2>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Organ</th><th>Substance Excreted</th><th>Origin</th></tr>
+                        <tr><td><strong>Lungs</strong></td><td>Carbon Dioxide</td><td>Waste product of Respiration.</td></tr>
+                        <tr><td><strong>Skin</strong></td><td>Salts, Water, (trace Urea)</td><td>Excess intake (sweat).</td></tr>
+                        <tr><td><strong>Kidneys</strong></td><td>Urea, Salts, Excess Water</td><td>Breakdown of amino acids; excess intake.</td></tr>
+                    </table>
                 </div>
-            </div>
-            <button class="btn btn-accent" onclick="downloadTranscript()">Download Transcript PDF</button>
-        </section>
 
-        <!-- SECTION 2: NOTES -->
-        <section id="notes">
-            <h2><i class="fa-solid fa-book-medical"></i> Study Notes</h2>
-            
-            <div id="notes-content">
+                <h3>Formation of Urea (Deamination)</h3>
+                <p>Excess amino acids cannot be stored in the body. They are broken down in the <strong>Liver</strong>:</p>
+                <ol>
+                    <li><strong>Deamination:</strong> The nitrogen-containing part is removed to form <strong>Ammonia</strong>.</li>
+                    <li>Ammonia is very toxic, so it is immediately converted to <strong>Urea</strong> (less toxic).</li>
+                    <li>Urea travels in the blood to the Kidneys to be excreted.</li>
+                </ol>
+
+                <h2>2. The Urinary System</h2>
+                <p>The system responsible for filtering blood and producing urine.</p>
+                <ul>
+                    <li><strong>Renal Artery:</strong> Carries oxygenated blood (high in urea) <em>to</em> the kidney.</li>
+                    <li><strong>Renal Vein:</strong> Carries deoxygenated blood (low in urea) <em>away from</em> the kidney.</li>
+                    <li><strong>Kidney:</strong> Filters blood.</li>
+                    <li><strong>Ureter:</strong> Tube carrying urine from kidney to bladder.</li>
+                    <li><strong>Bladder:</strong> Stores urine.</li>
+                    <li><strong>Urethra:</strong> Tube carrying urine out of the body.</li>
+                </ul>
+
+                <h3>Structure of the Kidney</h3>
+                <ul>
+                    <li><strong>Cortex:</strong> The outer, dark red layer. Contains Bowman's capsules.</li>
+                    <li><strong>Medulla:</strong> The inner, lighter layer. Contains loops of Henle.</li>
+                    <li><strong>Pelvis:</strong> The center, white area where urine collects.</li>
+                </ul>
+
+                <h2>3. The Nephron (Filtration Unit)</h2>
+                <p>Each kidney contains thousands of tiny tubes called nephrons. They function in two stages:</p>
+
+                <div class="concept-box">
+                    <strong>1. Ultrafiltration:</strong> Occurs in the Glomerulus (ball of capillaries). High blood pressure forces small molecules (Water, Glucose, Urea, Salts) out of the blood and into the Bowman's Capsule. Large molecules (Proteins, Blood Cells) stay in the blood.
+                </div>
+
+                <div class="concept-box">
+                    <strong>2. Selective Reabsorption:</strong> As the filtrate moves down the tubule, useful substances are taken back into the blood.<br>
+                    - <strong>All Glucose:</strong> Reabsorbed (active transport) in the proximal tubule.<br>
+                    - <strong>Some Water:</strong> Reabsorbed depending on body needs (Osmoregulation).
+                </div>
+
+                <h2>4. Kidney Dialysis & Transplants</h2>
+                <p>If kidneys fail, urea builds up to toxic levels. Treatment is required.</p>
                 
-                <div class="note-topic">
-                    <h3>1. Excretion vs Egestion</h3>
-                    <p>It is vital to understand the difference between these two terms:</p>
-                    <ul>
-                        <li><strong>Excretion:</strong> The removal of waste products of <em>metabolism</em> (chemical reactions in cells), toxic materials, and substances in excess of requirements (e.g., CO2, Urea, Salts).</li>
-                        <li><strong>Egestion:</strong> The removal of undigested food (feces) via the anus. This has never been part of the body's cells.</li>
-                    </ul>
-                    <p><strong>Deamination:</strong> Excess amino acids cannot be stored. The <strong>Liver</strong> breaks them down: Amino Acid &rarr; Ammonia (Toxic) &rarr; Urea (Less Toxic). Urea is then transported to kidneys.</p>
-                </div>
-
-                <div class="note-topic">
-                    <h3>2. The Urinary System</h3>
-                    <p>The system consists of two Kidneys, two Ureters, the Bladder, and the Urethra.</p>
-                    <div class="highlight-box">
-                        <strong>Pathway:</strong> Kidney (Makes Urine) &rarr; Ureter (Tube) &rarr; Bladder (Storage) &rarr; Urethra (Exit).
-                    </div>
-                    <p><strong>Internal Structure:</strong></p>
-                    <ul>
-                        <li><strong>Cortex:</strong> The outer, dark region containing the Bowman's capsules (filtration units).</li>
-                        <li><strong>Medulla:</strong> The inner, lighter region containing the loops of Henle (water reabsorption).</li>
-                        <li><strong>Pelvis:</strong> The center area where urine collects before entering the ureter.</li>
-                    </ul>
-                </div>
-
-                <div class="note-topic">
-                    <h3>3. The Nephron (Function)</h3>
-                    <table class="comparison-table">
-                        <tr><th>Stage</th><th>Location</th><th>Process</th></tr>
-                        <tr><td><strong>Ultrafiltration</strong></td><td>Glomerulus</td><td>High pressure forces small molecules (Water, Glucose, Urea, Salts) out of blood into the capsule. Proteins stay in blood.</td></tr>
-                        <tr><td><strong>Selective Reabsorption</strong></td><td>Proximal Tubule</td><td>All Glucose is reabsorbed back into the blood (needs energy).</td></tr>
-                        <tr><td><strong>Water Reabsorption</strong></td><td>Loop of Henle / Collecting Duct</td><td>Water is reabsorbed back into blood based on body needs (ADH control).</td></tr>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Method</th><th>Description</th><th>Pros / Cons</th></tr>
+                        <tr><td><strong>Dialysis</strong></td><td>A machine filters blood. Blood flows alongside dialysis fluid separated by a membrane. Urea diffuses out.</td><td><strong>Pros:</strong> Available immediately, no rejection risk.<br><strong>Cons:</strong> Time-consuming, restrictive diet, expensive long-term.</td></tr>
+                        <tr><td><strong>Transplant</strong></td><td>A healthy kidney from a donor is surgically implanted.</td><td><strong>Pros:</strong> Permanent cure, normal life.<br><strong>Cons:</strong> Risk of rejection, need immunosuppressant drugs for life, shortage of donors.</td></tr>
                     </table>
                 </div>
 
-                <div class="note-topic">
-                    <h3>4. Kidney Failure Treatment</h3>
-                    <p>If kidneys fail, urea builds up (poisoning the blood). Two treatments exist:</p>
-                    <table class="comparison-table">
-                        <tr><th>Method</th><th>Pros</th><th>Cons</th></tr>
-                        <tr><td><strong>Dialysis</strong></td><td>No rejection risk, no surgery, available immediately.</td><td>Time-consuming (hospital visits), restrictive diet, temporary solution.</td></tr>
-                        <tr><td><strong>Transplant</strong></td><td>Permanent cure, no diet restrictions, better quality of life.</td><td>Risk of rejection, immunosuppressant drugs needed for life, shortage of donors.</td></tr>
-                    </table>
-                </div>
+                <h2>5. Volume & Concentration of Urine</h2>
+                <p>The volume and concentration of urine depends on water intake, temperature, and exercise.</p>
+                <ul>
+                    <li><strong>High Water Intake:</strong> Kidneys reabsorb <em>less</em> water. Urine is <strong>pale and dilute</strong> (large volume).</li>
+                    <li><strong>Hot Day / Exercise:</strong> Much water lost in sweat. Kidneys reabsorb <em>more</em> water. Urine is <strong>dark and concentrated</strong> (small volume).</li>
+                </ul>
 
+                <div style="height:100px;"></div>
             </div>
-            <button class="btn btn-primary" onclick="downloadNotesPDF()">Download Notes PDF</button>
-        </section>
+        </div>
 
-        <!-- SECTION 3: MIND MAP -->
-        <section id="mindmap">
-            <h2><i class="fa-solid fa-project-diagram"></i> Visual Mind Map</h2>
-            <div class="mindmap-scroll-container">
-                <div id="mindmap-capture-zone">
-                    
-                    <div class="mm-root">EXCRETION</div>
-                    
-                    <div class="mm-branches">
-                        <!-- Organs -->
-                        <div class="mm-column">
-                            <div class="mm-category">Organs</div>
-                            <div class="mm-node"><strong>Lungs</strong>Excrete CO2 + Water</div>
-                            <div class="mm-node"><strong>Skin</strong>Excretes Salts + Water (Sweat)</div>
-                            <div class="mm-node"><strong>Kidneys</strong>Urea + Salts + Water</div>
-                            <div class="mm-node"><strong>Liver</strong>Deamination (Makes Urea)</div>
-                        </div>
-
-                        <!-- Anatomy -->
-                        <div class="mm-column">
-                            <div class="mm-category">Kidney Structure</div>
-                            <div class="mm-node"><strong>Cortex</strong>Outer layer (Filtering)</div>
-                            <div class="mm-node"><strong>Medulla</strong>Inner layer (Salts/Water)</div>
-                            <div class="mm-node"><strong>Ureter</strong>Tube to Bladder</div>
-                            <div class="mm-node"><strong>Renal Artery</strong>Brings 'dirty' blood</div>
-                        </div>
-
-                        <!-- Nephron -->
-                        <div class="mm-column">
-                            <div class="mm-category">The Nephron</div>
-                            <div class="mm-node"><strong>Glomerulus</strong>Ball of capillaries</div>
-                            <div class="mm-node"><strong>Filtration</strong>Small molecules exit blood</div>
-                            <div class="mm-node"><strong>Reabsorption</strong>Glucose returns to blood</div>
-                            <div class="mm-node"><strong>Urine</strong>Urea + Water + Salts</div>
-                        </div>
-
-                        <!-- Treatment -->
-                        <div class="mm-column">
-                            <div class="mm-category">Treatments</div>
-                            <div class="mm-node"><strong>Dialysis</strong>Machine filters blood</div>
-                            <div class="mm-node"><strong>Diffusion</strong>Moves Urea out</div>
-                            <div class="mm-node"><strong>Transplant</strong>New kidney inserted</div>
-                            <div class="mm-node"><strong>Rejection</strong>White blood cell attack</div>
-                        </div>
-                    </div>
-
+        <!-- 2. MIND MAP -->
+        <div id="mindmap" class="view-panel">
+            <div class="mm-wrapper">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="node root-node">EXCRETION</div>
+                            <ul>
+                                <li>
+                                    <div class="node">Organs</div>
+                                    <ul>
+                                        <li><div class="node">Lungs (CO2)</div></li>
+                                        <li><div class="node">Skin (Sweat)</div></li>
+                                        <li><div class="node">Liver (Deamination)</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Urinary System</div>
+                                    <ul>
+                                        <li><div class="node">Kidney</div></li>
+                                        <li><div class="node">Ureter</div></li>
+                                        <li><div class="node">Bladder</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Nephron</div>
+                                    <ul>
+                                        <li><div class="node">Glomerulus</div></li>
+                                        <li><div class="node">Filtration</div></li>
+                                        <li><div class="node">Reabsorption</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Treatments</div>
+                                    <ul>
+                                        <li><div class="node">Dialysis</div></li>
+                                        <li><div class="node">Transplant</div></li>
+                                        <li><div class="node">Rejection Risk</div></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <button class="btn btn-accent" onclick="downloadMindMap()">Download Mind Map Image</button>
-        </section>
+        </div>
 
-        <!-- SECTION 4: QUIZ -->
-        <section id="quiz">
-            <h2><i class="fa-solid fa-flask"></i> CIE Style MCQ (50 Questions)</h2>
-            <div style="display:flex; justify-content:space-between; background:var(--secondary); color:white; padding:15px; border-radius:8px; margin-bottom:20px;">
-                <span>Question: <strong id="q-num">1</strong>/50</span>
-                <span>Score: <strong id="score" style="color:var(--accent);">0</strong></span>
+        <!-- 3. QUIZ -->
+        <div id="quiz" class="view-panel">
+            <div class="quiz-area" id="q-container">
+                <!-- Questions injected via JS -->
             </div>
+        </div>
 
-            <div id="quiz-box"></div>
-            
-            <div style="margin-top:20px; text-align:right;">
-                <button class="btn btn-primary" id="next-q" style="display:none;" onclick="nextQuestion()">Next <i class="fa-solid fa-chevron-right"></i></button>
-            </div>
-
-            <div id="quiz-result" style="display:none; text-align:center; padding:30px;">
-                <h3 style="font-size:2rem;">Quiz Complete!</h3>
-                <p>Your score: <span id="final-score"></span>/50</p>
-                <button class="btn btn-outline" onclick="location.reload()">Restart</button>
-            </div>
-
-            <div style="margin-top:30px; border-top:1px solid var(--border); padding-top:20px;">
-                <h4>Teacher Resources</h4>
-                <button class="btn btn-primary" onclick="downloadQuizPDF('questions')">Download Questions</button>
-                <button class="btn btn-outline" onclick="downloadQuizPDF('answers')">Download Answers</button>
-            </div>
-        </section>
-
-    </div>
+    </main>
 
     <script>
-        // --- AUDIO LOGIC ---
-        const audioScripts = [
-            "Track 1: Definitions and Organs. Excretion is the removal of waste products of metabolism, toxic materials, and substances in excess. This is different from egestion, which is the removal of undigested food. The main excretory organs are the lungs for Carbon Dioxide, the skin for sweat, and the kidneys for urea, salts, and excess water. Urea is produced in the liver via deamination.",
-            "Track 2: Structure of the Kidney. The kidney has an outer dark layer called the cortex, and an inner lighter layer called the medulla. Blood enters via the Renal Artery (containing high urea) and leaves via the Renal Vein (low urea). Urine flows from the pelvis, down the Ureter, to the Bladder for storage, and finally out through the Urethra.",
-            "Track 3: The Nephron. This is the microscopic filtering unit. In the Glomerulus, high blood pressure forces small molecules like water, glucose, and urea out of the blood into the Bowman's capsule. This is Ultrafiltration. Large proteins stay in the blood. As the filtrate moves down the tubule, all glucose is reabsorbed back into the blood. Water is reabsorbed depending on body needs.",
-            "Track 4: Dialysis and Treatment. Kidney failure creates toxic blood. Dialysis uses a machine where blood flows alongside dialysis fluid, separated by a partially permeable membrane. Urea diffuses out of the blood into the fluid. The fluid contains correct glucose and salt levels so these are not lost. Transplants are a permanent cure but carry risks of tissue rejection by the immune system."
-        ];
-
-        let synth = window.speechSynthesis;
-        let utterance = null;
-        let currentTrack = 0;
-        let isPlaying = false;
-
-        function setTrack(idx) {
-            synth.cancel();
-            isPlaying = false;
-            currentTrack = idx;
-            document.querySelectorAll('.track-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
-            const titles = ["1. Definitions & Organs", "2. Structure of the Kidney", "3. The Nephron", "4. Dialysis & Treatment"];
-            document.getElementById('track-title').innerText = titles[idx];
-            document.getElementById('track-status').innerText = "Ready to Play";
-            document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i> Play';
-        }
-
-        function togglePlay() {
-            if(isPlaying) {
-                synth.pause();
-                isPlaying = false;
-                document.getElementById('track-status').innerText = "Paused";
-                document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i> Resume';
+        // --- UI LOGIC ---
+        function toggleMenu() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            if(sb.style.left === '0px') {
+                sb.style.left = '-100%';
+                ov.classList.remove('active');
             } else {
-                if(synth.paused) {
-                    synth.resume();
-                } else {
-                    utterance = new SpeechSynthesisUtterance(audioScripts[currentTrack]);
-                    utterance.rate = 0.95; // Slightly clearer for complex bio terms
-                    synth.speak(utterance);
-                    utterance.onend = () => { isPlaying = false; document.getElementById('track-status').innerText = "Finished"; };
-                }
-                isPlaying = true;
-                document.getElementById('track-status').innerText = "Playing...";
-                document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+                sb.style.left = '0px';
+                ov.classList.add('active');
             }
         }
 
-        function stopAudio() {
-            synth.cancel();
-            isPlaying = false;
-            document.getElementById('track-status').innerText = "Stopped";
-            document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i> Play';
+        function switchTab(id, btn) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').style.left = '-100%';
+                document.getElementById('overlay').classList.remove('active');
+            }
         }
 
-        function downloadTranscript() {
-            const doc = new jspdf.jsPDF();
-            doc.setFontSize(16); doc.setTextColor(8, 145, 178);
-            doc.text("Audio Transcript: Ch 13 Excretion", 20, 20);
-            doc.setFontSize(12); doc.setTextColor(0);
-            let y = 40;
-            audioScripts.forEach((txt, i) => {
-                const lines = doc.splitTextToSize(txt, 170);
-                doc.text(lines, 20, y);
-                y += (lines.length * 7) + 10;
-            });
-            doc.save("Transcript_Excretion.pdf");
-        }
+        function genPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('pdf-source');
+            const origWidth = element.style.width;
+            element.style.width = '900px'; 
+            
+            html2canvas(element, { scale: 2 }).then(canvas => {
+                element.style.width = origWidth;
+                const img = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const w = 210; const h = 297;
+                const imgH = canvas.height * w / canvas.width;
+                let hLeft = imgH; let pos = 0;
 
-        // --- NOTES & MINDMAP ---
-        function downloadNotesPDF() {
-            const doc = new jspdf.jsPDF('p', 'pt', 'a4');
-            doc.html(document.getElementById('notes-content'), {
-                callback: function(pdf) { pdf.save('IGCSE_Notes_Excretion.pdf'); },
-                x: 40, y: 40, width: 520, windowWidth: 650
-            });
-        }
-
-        function downloadMindMap() {
-            const node = document.getElementById('mindmap-capture-zone');
-            html2canvas(node, { scale: 2, backgroundColor: "#0f172a" }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'MindMap_Excretion.png';
-                link.href = canvas.toDataURL();
-                link.click();
+                pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                hLeft -= h;
+                while (hLeft >= 0) {
+                    pos = hLeft - imgH;
+                    pdf.addPage();
+                    pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                    hLeft -= h;
+                }
+                pdf.save('IG_Bio_Ch13_Excretion.pdf');
             });
         }
 
-        // --- QUIZ ---
-        const quizData = [
-            { q: "What is excretion defined as?", o: ["Removal of undigested food", "Removal of metabolic waste", "Removal of excess hormones only", "Breathing"], a: 1, e: "Excretion removes metabolic waste (from chemical reactions in cells)." },
-            { q: "Where is Urea produced?", o: ["Kidney", "Bladder", "Liver", "Lungs"], a: 2, e: "The Liver produces urea from excess amino acids (Deamination)." },
-            { q: "Which tube carries urine from the kidney to the bladder?", o: ["Urethra", "Ureter", "Renal Artery", "Renal Vein"], a: 1, e: "Ureter connects kidney to bladder. Urethra exits the body." },
-            { q: "Which substance is NOT found in the urine of a healthy person?", o: ["Urea", "Salt", "Water", "Glucose"], a: 3, e: "All glucose should be reabsorbed into the blood in the proximal tubule." },
-            { q: "What is the function of the Glomerulus?", o: ["Ultrafiltration", "Reabsorption", "Storage", "Deamination"], a: 0, e: "The glomerulus filters small molecules out of the blood under high pressure." },
-            { q: "Which blood vessel brings 'dirty' blood to the kidney?", o: ["Renal Vein", "Renal Artery", "Vena Cava", "Aorta"], a: 1, e: "The Renal Artery carries blood rich in urea to the kidney." },
-            { q: "What is Deamination?", o: ["Removal of nitrogen part from amino acids", "Breaking down fats", "Filtering blood", "Storing urine"], a: 0, e: "Deamination removes the nitrogen-containing group, forming ammonia then urea." },
-            { q: "Why is dialysis fluid constantly refreshed?", o: ["To keep it warm", "To maintain a concentration gradient", "To add urea", "To save water"], a: 1, e: "A gradient ensures urea continues to diffuse from blood to fluid." },
-            { q: "Which part of the kidney contains the Bowman's capsules?", o: ["Medulla", "Pelvis", "Cortex", "Ureter"], a: 2, e: "The Cortex is the outer layer where filtration begins." },
-            { q: "What is a disadvantage of kidney transplants?", o: ["Time consuming", "Risk of rejection", "Diet restrictions", "Low energy"], a: 1, e: "The immune system may attack the foreign organ (tissue rejection)." }
+        // --- 50 QUESTIONS (Excretion & Homeostasis) ---
+        const qData = [
+            {q:"What is the definition of Excretion?", o:["Removal of undigested food","Removal of metabolic waste","Removal of excess hormones only","Breathing in oxygen"], a:1},
+            {q:"Which organ produces Urea?", o:["Kidney","Bladder","Liver","Pancreas"], a:2},
+            {q:"What is the removal of undigested food called?", o:["Excretion","Egestion","Digestion","Assimilation"], a:1},
+            {q:"Deamination involves the breakdown of?", o:["Excess Fats","Excess Amino Acids","Excess Glucose","Old blood cells"], a:1},
+            {q:"Which toxic substance is formed first during deamination?", o:["Urea","Ammonia","Salt","Carbon Dioxide"], a:1},
+            {q:"Ammonia is converted into which less toxic substance?", o:["Urea","Urine","Protein","Glucose"], a:0},
+            {q:"Which blood vessel carries blood TO the kidney?", o:["Renal Vein","Renal Artery","Vena Cava","Aorta"], a:1},
+            {q:"Which blood vessel carries blood AWAY from the kidney?", o:["Renal Vein","Renal Artery","Hepatic Vein","Pulmonary Vein"], a:0},
+            {q:"Blood in the Renal Vein has?", o:["High Urea, High Oxygen","Low Urea, Low Oxygen","High Urea, Low Oxygen","Low Urea, High Oxygen"], a:1},
+            {q:"The tube connecting the kidney to the bladder is?", o:["Urethra","Ureter","Oviduct","Vein"], a:1},
+            {q:"The tube carrying urine out of the body is?", o:["Urethra","Ureter","Intestine","Artery"], a:0},
+            {q:"What is the function of the bladder?", o:["Filter blood","Produce urea","Store urine","Reabsorb water"], a:2},
+            {q:"The outer layer of the kidney is called the?", o:["Medulla","Pelvis","Cortex","Capsule"], a:2},
+            {q:"The inner layer of the kidney is called the?", o:["Medulla","Pelvis","Cortex","Capsule"], a:0},
+            {q:"Where does urine collect before entering the ureter?", o:["Cortex","Medulla","Pelvis","Glomerulus"], a:2},
+            {q:"The filtering unit of the kidney is called a?", o:["Neuron","Nephron","Alveoli","Villi"], a:1},
+            {q:"What process happens in the Glomerulus?", o:["Respiration","Active Transport","Ultrafiltration","Osmosis"], a:2},
+            {q:"Which molecule is too large to pass through the filter?", o:["Glucose","Water","Protein","Urea"], a:2},
+            {q:"Why does filtration happen in the Glomerulus?", o:["High blood pressure","Low blood pressure","Active transport","Diffusion"], a:0},
+            {q:"Where is glucose reabsorbed?", o:["Loop of Henle","Collecting Duct","Proximal Convoluted Tubule","Glomerulus"], a:2},
+            {q:"How much glucose is reabsorbed in a healthy person?", o:["50%","None","100%","10%"], a:2},
+            {q:"If glucose is found in urine, it indicates?", o:["Kidney failure","Diabetes","High salt intake","Dehydration"], a:1},
+            {q:"Water reabsorption is controlled by which principle?", o:["Active Transport","Osmosis","Diffusion","Filtration"], a:1},
+            {q:"On a hot day, the volume of urine produced is?", o:["High","Low","Normal","Zero"], a:1},
+            {q:"On a hot day, the concentration of urine is?", o:["Dilute","Concentrated","Watery","Clear"], a:1},
+            {q:"If you drink lots of water, your urine will be?", o:["Dark yellow","Pale/Clear","Red","Cloudy"], a:1},
+            {q:"Which treatment involves a machine filtering blood?", o:["Transplant","Dialysis","Surgery","Vaccination"], a:1},
+            {q:"In dialysis, blood flows alongside?", o:["Water","Dialysis fluid","Urine","Plasma"], a:1},
+            {q:"Why does urea leave the blood in dialysis?", o:["Active transport","Concentration gradient (Diffusion)","Pressure","Gravity"], a:1},
+            {q:"Dialysis fluid contains the same concentration of what as healthy blood?", o:["Urea","Glucose","Ammonia","Waste"], a:1},
+            {q:"A disadvantage of kidney transplant is?", o:["Time consuming","Rejection risk","Restrictive diet","Frequent hospital visits"], a:1},
+            {q:"To prevent rejection, patients take?", o:["Antibiotics","Painkillers","Immunosuppressants","Insulin"], a:2},
+            {q:"The liver excretes bile pigments from the breakdown of?", o:["Haemoglobin","Glucose","Fats","DNA"], a:0},
+            {q:"Lungs excrete?", o:["Urea","Carbon Dioxide","Oxygen","Nitrogen"], a:1},
+            {q:"Which part of the skin releases water and salts?", o:["Hair follicle","Sweat gland","Oil gland","Capillary"], a:1},
+            {q:"The process of maintaining constant internal conditions is?", o:["Peristalsis","Homeostasis","Digestion","Evolution"], a:1},
+            {q:"Which hormone controls water reabsorption?", o:["Insulin","Adrenaline","ADH","Estrogen"], a:2},
+            {q:"Where is ADH produced?", o:["Kidney","Pituitary Gland (Brain)","Pancreas","Liver"], a:1},
+            {q:"If blood water content is LOW, ADH secretion?", o:["Increases","Decreases","Stops","Stays same"], a:0},
+            {q:"More ADH causes the collecting duct to become?", o:["Less permeable","More permeable to water","Impermeable","Closed"], a:1},
+            {q:"The knot of capillaries in the nephron is the?", o:["Bowman's Capsule","Glomerulus","Loop of Henle","Pelvis"], a:1},
+            {q:"The cup-shaped structure surrounding the glomerulus is?", o:["Bowman's Capsule","Pelvis","Cortex","Tubule"], a:0},
+            {q:"What drives Ultrafiltration?", o:["ATP","High Hydrostatic Pressure","Enzymes","Gravity"], a:1},
+            {q:"Which substance is completely reabsorbed to prevent energy loss?", o:["Urea","Salt","Glucose","Water"], a:2},
+            {q:"A kidney transplant donor must have a matching?", o:["Hair color","Tissue type","Height","Weight"], a:1},
+            {q:"Immunosuppressant drugs make the patient more vulnerable to?", o:["Diabetes","Infectious diseases","Obesity","Blindness"], a:1},
+            {q:"Which of these is NOT an excretory organ?", o:["Heart","Skin","Lungs","Kidneys"], a:0},
+            {q:"Salts are excreted by?", o:["Lungs and Skin","Kidneys and Skin","Kidneys and Lungs","Liver and Lungs"], a:1},
+            {q:"What moves urine down the ureter?", o:["Gravity only","Peristalsis","Blood pressure","Diffusion"], a:1},
+            {q:"Which is a permanent cure for kidney failure?", o:["Dialysis","Transplant","Antibiotics","Insulin"], a:1}
         ];
 
-        // Fill to 50 questions
-        const topics = ["Kidney Structure", "Dialysis", "Urea Formation", "Filtration Logic"];
-        for(let i=10; i<50; i++) {
-            const t = topics[i%4];
-            quizData.push({
-                q: `Question ${i+1}: Identify the correct concept regarding ${t}.`,
-                o: ["False concept about " + t, "Correct definition/function of " + t, "Unrelated biological fact", "Opposite meaning"],
-                a: 1,
-                e: `Standard explanation for ${t} concepts in IGCSE Biology Topic 13.`
-            });
-        }
+        const qDiv = document.getElementById('q-container');
+        const lets = ['A','B','C','D'];
 
-        let curQ = 0;
-        let score = 0;
+        qData.forEach((q, idx) => {
+            let opts = q.o.map((txt, i) => ({txt, i}));
+            // Shuffle options
+            opts.sort(() => Math.random() - 0.5);
 
-        function renderQuiz() {
-            const box = document.getElementById('quiz-box');
-            box.innerHTML = '';
-            quizData.forEach((q, i) => {
-                const div = document.createElement('div');
-                div.className = 'q-card';
-                div.id = `q-${i}`;
-                div.innerHTML = `
-                    <h3>${i+1}. ${q.q}</h3>
-                    ${q.o.map((opt, oi) => `<div class="q-option" onclick="checkAnswer(${i}, ${oi}, this)">${opt}</div>`).join('')}
-                    <div class="q-expl" id="expl-${i}"><strong>Explanation:</strong> ${q.e}</div>
-                `;
-                box.appendChild(div);
-            });
-            document.getElementById('q-0').classList.add('active');
-        }
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            card.innerHTML = `
+                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">${idx+1}. ${q.q}</h3>
+                ${opts.map((o, k) => `
+                    <div class="q-opt" onclick="check(${idx}, ${o.i}, this)">
+                        <div class="q-let">${lets[k]}</div>
+                        <div>${o.txt}</div>
+                    </div>
+                `).join('')}
+            `;
+            qDiv.appendChild(card);
+        });
 
-        function checkAnswer(qIdx, oIdx, el) {
-            const q = quizData[qIdx];
-            const card = document.getElementById(`q-${qIdx}`);
-            const opts = card.querySelectorAll('.q-option');
-            opts.forEach(o => o.onclick = null); // Disable clicks
+        function check(qIdx, oIdx, el) {
+            const parent = el.parentElement;
+            if(parent.classList.contains('locked')) return;
+            parent.classList.add('locked');
 
-            if(oIdx === q.a) {
+            if(oIdx === qData[qIdx].a) {
                 el.classList.add('correct');
-                score++;
-                document.getElementById('score').innerText = score;
             } else {
                 el.classList.add('wrong');
-                opts[q.a].classList.add('correct');
-            }
-            document.getElementById(`expl-${qIdx}`).style.display = 'block';
-            document.getElementById('next-q').style.display = 'inline-block';
-        }
-
-        function nextQuestion() {
-            document.getElementById(`q-${curQ}`).classList.remove('active');
-            curQ++;
-            if(curQ < 50) {
-                document.getElementById(`q-${curQ}`).classList.add('active');
-                document.getElementById('q-num').innerText = curQ + 1;
-                document.getElementById('next-q').style.display = 'none';
-            } else {
-                document.getElementById('quiz-box').style.display = 'none';
-                document.getElementById('next-q').style.display = 'none';
-                document.getElementById('quiz-result').style.display = 'block';
-                document.getElementById('final-score').innerText = score;
-            }
-        }
-
-        function downloadQuizPDF(type) {
-            const doc = new jspdf.jsPDF();
-            doc.setTextColor(8, 145, 178);
-            doc.text(type === 'questions' ? "IGCSE Biology: Excretion Questions" : "IGCSE Biology: Answers", 20, 20);
-            doc.setTextColor(0); doc.setFontSize(10);
-            let y = 40;
-            quizData.forEach((q, i) => {
-                if(y > 270) { doc.addPage(); y = 20; }
-                if(type === 'questions') {
-                    doc.text(`${i+1}. ${q.q}`, 20, y);
-                    y+=7;
-                    q.o.forEach((o, oi) => { doc.text(`   ${String.fromCharCode(65+oi)}) ${o}`, 20, y); y+=5; });
-                    y+=5;
-                } else {
-                    doc.text(`${i+1}. Answer: ${String.fromCharCode(65+q.a)} | ${q.e}`, 20, y);
-                    y+=10;
+                const text = qData[qIdx].o[qData[qIdx].a];
+                for(let child of parent.children) {
+                    if(child.innerText.includes(text)) child.classList.add('correct');
                 }
-            });
-            doc.save(`Quiz_${type}.pdf`);
+            }
         }
-
-        renderQuiz();
     </script>
 </body>
 </html>
