@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Master Regulator: Auxin</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap');
+
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --sun-yellow: #f1c40f;
+            --root-brown: #8d6e63;
+            --bg-color: #f4f9f4;
+            --text-dark: #2c3e50;
+            --card-bg: #ffffff;
+            --accent-purple: #9b59b6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        /* Hero Section */
+        header {
+            background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Merriweather', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 6px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark-green);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        /* Deep Dive Box */
+        .deep-dive {
+            background: #e8f8f5;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 4px solid var(--accent-purple);
+        }
+
+        .deep-dive h3 {
+            color: var(--accent-purple);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* Phototropism Styling */
+        .photo-card {
+            border-left-color: var(--sun-yellow);
+        }
+        
+        .mechanism-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-box {
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #eee;
+        }
+
+        .step-box strong {
+            color: var(--dark-green);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Gravitropism Styling */
+        .grav-card {
+            border-left-color: var(--root-brown);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background-color: var(--text-dark);
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .shoot-row td:first-child { color: var(--primary-green); font-weight: bold; }
+        .root-row td:first-child { color: var(--root-brown); font-weight: bold; }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .mechanism-grid { grid-template-columns: 1fr; }
+            .card { padding: 1.5rem; }
+        }
+
+        .highlight {
+            background-color: rgba(241, 196, 15, 0.3);
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="fade-in">
+            <h1>Auxin</h1>
+            <p class="subtitle">The chemical messenger that tells plants how to bend, stretch, and find their way.</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- SECTION 1: THE BASICS -->
+        <section class="card fade-in" style="border-left-color: var(--dark-green);">
+            <h2>🧬 What is Auxin?</h2>
+            <p>Auxin (specifically <strong>Indole-3-Acetic Acid</strong> or IAA) is a powerful plant hormone produced primarily in the <strong>apical meristems</strong>—the very tips of shoots and young leaves.</p>
+            <p>While animals have nervous systems to move, plants have hormones. Auxin is the master of <strong>cell elongation</strong>.</p>
+            
+            <div class="deep-dive">
+                <h3>🔬 The Micro-Science: The "Acid Growth" Hypothesis</h3>
+                <p>How does a cell actually get longer? It's not magic; it's chemistry.</p>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>Auxin triggers <strong>proton pumps</strong> in the cell membrane.</li>
+                    <li>These pumps push H+ ions (protons) into the cell wall, making it <strong>acidic</strong>.</li>
+                    <li>The acidity activates enzymes called <strong>Expansins</strong>.</li>
+                    <li>Expansins "loosen" the cellulose fibers of the cell wall.</li>
+                    <li>Water rushes in due to turgor pressure, and the cell stretches like a balloon!</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PHOTOTROPISM -->
+        <section class="card photo-card fade-in">
+            <span class="card-icon">🌞</span>
+            <h2>Phototropism: Seeking the Light</h2>
+            <p>Plants need light for photosynthesis. Phototropism is the directional growth response to a light source.</p>
+            <p><strong>The Golden Rule:</strong> Auxin hates the light. It is <span class="highlight">photophobic</span>.</p>
+
+            <div class="mechanism-grid">
+                <div class="step-box">
+                    <strong>1. Detection</strong>
+                    <p>Receptors in the tip (phototropins) detect blue light coming from one specific direction.</p>
+                </div>
+                <div class="step-box">
+                    <strong>2. Redistribution</strong>
+                    <p>Auxin doesn't disappear; it moves laterally (sideways) to the <strong>shaded side</strong> of the stem.</p>
+                </div>
+                <div class="step-box">
+                    <strong>3. Elongation</strong>
+                    <p>Higher auxin concentration on the shaded side causes those cells to pump acid and <strong>elongate rapidly</strong>.</p>
+                </div>
+                <div class="step-box">
+                    <strong>4. The Bend</strong>
+                    <p>Since the shaded side is longer than the lit side, the stem acts like a bi-metallic strip and bends <strong>towards the light</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: GRAVITROPISM -->
+        <section class="card grav-card fade-in">
+            <span class="card-icon">🌍</span>
+            <h2>Gravitropism: Sensing Gravity</h2>
+            <p>Even in total darkness, a plant knows which way is up. This is <strong>Gravitropism</strong> (or Geotropism).</p>
+            
+            <div class="deep-dive" style="margin-bottom: 2rem; border-left-color: var(--root-brown); background-color: #fbf5f3;">
+                <h3>🔬 How do they "feel" gravity?</h3>
+                <p>Plant cells contain specialized plastids called <strong>Statoliths</strong>. These are dense starch grains. Just like rocks sinking in water, gravity pulls these statoliths to the bottom of the cell. This physical settling signals the plant to move Auxin to the <strong>lower side</strong>.</p>
+            </div>
+
+            <p>Here is the critical twist: <strong>Roots and Shoots react differently to the SAME hormone!</strong></p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Organ</th>
+                        <th>Auxin Location</th>
+                        <th>Effect of High Auxin</th>
+                        <th>Resulting Growth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="shoot-row">
+                        <td>🌱 Shoots</td>
+                        <td>Accumulates on <strong>Lower</strong> side</td>
+                        <td><strong>Stimulates</strong> Elongation</td>
+                        <td>Lower side grows faster. Shoot bends <strong>UP</strong> (Negative Gravitropism).</td>
+                    </tr>
+                    <tr class="root-row">
+                        <td>🥕 Roots</td>
+                        <td>Accumulates on <strong>Lower</strong> side</td>
+                        <td><strong>Inhibits</strong> Elongation</td>
+                        <td>Lower side grows slower. Upper side grows faster. Root bends <strong>DOWN</strong> (Positive Gravitropism).</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 20px; font-size: 0.9rem; color: #666; text-align: center;">
+                <em>*This sensitivity difference ensures shoots find sun and roots find water/soil.</em>
+            </div>
+        </section>
+
+        <!-- SUMMARY CARD -->
+        <section class="card fade-in" style="border-left: 6px solid var(--accent-purple); text-align: center;">
+            <h2 style="justify-content: center; color: var(--accent-purple);">🚀 Quick Recap</h2>
+            <ul style="list-style: none; text-align: left; display: inline-block;">
+                <li style="margin-bottom: 10px;">✅ <strong>Auxin</strong> is made in the tips.</li>
+                <li style="margin-bottom: 10px;">✅ It causes cells to get <strong>longer</strong> (Acid Growth).</li>
+                <li style="margin-bottom: 10px;">✅ <strong>Light:</strong> Auxin moves to the shade → Plant bends to light.</li>
+                <li style="margin-bottom: 10px;">✅ <strong>Gravity:</strong> Auxin sinks to the bottom.</li>
+                <li style="margin-bottom: 10px;">✅ <strong>The Paradox:</strong> High auxin helps shoots grow but stops roots from growing.</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <footer style="text-align: center; padding: 2rem; color: #7f8c8d; font-size: 0.9rem;">
+        Biology Study Notes | Designed for Learning
+    </footer>
+
+</body>
+</html>
