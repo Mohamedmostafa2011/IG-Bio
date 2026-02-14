@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IG-Bio | Ch 16: Genes & Proteins</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            /* Theme: Indigo / Violet for Genetics */
+            --primary: #6366f1; /* Indigo 500 */
+            --primary-dark: #4338ca; /* Indigo 700 */
+            --accent: #8b5cf6; /* Violet */
+            --bg: #eef2ff; /* Very Light Indigo */
+            --text: #1e293b;
+            --sidebar-w: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- NAVIGATION BUTTON (Fixed Circular) --- */
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+            position: fixed; top: 20px; left: 20px; z-index: 3000;
+            background: var(--primary); color: white; border: none;
+            width: 50px; height: 50px; border-radius: 50%;
+            font-size: 1.4rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .menu-toggle:active { transform: scale(0.9); }
+
+        /* --- MOBILE OVERLAY --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1999;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* --- SIDEBAR --- */
+        aside {
+            width: var(--sidebar-w);
+            background: #1e1b4b; /* Indigo 950 */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            flex-shrink: 0;
+            z-index: 2000;
+            border-right: 1px solid #312e81;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand {
+            font-size: 1.5rem; font-weight: 800; color: #a5b4fc; margin-bottom: 40px;
+            display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;
+        }
+
+        .nav-item {
+            padding: 16px; margin-bottom: 8px; border-radius: 8px;
+            cursor: pointer; color: #c7d2fe; font-weight: 600;
+            display: flex; align-items: center; gap: 15px; transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
+
+        /* --- MAIN CONTENT --- */
+        main { flex: 1; position: relative; overflow: hidden; width: 100%; }
+
+        .view-panel {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto; padding: 0; display: none; opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .view-panel.active { display: block; opacity: 1; }
+
+        /* --- TEXTBOOK STYLING --- */
+        .paper {
+            max-width: 950px; margin: 0 auto; background: white;
+            padding: 80px; min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px; letter-spacing: -1px; }
+        .meta { color: #64748b; text-transform: uppercase; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; }
+        
+        h2 { 
+            font-family: 'Inter', sans-serif; font-size: 1.8rem; color: #1e293b; 
+            margin-top: 60px; margin-bottom: 25px; padding-bottom: 15px; 
+            border-bottom: 2px solid #e0e7ff; display: flex; align-items: center; gap: 10px;
+        }
+        
+        h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; color: var(--primary); margin-top: 35px; margin-bottom: 15px; }
+
+        p {
+            font-family: 'Crimson Pro', serif; font-size: 1.2rem; line-height: 1.8;
+            color: #334155; margin-bottom: 20px;
+        }
+        li { font-family: 'Crimson Pro', serif; font-size: 1.15rem; line-height: 1.7; margin-bottom: 8px; margin-left: 20px; }
+        
+        /* Concept Boxes */
+        .concept-box {
+            background: #e0e7ff; border-left: 5px solid var(--primary);
+            padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
+        }
+        .concept-box strong { color: var(--primary-dark); font-family: 'Inter', sans-serif; }
+
+        .exam-tip {
+            background: #fdf4ff; border: 1px solid #f0abfc; border-radius: 8px;
+            padding: 20px; margin: 30px 0; display: flex; gap: 15px; align-items: flex-start;
+        }
+        .exam-tip i { color: #d946ef; font-size: 1.5rem; margin-top: 3px; }
+        .exam-tip strong { color: #86198f; }
+
+        /* Tables */
+        .t-wrap { overflow-x: auto; margin: 30px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #eef2ff; color: var(--primary-dark); padding: 16px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 700; border-bottom: 2px solid #c7d2fe; }
+        td { padding: 16px; border-bottom: 1px solid #e2e8f0; vertical-align: top; font-family: 'Crimson Pro', serif; font-size: 1.1rem; }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- MIND MAP --- */
+        .mm-wrapper { padding: 80px; display: inline-flex; min-width: 100%; justify-content: center; background: #f8fafc; }
+        .tree ul { padding-top: 20px; position: relative; display: flex; justify-content: center; }
+        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px; }
+        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #94a3b8; width: 50%; height: 20px; }
+        .tree li::after { right: auto; left: 50%; border-left: 2px solid #94a3b8; }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; } .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid #94a3b8; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #94a3b8; width: 0; height: 20px; }
+
+        .node {
+            background: white; border: 1px solid #cbd5e1; padding: 12px 18px; border-radius: 8px;
+            display: inline-block; min-width: 140px; font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; z-index: 2;
+        }
+        .root-node { background: var(--primary-dark); color: white; transform: scale(1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* --- QUIZ --- */
+        .quiz-area { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .q-card { background: white; padding: 30px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; }
+        .q-opt {
+            display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid #e2e8f0;
+            margin-top: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s;
+        }
+        .q-opt:hover { background: #f1f5f9; border-color: #94a3b8; }
+        .q-let { font-weight: 900; color: #94a3b8; background: #f1f5f9; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        .q-opt.correct { background: #dcfce7; border-color: #22c55e; }
+        .q-opt.correct .q-let { background: #22c55e; color: white; }
+        .q-opt.wrong { background: #ffe4e6; border-color: #f43f5e; }
+        .q-opt.wrong .q-let { background: #f43f5e; color: white; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            aside { position: fixed; top: 0; left: -100%; height: 100%; width: 85%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+            aside.active { left: 0; }
+            .paper { padding: 30px 20px; }
+            h1 { font-size: 2.2rem; }
+            .mm-wrapper { justify-content: flex-start; padding: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENU BUTTON -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <div class="brand"><i class="fa-solid fa-dna"></i> IG-BIO GENETICS</div>
+        
+        <div class="nav-item active" onclick="switchTab('notes', this)">
+            <i class="fa-solid fa-book-open-reader"></i> Full Notes
+        </div>
+        <div class="nav-item" onclick="switchTab('mindmap', this)">
+            <i class="fa-solid fa-network-wired"></i> Mind Map
+        </div>
+        <div class="nav-item" onclick="switchTab('quiz', this)">
+            <i class="fa-solid fa-flask"></i> 50 Qs Quiz
+        </div>
+        
+        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #312e81;">
+             <div class="nav-item" onclick="genPDF()" style="color:#a5b4fc; border-color:#4338ca;">
+                 <i class="fa-solid fa-file-pdf"></i> Save as PDF
+             </div>
+        </div>
+    </aside>
+
+    <main>
+        
+        <!-- 1. DETAILED NOTES -->
+        <div id="notes" class="view-panel active">
+            <div class="paper" id="pdf-source">
+                <span class="meta">IGCSE Biology 0610 • Chapter 16</span>
+                <h1>Chromosomes, Genes & Proteins</h1>
+                <p>This chapter explores the molecular basis of inheritance. We look at what DNA is, how it is structured, and how the genetic code is translated into proteins that make up our bodies.</p>
+
+                <h2>1. Chromosomes and DNA</h2>
+                
+                <p>Inside the nucleus of almost every cell in the human body, there are thread-like structures called <strong>chromosomes</strong>. </p>
+                <div class="concept-box">
+                    <strong>Key Definitions:</strong><br><br>
+                    <strong>Chromosome:</strong> A thread-like structure of DNA, carrying genetic information in the form of genes.<br>
+                    <strong>Gene:</strong> A length of DNA that codes for a protein.<br>
+                    <strong>Allele:</strong> A version of a gene.
+                </div>
+                
+                <p>Humans have <strong>46 chromosomes</strong> (23 pairs) in diploid cells (body cells), but only <strong>23 chromosomes</strong> in haploid cells (gametes: sperm and egg).</p>
+
+                <h2>2. The Structure of DNA</h2>
+                <p>DNA (Deoxyribonucleic Acid) carries the genetic code. Its shape is a <strong>Double Helix</strong> (like a twisted ladder).</p>
+                
+                <h3>Nucleotides</h3>
+                <p>DNA is a polymer made of many monomer units called <strong>nucleotides</strong>. Each nucleotide consists of:</p>
+                <ul>
+                    <li>A Phosphate group</li>
+                    <li>A Sugar molecule</li>
+                    <li>A Base</li>
+                </ul>
+
+                <h3>Base Pairing Rules</h3>
+                <p>There are four distinct bases in DNA. They always pair up in a specific way across the double helix, held together by hydrogen bonds:</p>
+                
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Base 1</th><th>Pairs With</th><th>Base 2</th></tr>
+                        <tr><td><strong>A</strong> (Adenine)</td><td>&harr;</td><td><strong>T</strong> (Thymine)</td></tr>
+                        <tr><td><strong>C</strong> (Cytosine)</td><td>&harr;</td><td><strong>G</strong> (Guanine)</td></tr>
+                    </table>
+                </div>
+
+                <div class="exam-tip">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Exam Tip: Complementary Pairing</strong><br>
+                        Remember "Apple in the Tree" (A-T) and "Car in the Garage" (C-G). If an exam question gives you a strand <strong>A-C-C-T-G</strong>, the complementary strand is <strong>T-G-G-A-C</strong>.
+                    </div>
+                </div>
+
+                <h2>3. Protein Synthesis</h2>
+                <p>DNA codes for proteins. A protein is made of a chain of amino acids. The <strong>sequence of bases</strong> in a gene determines the <strong>sequence of amino acids</strong> in a protein.</p>
+
+                <h3>The Process (Simplified for Core/Supplement)</h3>
+                <ol>
+                    <li><strong>Location:</strong> DNA is too large to leave the nucleus. Proteins are made in the <strong>cytoplasm</strong> by <strong>ribosomes</strong>.</li>
+                    <li><strong>Transcription (mRNA):</strong> A copy of the gene is made. This molecule is called <strong>mRNA</strong> (messenger RNA). mRNA is small enough to leave the nucleus.</li>
+                    <li><strong>Translation:</strong> The mRNA travels to a <strong>ribosome</strong>.</li>
+                    <li><strong>Assembly:</strong> The ribosome reads the base sequence on the mRNA and assembles amino acids in the correct order to form a specific protein.</li>
+                </ol>
+
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Component</th><th>Role in Protein Synthesis</th></tr>
+                        <tr><td><strong>DNA</strong></td><td>Contains the master code. Remains in the nucleus.</td></tr>
+                        <tr><td><strong>mRNA</strong></td><td>Carries the copy of the code from nucleus to ribosome.</td></tr>
+                        <tr><td><strong>Ribosome</strong></td><td> The site where proteins are assembled.</td></tr>
+                        <tr><td><strong>Amino Acids</strong></td><td>The building blocks joined together to make the protein.</td></tr>
+                    </table>
+                </div>
+
+                <h2>4. Gene Expression</h2>
+                <p>Every nucleus in your body contains all your genes (the entire genome). However, cells are specialized (e.g., nerve cells, muscle cells).</p>
+                <ul>
+                    <li><strong>Specialization:</strong> Cells control which genes are used.</li>
+                    <li><strong>Gene Expression:</strong> In a muscle cell, the genes for muscle proteins are "switched on" (expressed), while genes for making eye pigment are "switched off".</li>
+                    <li>This allows cells to perform specific functions despite having the same DNA.</li>
+                </ul>
+
+                <h2>5. Cell Division: Mitosis vs Meiosis</h2>
+                <p>While usually covered in detail in Ch 17, it is vital to know the chromosomal difference:</p>
+                <ul>
+                    <li><strong>Mitosis:</strong> Produces genetically <strong>identical</strong> cells for growth/repair. (Diploid $\to$ Diploid).</li>
+                    <li><strong>Meiosis:</strong> Produces genetically <strong>different</strong> gametes for reproduction. (Diploid $\to$ Haploid).</li>
+                </ul>
+
+                <div style="height:100px;"></div>
+            </div>
+        </div>
+
+        <!-- 2. MIND MAP -->
+        <div id="mindmap" class="view-panel">
+            <div class="mm-wrapper">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="node root-node">GENETICS (DNA)</div>
+                            <ul>
+                                <li>
+                                    <div class="node">Definitions</div>
+                                    <ul>
+                                        <li><div class="node">Chromosome (Thread)</div></li>
+                                        <li><div class="node">Gene (Code for protein)</div></li>
+                                        <li><div class="node">Allele (Version)</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Structure</div>
+                                    <ul>
+                                        <li><div class="node">Double Helix</div></li>
+                                        <li><div class="node">Nucleotides</div></li>
+                                        <li>
+                                            <div class="node">Bases</div>
+                                            <ul>
+                                                <li><div class="node">A &harr; T</div></li>
+                                                <li><div class="node">C &harr; G</div></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Protein Synthesis</div>
+                                    <ul>
+                                        <li><div class="node">1. DNA (Nucleus)</div></li>
+                                        <li><div class="node">2. mRNA (Copy)</div></li>
+                                        <li><div class="node">3. Ribosome (Make)</div></li>
+                                        <li><div class="node">4. Amino Acids</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Cells</div>
+                                    <ul>
+                                        <li><div class="node">Haploid (23)</div></li>
+                                        <li><div class="node">Diploid (46)</div></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. QUIZ -->
+        <div id="quiz" class="view-panel">
+            <div class="quiz-area" id="q-container"></div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- UI LOGIC ---
+        function toggleMenu() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            if(sb.style.left === '0px') {
+                sb.style.left = '-100%';
+                ov.classList.remove('active');
+            } else {
+                sb.style.left = '0px';
+                ov.classList.add('active');
+            }
+        }
+
+        function switchTab(id, btn) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').style.left = '-100%';
+                document.getElementById('overlay').classList.remove('active');
+            }
+        }
+
+        function genPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('pdf-source');
+            const origWidth = element.style.width;
+            // Fix width to ensure consistent PDF layout
+            element.style.width = '900px'; 
+            
+            html2canvas(element, { scale: 2 }).then(canvas => {
+                element.style.width = origWidth;
+                const img = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const w = 210; const h = 297;
+                const imgH = canvas.height * w / canvas.width;
+                let hLeft = imgH; let pos = 0;
+
+                pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                hLeft -= h;
+                while (hLeft >= 0) {
+                    pos = hLeft - imgH;
+                    pdf.addPage();
+                    pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                    hLeft -= h;
+                }
+                pdf.save('IG_Bio_Ch16_Genetics.pdf');
+            });
+        }
+
+        // --- 50 QUESTIONS (Genetics / Ch 16) ---
+        const qData = [
+            {q:"Where is DNA primarily found in a human cell?", o:["Nucleus","Ribosome","Cytoplasm","Membrane"], a:0},
+            {q:"What is the shape of a DNA molecule?", o:["Double Helix","Single Helix","Triple Helix","Circular"], a:0},
+            {q:"What stands for 'A' in DNA bases?", o:["Adenine","Alanine","Arginine","Acid"], a:0},
+            {q:"What pairs with Adenine (A)?", o:["Thymine (T)","Cytosine (C)","Guanine (G)","Uracil (U)"], a:0},
+            {q:"What pairs with Cytosine (C)?", o:["Guanine (G)","Thymine (T)","Adenine (A)","Uracil (U)"], a:0},
+            {q:"What is a gene?", o:["A length of DNA coding for a protein","A fat molecule","A type of sugar","A whole chromosome"], a:0},
+            {q:"How many chromosomes are in a normal human body cell?", o:["46","23","92","2"], a:0},
+            {q:"How many chromosomes are in a human sperm cell?", o:["23","46","12","4"], a:0},
+            {q:"Which molecule carries the genetic code OUT of the nucleus?", o:["mRNA","DNA","tRNA","Lipids"], a:0},
+            {q:"Proteins are assembled on which organelle?", o:["Ribosome","Mitochondria","Nucleus","Vacuole"], a:0},
+            {q:"What are proteins made of?", o:["Amino acids","Fatty acids","Glucose","Nucleotides"], a:0},
+            {q:"A nucleotide consists of a sugar, a base, and...?", o:["A phosphate","A lipid","An acid","An enzyme"], a:0},
+            {q:"The term 'Diploid' refers to cells with?", o:["Two sets of chromosomes","One set of chromosomes","No chromosomes","Three sets"], a:0},
+            {q:"The term 'Haploid' refers to cells with?", o:["One set of chromosomes","Two sets of chromosomes","46 chromosomes","Pairs of chromosomes"], a:0},
+            {q:"Which base is NOT found in DNA?", o:["Uracil","Thymine","Adenine","Cytosine"], a:0},
+            {q:"If a DNA strand is A-G-T, the complementary strand is?", o:["T-C-A","U-C-A","T-G-A","A-G-T"], a:0},
+            {q:"What determines the sequence of amino acids in a protein?", o:["The sequence of DNA bases","The shape of the cell","The number of mitochondria","The type of sugar"], a:0},
+            {q:"What is an allele?", o:["An alternative form of a gene","A type of protein","A chromosome","A mutation"], a:0},
+            {q:"In DNA, the two strands are held together by?", o:["Hydrogen bonds","Ionic bonds","Glue","Gravity"], a:0},
+            {q:"What does DNA stand for?", o:["Deoxyribonucleic Acid","Deoxyribose Acid","Denatured Acid","Double Nucleic Acid"], a:0},
+            {q:"Which cells in the body do NOT contain chromosomes?", o:["Red blood cells","White blood cells","Skin cells","Nerve cells"], a:0},
+            {q:"The 'backbone' of the DNA strand consists of?", o:["Sugar and Phosphate","Base and Sugar","Base and Phosphate","Two Bases"], a:0},
+            {q:"How many types of bases are there in DNA?", o:["4","20","23","2"], a:0},
+            {q:"The process of making mRNA from DNA is called?", o:["Transcription","Translation","Respiration","Digestion"], a:0},
+            {q:"Gene expression means?", o:["A gene is used to make a protein","A gene is destroyed","A gene is copied","A gene is lost"], a:0},
+            {q:"Why does mRNA need to form?", o:["DNA is too big to leave nucleus","DNA is too small","Ribosomes are in the nucleus","Proteins are made in nucleus"], a:0},
+            {q:"Which determines the gender of a human?", o:["Sex chromosomes","Ribosomes","Mitochondria","Number of genes"], a:0},
+            {q:"Male sex chromosomes are typically?", o:["XY","XX","YY","XO"], a:0},
+            {q:"Female sex chromosomes are typically?", o:["XX","XY","YY","XO"], a:0},
+            {q:"Gametes are produced by which type of division?", o:["Meiosis","Mitosis","Binary Fission","Cloning"], a:0},
+            {q:"Body cells (somatic cells) divide by?", o:["Mitosis","Meiosis","Fertilization","Mutation"], a:0},
+            {q:"If a muscle cell contains 46 chromosomes, how many does a skin cell have?", o:["46","23","92","0"], a:0},
+            {q:"Which chemical element is always found in proteins but not in fats?", o:["Nitrogen","Carbon","Oxygen","Hydrogen"], a:0},
+            {q:"What is a mutation?", o:["A change in the DNA base sequence","A change in cell shape","Cell death","A new ribosome"], a:0},
+            {q:"DNA is a polymer made of monomers called?", o:["Nucleotides","Amino Acids","Fatty Acids","Glucose"], a:0},
+            {q:"Which base pairs with Guanine?", o:["Cytosine","Adenine","Thymine","Uracil"], a:0},
+            {q:"In a DNA molecule, A always bonds with?", o:["T","C","G","U"], a:0},
+            {q:"All cells in an organism have the same DNA because?", o:["They came from one zygote","They eat the same food","They breathe same air","They are close together"], a:0},
+            {q:"Why are nerve cells different from skin cells?", o:["Different genes are expressed","Different DNA","Different chromosomes","No nucleus"], a:0},
+            {q:"The order of bases in a gene determines the order of?", o:["Amino acids","Sugars","Phosphates","Cells"], a:0},
+            {q:"The sugar in DNA is called?", o:["Deoxyribose","Glucose","Sucrose","Fructose"], a:0},
+            {q:"Where does Translation occur?", o:["At the Ribosome","In the Nucleus","In the Blood","In the Mitochondria"], a:0},
+            {q:"A fertilized egg is called a?", o:["Zygote","Gamete","Fetus","Embryo"], a:0},
+            {q:"Is a Zygote haploid or diploid?", o:["Diploid","Haploid","Triploid","Null"], a:0},
+            {q:"What passes from parents to offspring?", o:["Genes/Chromosomes","Blood","Muscles","Memories"], a:0},
+            {q:"If a DNA strand has 20% Adenine, how much Thymine does it have?", o:["20%","30%","50%","80%"], a:0},
+            {q:"If a DNA strand has 20% Adenine, how much Cytosine does it have?", o:["30%","20%","50%","0%"], a:0},
+            {q:"A strand of DNA is very long and coiled to form?", o:["A Chromosome","A Protein","A Ribosome","A Cell Wall"], a:0},
+            {q:"Which is larger?", o:["Chromosome","Gene","Base","Atom"], a:0},
+            {q:"The triplet code refers to?", o:["3 bases coding for 1 amino acid","3 genes","3 chromosomes","3 proteins"], a:0}
+        ];
+
+        const qDiv = document.getElementById('q-container');
+        const lets = ['A','B','C','D'];
+
+        qData.forEach((q, idx) => {
+            let opts = q.o.map((txt, i) => ({txt, i}));
+            // Shuffle options
+            opts.sort(() => Math.random() - 0.5);
+
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            card.innerHTML = `
+                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#1e293b;">${idx+1}. ${q.q}</h3>
+                ${opts.map((o, k) => `
+                    <div class="q-opt" onclick="check(${idx}, ${o.i}, this)">
+                        <div class="q-let">${lets[k]}</div>
+                        <div>${o.txt}</div>
+                    </div>
+                `).join('')}
+            `;
+            qDiv.appendChild(card);
+        });
+
+        function check(qIdx, oIdx, el) {
+            const parent = el.parentElement;
+            if(parent.classList.contains('locked')) return;
+            parent.classList.add('locked');
+
+            if(oIdx === qData[qIdx].a) {
+                el.classList.add('correct');
+            } else {
+                el.classList.add('wrong');
+                const text = qData[qIdx].o[qData[qIdx].a];
+                for(let child of parent.children) {
+                    if(child.innerText.includes(text)) child.classList.add('correct');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
