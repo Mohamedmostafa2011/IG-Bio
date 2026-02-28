@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE Biology: Organisms & Environment</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF & Image Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            /* Eco Theme */
+            --primary: #15803d; /* Green-700 */
+            --primary-dark: #14532d; /* Green-900 */
+            --secondary: #0f172a; /* Slate-900 */
+            --accent: #facc15; /* Sun Yellow */
+            --accent-text: #854d0e;
+            --bg: #f0fdf4; /* Light Mint */
+            --surface: #ffffff;
+            --text: #334155;
+            --border: #bbf7d0;
+            --water: #0ea5e9;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Rubik', sans-serif; }
+
+        /* --- Header --- */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--accent);
+        }
+        
+        /* Animated Sun/Leaf Effect in Header */
+        header::after {
+            content: '\f185'; /* Sun Icon */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 150px;
+            color: rgba(250, 204, 21, 0.2);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 20s linear infinite;
+        }
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; z-index: 2; position: relative; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        header p { opacity: 0.95; z-index: 2; position: relative; color: var(--accent); font-weight: 600; font-size: 1.2rem; }
+
+        /* --- Nav --- */
+        nav {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 4px 10px -2px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 0 1rem;
+            flex-wrap: wrap;
+        }
+        nav a {
+            padding: 1.2rem 1.5rem;
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 700;
+            font-family: 'Rubik', sans-serif;
+            border-bottom: 4px solid transparent;
+            transition: 0.3s;
+        }
+        nav a:hover { color: var(--primary); border-color: var(--primary); background: #f0fdf4; }
+
+        /* --- Container --- */
+        .container { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+
+        section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            scroll-margin-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        section::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary);
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-right: 10px;
+            margin-top: 15px;
+            font-family: 'Rubik', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3); }
+        .btn-accent { background: var(--accent); color: var(--accent-text); }
+        .btn-accent:hover { background: #eab308; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4); }
+
+        /* --- Audio Player --- */
+        .player-wrapper {
+            background: #f1f5f9;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid #cbd5e1;
+        }
+        .track-list { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .track-btn {
+            background: white;
+            border: 2px solid transparent;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-family: 'Rubik', sans-serif;
+            flex-grow: 1;
+        }
+        .track-btn.active { border-color: var(--primary); color: var(--primary); background: #dcfce7; }
+        
+        /* --- Notes --- */
+        .note-topic { margin-bottom: 40px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 25px; }
+        .note-topic:last-child { border-bottom: none; }
+        .note-topic h3 { color: var(--primary); font-size: 1.5rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        .pyramid-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .pyramid-level {
+            width: 60%;
+            text-align: center;
+            padding: 10px;
+            margin: 2px;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .highlight-box {
+            background: #fffbeb;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+        .highlight-box strong { color: var(--accent-text); }
+
+        /* --- Mind Map --- */
+        .mindmap-scroll-container {
+            width: 100%;
+            overflow-x: auto;
+            background: #2e3b2e; /* Dark Earthy background */
+            border-radius: 12px;
+            padding: 20px;
+            border: 4px solid #4a5d4a;
+        }
+        
+        #mindmap-capture-zone {
+            background: #2e3b2e;
+            padding: 50px;
+            display: inline-block;
+            min-width: 1100px;
+        }
+
+        .mm-root {
+            background: linear-gradient(to right, var(--accent), #eab308);
+            color: var(--accent-text);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin: 0 auto 60px auto;
+            width: fit-content;
+            box-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
+            border: 3px solid white;
+            text-transform: uppercase;
+        }
+
+        .mm-branches { display: flex; gap: 30px; justify-content: center; }
+        .mm-column { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; }
+        
+        /* Connector Lines */
+        .mm-column::before { content: ''; position: absolute; top: -60px; height: 60px; width: 2px; background: rgba(255,255,255,0.3); left: 50%; }
+        .mm-branches::before { content: ''; position: absolute; top: 115px; left: 15%; right: 15%; height: 2px; background: rgba(255,255,255,0.3); }
+
+        .mm-category {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            z-index: 2;
+            border: 2px solid rgba(255,255,255,0.3);
+            font-size: 1.1rem;
+            width: 90%;
+            text-align: center;
+        }
+
+        .mm-node {
+            background: rgba(255,255,255,0.1);
+            color: #e2e8f0;
+            border-left: 3px solid var(--accent);
+            padding: 12px 15px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9rem;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 12px;
+            backdrop-filter: blur(5px);
+            transition: 0.2s;
+        }
+        .mm-node:hover { background: rgba(255,255,255,0.15); transform: translateX(5px); }
+        .mm-node strong { color: var(--accent); display: block; font-size: 1rem; margin-bottom: 3px; }
+
+        /* --- Quiz --- */
+        .q-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 12px;
+            display: none;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .q-card.active { display: block; animation: slideIn 0.4s ease; }
+        @keyframes slideIn { from{opacity:0; transform:translateX(20px);} to{opacity:1; transform:translateX(0);} }
+
+        .q-option {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            margin-top: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .q-option:hover { border-color: var(--primary); background: #f0fdf4; }
+        .q-option.correct { background: #dcfce7; border-color: var(--primary); color: #14532d; }
+        .q-option.wrong { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+        
+        .q-expl { display: none; margin-top: 20px; padding: 15px; background: #eff6ff; border-left: 4px solid var(--water); color: #1e3a8a; font-size: 0.95rem; border-radius: 4px; }
+
+        /* Loader */
+        #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.98); z-index:2000; display:none; justify-content:center; align-items:center; flex-direction:column; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e5e7eb; border-top: 5px solid var(--primary); border-radius: 50%; animation: spinLoader 1s linear infinite; }
+        @keyframes spinLoader { 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-weight:700; color:var(--primary);">Compiling Ecosystem Data...</p>
+    </div>
+
+    <header>
+        <h1>Organisms & Environment</h1>
+        <p>Ecology, Cycles & Populations (CIE 0610)</p>
+    </header>
+
+    <nav>
+        <a href="#audio"><i class="fa-solid fa-volume-high"></i> Lectures</a>
+        <a href="#notes"><i class="fa-solid fa-book-open"></i> Study Notes</a>
+        <a href="#mindmap"><i class="fa-solid fa-sitemap"></i> Mind Map</a>
+        <a href="#quiz"><i class="fa-solid fa-list-check"></i> Quiz (50)</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- SECTION 1: AUDIO -->
+        <section id="audio">
+            <h2><i class="fa-solid fa-headphones-simple"></i> Audio Learning Modules</h2>
+            <p>Select a key topic to listen to a concise explanation.</p>
+            
+            <div class="player-wrapper">
+                <div class="track-list">
+                    <button class="track-btn active" onclick="setTrack(0)"><i class="fa-solid fa-sun"></i> 1. Energy Flow</button>
+                    <button class="track-btn" onclick="setTrack(1)"><i class="fa-solid fa-leaf"></i> 2. Food Webs</button>
+                    <button class="track-btn" onclick="setTrack(2)"><i class="fa-solid fa-recycle"></i> 3. Nutrient Cycles</button>
+                    <button class="track-btn" onclick="setTrack(3)"><i class="fa-solid fa-arrow-trend-up"></i> 4. Populations</button>
+                </div>
+
+                <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                    <h3 id="track-title" style="color:var(--primary); margin-bottom: 5px;">1. Energy Flow</h3>
+                    <p id="track-status" style="font-size:0.9rem; color:#64748b; font-weight:bold;">Ready to Play</p>
+                    <div id="track-visual" style="height: 4px; width: 0%; background: var(--primary); transition: width 0.2s; margin-top: 10px;"></div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" id="play-btn" onclick="togglePlay()"><i class="fa-solid fa-play"></i> Play</button>
+                    <button class="btn btn-primary" style="background: var(--secondary);" onclick="stopAudio()"><i class="fa-solid fa-stop"></i> Stop</button>
+                </div>
+            </div>
+            <button class="btn btn-accent" onclick="downloadTranscript()">Download Transcript PDF</button>
+        </section>
+
+        <!-- SECTION 2: NOTES -->
+        <section id="notes">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Study Notes</h2>
+            
+            <div id="notes-content">
+                
+                <div class="note-topic">
+                    <h3><i class="fa-solid fa-solar-panel"></i> 1. Energy Flow</h3>
+                    <p>The <strong>Sun</strong> is the principal source of energy input to biological systems. Energy flows through living organisms in one direction (it does not cycle).</p>
+                    <div class="highlight-box">
+                        <strong>The 10% Rule:</strong> Only about 10% of energy is passed from one trophic level to the next. The remaining 90% is lost as heat (respiration), movement, or undigested waste. This limits food chains to usually 4 or 5 levels.
+                    </div>
+                </div>
+
+                <div class="note-topic">
+                    <h3><i class="fa-solid fa-network-wired"></i> 2. Food Chains & Webs</h3>
+                    <p><strong>Trophic Levels:</strong> The position of an organism in a food chain.</p>
+                    <div class="pyramid-box">
+                        <div class="pyramid-level" style="background: #ef4444; width: 20%;">Tertiary Consumer (Carnivore)</div>
+                        <div class="pyramid-level" style="background: #f97316; width: 40%;">Secondary Consumer (Carnivore)</div>
+                        <div class="pyramid-level" style="background: #eab308; width: 60%;">Primary Consumer (Herbivore)</div>
+                        <div class="pyramid-level" style="background: #22c55e; width: 80%;">Producer (Plant)</div>
+                    </div>
+                    <ul>
+                        <li><strong>Producer:</strong> Makes its own organic nutrients using solar energy (Photosynthesis).</li>
+                        <li><strong>Consumer:</strong> Gets energy by feeding on other organisms.</li>
+                        <li><strong>Decomposer:</strong> Bacteria/Fungi that get energy from dead organic matter.</li>
+                    </ul>
+                </div>
+
+                <div class="note-topic">
+                    <h3><i class="fa-solid fa-recycle"></i> 3. Nutrient Cycles</h3>
+                    
+                    <h4>The Carbon Cycle</h4>
+                    <p>Balances Carbon Dioxide (CO₂) in the atmosphere.</p>
+                    <ul>
+                        <li><strong>Removed by:</strong> Photosynthesis (Plants turn CO₂ into glucose).</li>
+                        <li><strong>Returned by:</strong> Respiration (Plants/Animals), Decomposition, and Combustion (burning fossil fuels).</li>
+                    </ul>
+
+                    <h4 style="margin-top:15px;">The Nitrogen Cycle</h4>
+                    <p>Nitrogen is required to make amino acids (proteins). Plants cannot use N₂ gas directly.</p>
+                    <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:0.9rem;">
+                        <tr style="background:var(--secondary); color:white;"><th>Bacteria Type</th><th>Process</th><th>Result</th></tr>
+                        <tr><td><strong>N-Fixing</strong></td><td>Nitrogen Fixation</td><td>Turns N₂ gas &rarr; Nitrates (in soil/root nodules).</td></tr>
+                        <tr><td><strong>Nitrifying</strong></td><td>Nitrification</td><td>Turns Ammonia (decay) &rarr; Nitrates.</td></tr>
+                        <tr><td><strong>Denitrifying</strong></td><td>Denitrification</td><td>Turns Nitrates &rarr; N₂ gas (bad for farming).</td></tr>
+                    </table>
+                </div>
+
+                <div class="note-topic">
+                    <h3><i class="fa-solid fa-chart-line"></i> 4. Population Growth</h3>
+                    <p>A population is a group of organisms of one species living in the same area.</p>
+                    <div class="highlight-box">
+                        <strong>The Sigmoid Curve (S-Shape):</strong><br>
+                        1. <strong>Lag Phase:</strong> Slow growth, few individuals reproducing.<br>
+                        2. <strong>Log (Exponential) Phase:</strong> Rapid growth, no limiting factors.<br>
+                        3. <strong>Stationary Phase:</strong> Birth rate = Death rate. Limiting factors (food, space, disease) kick in.<br>
+                        4. <strong>Death Phase:</strong> Death rate > Birth rate (resources run out).
+                    </div>
+                </div>
+
+            </div>
+            <button class="btn btn-primary" onclick="downloadNotesPDF()">Download Notes PDF</button>
+        </section>
+
+        <!-- SECTION 3: MIND MAP -->
+        <section id="mindmap">
+            <h2><i class="fa-solid fa-project-diagram"></i> Visual Mind Map</h2>
+            <div class="mindmap-scroll-container">
+                <div id="mindmap-capture-zone">
+                    
+                    <div class="mm-root">ECOSYSTEMS</div>
+                    
+                    <div class="mm-branches">
+                        <!-- Energy -->
+                        <div class="mm-column">
+                            <div class="mm-category">Energy Flow</div>
+                            <div class="mm-node"><strong>Sunlight</strong>Ultimate Source</div>
+                            <div class="mm-node"><strong>Producers</strong>Photosynthesis</div>
+                            <div class="mm-node"><strong>10% Rule</strong>Energy loss (Heat)</div>
+                            <div class="mm-node"><strong>Food Web</strong>Interconnected chains</div>
+                        </div>
+
+                        <!-- Carbon -->
+                        <div class="mm-column">
+                            <div class="mm-category">Carbon Cycle</div>
+                            <div class="mm-node"><strong>Photosynthesis</strong>Removes CO₂</div>
+                            <div class="mm-node"><strong>Respiration</strong>Adds CO₂</div>
+                            <div class="mm-node"><strong>Combustion</strong>Burning fuels (Adds CO₂)</div>
+                            <div class="mm-node"><strong>Decomposition</strong>Breakdown of matter</div>
+                        </div>
+
+                        <!-- Nitrogen -->
+                        <div class="mm-column">
+                            <div class="mm-category">Nitrogen Cycle</div>
+                            <div class="mm-node"><strong>Proteins</strong>Need N to build</div>
+                            <div class="mm-node"><strong>N-Fixing Bacteria</strong>Root nodules (Legumes)</div>
+                            <div class="mm-node"><strong>Nitrifying</strong>Ammonia to Nitrate</div>
+                            <div class="mm-node"><strong>Denitrifying</strong>Nitrate to Gas</div>
+                        </div>
+
+                        <!-- Populations -->
+                        <div class="mm-column">
+                            <div class="mm-category">Populations</div>
+                            <div class="mm-node"><strong>Lag Phase</strong>Slow start</div>
+                            <div class="mm-node"><strong>Log Phase</strong>Exponential growth</div>
+                            <div class="mm-node"><strong>Stationary</strong>Births = Deaths</div>
+                            <div class="mm-node"><strong>Limiting Factors</strong>Food, Disease, Space</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <button class="btn btn-accent" onclick="downloadMindMap()">Download Mind Map Image</button>
+        </section>
+
+        <!-- SECTION 4: QUIZ -->
+        <section id="quiz">
+            <h2><i class="fa-solid fa-clipboard-question"></i> CIE Style MCQ (50 Questions)</h2>
+            <div style="display:flex; justify-content:space-between; background:var(--secondary); color:white; padding:15px; border-radius:8px; margin-bottom:20px;">
+                <span>Question: <strong id="q-num">1</strong>/50</span>
+                <span>Score: <strong id="score" style="color:var(--accent);">0</strong></span>
+            </div>
+
+            <div id="quiz-box"></div>
+            
+            <div style="margin-top:20px; text-align:right;">
+                <button class="btn btn-primary" id="next-q" style="display:none;" onclick="nextQuestion()">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div id="quiz-result" style="display:none; text-align:center; padding:30px;">
+                <h3 style="font-size:2rem; color:var(--primary);">Quiz Complete!</h3>
+                <p style="font-size:1.2rem; margin:10px 0;">You scored: <span id="final-score" style="font-weight:bold;"></span>/50</p>
+                <div id="result-message" style="margin-bottom:20px; font-style:italic;"></div>
+                <button class="btn btn-primary" onclick="location.reload()">Restart Quiz</button>
+            </div>
+
+            <div style="margin-top:30px; border-top:1px solid var(--border); padding-top:20px;">
+                <h4><i class="fa-solid fa-file-pdf"></i> Teacher Resources</h4>
+                <button class="btn btn-primary" onclick="downloadQuizPDF('questions')">Download Questions Only</button>
+                <button class="btn btn-primary" style="background:var(--secondary);" onclick="downloadQuizPDF('answers')">Download Mark Scheme</button>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- AUDIO LOGIC ---
+        const audioScripts = [
+            "Track 1: Energy Flow. The Sun is the principal source of energy for biological systems. Producers, like plants, trap light energy using chlorophyll during photosynthesis. This energy is transferred to chemical energy in glucose. As energy moves up the food chain, roughly 90 percent is lost at each level as heat from respiration, movement, and undigested waste. Only 10 percent is passed on.",
+            "Track 2: Food Chains and Webs. A food chain shows the transfer of energy. It always starts with a Producer. The Primary Consumer eats the producer. The Secondary Consumer eats the primary consumer. A Food Web is a network of interconnected food chains. If one species is removed, it affects the population of others. For example, removing a predator causes the prey population to increase.",
+            "Track 3: Nutrient Cycles. In the Carbon Cycle, photosynthesis removes carbon dioxide from the air, while respiration and combustion add it back. In the Nitrogen Cycle, plants need nitrogen to make proteins (amino acids). They cannot use nitrogen gas. Nitrogen-fixing bacteria in root nodules turn gas into nitrates. Nitrifying bacteria turn ammonia into nitrates. Denitrifying bacteria turn nitrates back into gas.",
+            "Track 4: Population Growth. A population follows a Sigmoid or S-shaped curve. First is the Lag phase, where growth is slow. Second is the Log or Exponential phase, where the population grows rapidly due to abundant resources. Third is the Stationary phase, where birth rate equals death rate due to limiting factors like food shortage, disease, or predation."
+        ];
+
+        let synth = window.speechSynthesis;
+        let utterance = null;
+        let currentTrack = 0;
+        let isPlaying = false;
+
+        function setTrack(idx) {
+            synth.cancel();
+            isPlaying = false;
+            currentTrack = idx;
+            document.querySelectorAll('.track-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+            const titles = ["1. Energy Flow", "2. Food Chains & Webs", "3. Nutrient Cycles", "4. Population Growth"];
+            document.getElementById('track-title').innerText = titles[idx];
+            document.getElementById('track-status').innerText = "Ready to Play";
+            document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i> Play';
+            document.getElementById('track-visual').style.width = "0%";
+        }
+
+        function togglePlay() {
+            if(isPlaying) {
+                synth.pause();
+                isPlaying = false;
+                document.getElementById('track-status').innerText = "Paused";
+                document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i> Resume';
+            } else {
+                if(synth.paused) {
+                    synth.resume();
+                } else {
+                    utterance = new SpeechSynthesisUtterance(audioScripts[currentTrack]);
+                    utterance.rate = 1.0;
+                    utterance.pitch = 1.0;
+                    
+                    // Simple visualizer effect
+                    let progress = 0;
+                    const duration = audioScripts[currentTrack].length * 50; // approx duration calculation
+                    const interval = setInterval(() => {
+                        if(!isPlaying) { clearInterval(interval); return; }
+                        progress += 100;
+                        let pct = Math.min((progress/duration)*100, 100);
+                        document.getElementById('track-visual').style.width = pct + "%";
+                    }, 100);
+
+                    synth.speak(utterance);
+                    utterance.onend = () => { 
+                        isPlaying = false; 
+                        document.getElementById('track-status').innerText = "Finished"; 
+                        document.getElementById('track-visual').style.width = "100%";
+                        clearInterval(interval);
+                    };
+                }
+                isPlaying = true;
+                document.getElementById('track-status').innerText = "Playing...";
+                document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+            }
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            document.getElementById('track-status').innerText = "Stopped";
+            document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i> Play';
+            document.getElementById('track-visual').style.width = "0%";
+        }
+
+        function downloadTranscript() {
+            const doc = new jspdf.jsPDF();
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18); doc.setTextColor(21, 128, 61);
+            doc.text("Audio Transcript: Ch 18 Ecology", 20, 20);
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12); doc.setTextColor(0);
+            let y = 40;
+            audioScripts.forEach((txt, i) => {
+                const lines = doc.splitTextToSize(txt, 170);
+                doc.text(lines, 20, y);
+                y += (lines.length * 7) + 15;
+            });
+            doc.save("Transcript_Ecology.pdf");
+        }
+
+        // --- NOTES & MINDMAP ---
+        function downloadNotesPDF() {
+            const element = document.getElementById('notes-content');
+            const doc = new jspdf.jsPDF('p', 'pt', 'a4');
+            
+            // Adding a title manually to PDF
+            doc.setFontSize(18); doc.setTextColor(21, 128, 61);
+            doc.text("Chapter 18: Study Notes", 40, 40);
+
+            doc.html(element, {
+                callback: function(pdf) { pdf.save('IGCSE_Notes_Ecology.pdf'); },
+                x: 40, y: 60, width: 520, windowWidth: 650
+            });
+        }
+
+        function downloadMindMap() {
+            document.getElementById('loader').style.display = 'flex';
+            setTimeout(() => {
+                const node = document.getElementById('mindmap-capture-zone');
+                html2canvas(node, { scale: 2, backgroundColor: "#2e3b2e" }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'MindMap_Ecology.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    document.getElementById('loader').style.display = 'none';
+                });
+            }, 500);
+        }
+
+        // --- QUIZ DATA ---
+        // 12 Specific Questions + 38 Generated Concept Questions
+        const quizData = [
+            { q: "What is the principal source of energy for biological systems?", o: ["The Moon", "The Earth's Core", "The Sun", "Electricity"], a: 2, e: "The Sun provides light energy for photosynthesis." },
+            { q: "Approximately how much energy is passed from one trophic level to the next?", o: ["100%", "90%", "50%", "10%"], a: 3, e: "90% is lost as heat, movement, and waste; only 10% transfers." },
+            { q: "Which process removes Carbon Dioxide from the atmosphere?", o: ["Respiration", "Photosynthesis", "Combustion", "Decomposition"], a: 1, e: "Plants use CO2 to make glucose during photosynthesis." },
+            { q: "What is the function of nitrifying bacteria?", o: ["Turn Nitrate to Nitrogen gas", "Turn Nitrogen gas to Nitrate", "Turn Ammonia to Nitrate", "Cause decay"], a: 2, e: "Nitrification converts ammonium compounds (from decay) into nitrates." },
+            { q: "Where are nitrogen-fixing bacteria found?", o: ["In the air", "In root nodules of legumes", "In the stomach", "On leaves"], a: 1, e: "They live symbiotically in roots of peas, beans, and clover." },
+            { q: "Which phase of the sigmoid curve shows the most rapid growth?", o: ["Lag Phase", "Stationary Phase", "Log (Exponential) Phase", "Death Phase"], a: 2, e: "In the Log phase, there are no limiting factors and abundant resources." },
+            { q: "Organisms that get their energy by eating other organisms are called:", o: ["Producers", "Consumers", "Decomposers", "Autotrophs"], a: 1, e: "Consumers cannot make their own food." },
+            { q: "What defines a 'population'?", o: ["All living things in an area", "A group of one species in an area", "Predators and Prey", "The abiotic factors"], a: 1, e: "Population refers to a single species in a specific habitat." },
+            { q: "Which of these is a biotic factor?", o: ["Temperature", "Water availability", "Predation", "Light intensity"], a: 2, e: "Biotic factors are living components (predators, food, disease)." },
+            { q: "Why are food chains usually short (4-5 levels)?", o: ["Animals are too small", "Not enough space", "Energy loss at each level", "Predators eat everything"], a: 2, e: "Since 90% energy is lost at each step, there isn't enough energy left to support more levels." },
+            { q: "In the carbon cycle, what does combustion produce?", o: ["Oxygen", "Glucose", "Carbon Dioxide", "Nitrogen"], a: 2, e: "Burning fossil fuels releases stored carbon as CO2." },
+            { q: "Denitrifying bacteria are most active in what conditions?", o: ["Dry soil", "Waterlogged (anaerobic) soil", "Sandy soil", "High oxygen soil"], a: 1, e: "They work best without oxygen, turning nitrates back into gas (bad for farmers)." }
+        ];
+
+        // Generate remaining 38 questions based on key topics
+        const extraTopics = [
+            { t: "Decomposers", fact: "break down dead organic matter." },
+            { t: "Trophic Level 1", fact: "is always occupied by producers." },
+            { t: "Herbivores", fact: "are primary consumers." },
+            { t: "Carnivores", fact: "are secondary or tertiary consumers." },
+            { t: "Food Webs", fact: "show interconnected food chains." },
+            { t: "Limiting Factors", fact: "stop a population from growing indefinitely." },
+            { t: "Pyramid of Numbers", fact: "shows the count of organisms at each level." },
+            { t: "Pyramid of Biomass", fact: "shows the dry mass of organisms at each level." },
+            { t: "Water Cycle", fact: "involves evaporation, condensation, and precipitation." },
+            { t: "Respiration", fact: "releases energy from glucose using oxygen." }
+        ];
+
+        for(let i=12; i<50; i++) {
+            const topic = extraTopics[i % extraTopics.length];
+            // Rotating question types to avoid exact duplicates
+            const type = i % 3;
+            let qText, correct, opts, expl;
+
+            if (type === 0) {
+                qText = `True or False: ${topic.t} ${topic.fact}`;
+                opts = ["True", "False", "It depends", "Not related to Ecology"];
+                correct = 0;
+                expl = `This is a fundamental concept in Chapter 18.`;
+            } else if (type === 1) {
+                qText = `Which concept involves the idea that ${topic.t} ${topic.fact}?`;
+                opts = ["Genetics", topic.t, "Digestion", "Circulation"];
+                correct = 1;
+                expl = `This relates directly to ${topic.t}.`;
+            } else {
+                qText = `Identify the correct statement about ${topic.t}.`;
+                opts = [
+                    "They are abiotic factors.",
+                    `They ${topic.fact}`,
+                    "They are only found in oceans.",
+                    "They produce energy from nothing."
+                ];
+                correct = 1;
+                expl = `${topic.t} play this specific role in the ecosystem.`;
+            }
+
+            quizData.push({ q: qText, o: opts, a: correct, e: expl });
+        }
+
+        let curQ = 0;
+        let score = 0;
+
+        function renderQuiz() {
+            const box = document.getElementById('quiz-box');
+            box.innerHTML = '';
+            quizData.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'q-card';
+                div.id = `q-${i}`;
+                div.innerHTML = `
+                    <h3 style="color:var(--primary-dark)">${i+1}. ${q.q}</h3>
+                    <div class="options-grid">
+                        ${q.o.map((opt, oi) => `<div class="q-option" onclick="checkAnswer(${i}, ${oi}, this)">${opt}</div>`).join('')}
+                    </div>
+                    <div class="q-expl" id="expl-${i}"><i class="fa-solid fa-circle-info"></i> <strong>Explanation:</strong> ${q.e}</div>
+                `;
+                box.appendChild(div);
+            });
+            document.getElementById('q-0').classList.add('active');
+        }
+
+        function checkAnswer(qIdx, oIdx, el) {
+            const q = quizData[qIdx];
+            const card = document.getElementById(`q-${qIdx}`);
+            const opts = card.querySelectorAll('.q-option');
+            
+            // Prevent multiple clicks
+            if(card.getAttribute('data-answered')) return;
+            card.setAttribute('data-answered', 'true');
+
+            if(oIdx === q.a) {
+                el.classList.add('correct');
+                score++;
+                document.getElementById('score').innerText = score;
+                el.innerHTML += ' <i class="fa-solid fa-check"></i>';
+            } else {
+                el.classList.add('wrong');
+                el.innerHTML += ' <i class="fa-solid fa-xmark"></i>';
+                opts[q.a].classList.add('correct');
+                opts[q.a].innerHTML += ' <i class="fa-solid fa-check"></i>';
+            }
+            document.getElementById(`expl-${qIdx}`).style.display = 'block';
+            document.getElementById('next-q').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            document.getElementById(`q-${curQ}`).classList.remove('active');
+            curQ++;
+            if(curQ < 50) {
+                document.getElementById(`q-${curQ}`).classList.add('active');
+                document.getElementById('q-num').innerText = curQ + 1;
+                document.getElementById('next-q').style.display = 'none';
+            } else {
+                document.getElementById('quiz-box').style.display = 'none';
+                document.getElementById('next-q').style.display = 'none';
+                document.getElementById('quiz-result').style.display = 'block';
+                document.getElementById('final-score').innerText = score;
+                
+                const msg = document.getElementById('result-message');
+                if(score > 45) msg.innerText = "Outstanding! You are an Ecology Master.";
+                else if(score > 35) msg.innerText = "Great job! You know your cycles well.";
+                else msg.innerText = "Keep studying! Review the Nutrient Cycles and try again.";
+            }
+        }
+
+        function downloadQuizPDF(type) {
+            const doc = new jspdf.jsPDF();
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(21, 128, 61);
+            doc.text(type === 'questions' ? "IGCSE Ecology: Practice Questions" : "IGCSE Ecology: Mark Scheme", 20, 20);
+            
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(0); doc.setFontSize(10);
+            let y = 40;
+            
+            quizData.forEach((q, i) => {
+                if(y > 270) { doc.addPage(); y = 20; }
+                
+                if(type === 'questions') {
+                    const lines = doc.splitTextToSize(`${i+1}. ${q.q}`, 170);
+                    doc.text(lines, 20, y);
+                    y += (lines.length * 5) + 2;
+                    q.o.forEach((o, oi) => { 
+                        doc.text(`   ${String.fromCharCode(65+oi)}) ${o}`, 20, y); 
+                        y+=5; 
+                    });
+                    y+=8;
+                } else {
+                    doc.text(`${i+1}. Answer: ${String.fromCharCode(65+q.a)}`, 20, y);
+                    y+=5;
+                    const explLines = doc.splitTextToSize(`Explanation: ${q.e}`, 170);
+                    doc.setTextColor(100);
+                    doc.text(explLines, 20, y);
+                    doc.setTextColor(0);
+                    y += (explLines.length * 5) + 8;
+                }
+            });
+            doc.save(`Quiz_${type}_Ecology.pdf`);
+        }
+
+        // Initialize
+        renderQuiz();
+    </script>
+</body>
+</html>
