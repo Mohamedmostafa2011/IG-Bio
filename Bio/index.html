@@ -417,7 +417,7 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            z-index: 2000; display: none; justify-content: center; align-items: center;
+            z-index: 6000; display: none; justify-content: center; align-items: center;
         }
         .modal-box {
             background: var(--modal-bg);
@@ -649,6 +649,52 @@
         }
         .folder-modal-icon i { font-size: 1.7rem; color: white; }
 
+
+        /* ── CREATE FOLDER BUTTON (beside Select) ── */
+        .create-folder-btn {
+            background: var(--surface); color: var(--accent);
+            border: 1.5px solid var(--accent); padding: 9px 18px;
+            border-radius: 50px; cursor: pointer; font-family: inherit;
+            font-weight: 700; font-size: 0.82rem; white-space: nowrap;
+            display: none; transition: 0.2s; gap: 6px; align-items: center;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .create-folder-btn:hover { background: var(--accent); color: white; }
+
+        /* ── SELECTION TOOLBAR extra buttons ── */
+        .sel-btn-move { background: #8b5cf6; color: white; }
+        .sel-btn-remove { background: #0ea5e9; color: white; }
+
+        /* ── MOVE-TO MODAL ── */
+        .move-section-label {
+            font-size: 0.75rem; font-weight: 800; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px;
+            margin: 16px 0 8px; text-align: left;
+        }
+        .move-dest-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; border-radius: 14px; cursor: pointer;
+            border: 1.5px solid var(--glass-border);
+            background: var(--card-bg); margin-bottom: 8px;
+            transition: 0.2s; font-weight: 600; color: var(--text);
+            font-size: 0.9rem;
+        }
+        .move-dest-item:hover { border-color: var(--primary); background: var(--surface-hover); color: var(--primary); }
+        .move-dest-item i { width: 20px; color: var(--primary); }
+        .move-dest-item.folder-dest i { color: #f59e0b; }
+        #moveDestScroll { max-height: 55vh; overflow-y: auto; padding-right: 4px; }
+
+        /* ── FOLDER PAGE SELECT BTN ── */
+        .folder-select-btn {
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer;
+            font-family: inherit; font-weight: 700; font-size: 0.8rem;
+            transition: 0.2s; display: none; gap: 6px; align-items: center;
+            white-space: nowrap;
+        }
+        .folder-select-btn:hover, .folder-select-btn.active { background: rgba(255,255,255,0.28); }
+        .folder-select-btn.active { background: rgba(239,68,68,0.7); border-color: transparent; }
+
         /* ── RESPONSIVE ── */
         @media(max-width: 600px) {
             header h1 { font-size: 2.4rem; }
@@ -757,6 +803,9 @@
                     <button class="select-mode-btn" data-grid="grid" onclick="toggleSelectionMode('grid')">
                         <i class="fa-regular fa-square-check"></i> Select
                     </button>
+                    <button class="create-folder-btn" data-grid="grid" onclick="openCreateFolderDirect('grid')">
+                        <i class="fa-solid fa-folder-plus"></i> New Folder
+                    </button>
                 </div>
                 <div class="chapter-grid" id="grid">
                     <div class="chapter-card add-card" id="add-btn-chapters" onclick="openAdminModal('chapters')">
@@ -781,6 +830,9 @@
                     <button class="select-mode-btn" data-grid="topicGrid" onclick="toggleSelectionMode('topicGrid')">
                         <i class="fa-regular fa-square-check"></i> Select
                     </button>
+                    <button class="create-folder-btn" data-grid="topicGrid" onclick="openCreateFolderDirect('topicGrid')">
+                        <i class="fa-solid fa-folder-plus"></i> New Folder
+                    </button>
                 </div>
                 <div class="chapter-grid" id="topicGrid">
                     <div class="chapter-card add-card" id="add-btn-topics" onclick="openAdminModal('general-topics')">
@@ -802,6 +854,9 @@
                     </div>
                     <button class="select-mode-btn" data-grid="gameGrid" onclick="toggleSelectionMode('gameGrid')">
                         <i class="fa-regular fa-square-check"></i> Select
+                    </button>
+                    <button class="create-folder-btn" data-grid="gameGrid" onclick="openCreateFolderDirect('gameGrid')">
+                        <i class="fa-solid fa-folder-plus"></i> New Folder
                     </button>
                 </div>
                 <div class="chapter-grid" id="gameGrid">
@@ -875,11 +930,17 @@
     <!-- ===== SELECTION TOOLBAR ===== -->
     <div class="selection-toolbar" id="selectionToolbar">
         <span class="sel-count-badge" id="selCount">0 selected</span>
+        <button class="sel-action-btn sel-btn-move" id="toolbarMoveBtn" onclick="openMoveModal()">
+            <i class="fa-solid fa-arrows-turn-right"></i> Move
+        </button>
+        <button class="sel-action-btn sel-btn-folder" id="toolbarFolderBtn" onclick="promptCreateFolder()">
+            <i class="fa-solid fa-folder-plus"></i> New Folder
+        </button>
+        <button class="sel-action-btn sel-btn-remove" id="toolbarRemoveBtn" onclick="removeSelectedFromFolder()" style="display:none;">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> To Homepage
+        </button>
         <button class="sel-action-btn sel-btn-delete" onclick="deleteSelectedCards()">
             <i class="fa-solid fa-trash"></i> Delete
-        </button>
-        <button class="sel-action-btn sel-btn-folder" onclick="promptCreateFolder()">
-            <i class="fa-solid fa-folder-plus"></i> Folder
         </button>
         <button class="sel-action-btn sel-btn-cancel" onclick="exitSelectionMode()">
             <i class="fa-solid fa-xmark"></i> Cancel
@@ -923,6 +984,17 @@
         </div>
     </div>
 
+    <!-- ===== MOVE TO FOLDER MODAL ===== -->
+    <div id="moveToFolderModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:520px;">
+            <div class="folder-modal-icon"><i class="fa-solid fa-arrows-turn-right"></i></div>
+            <h2 style="color:var(--text); margin-bottom:6px;">Move to…</h2>
+            <p style="color:var(--text-light); font-size:0.9rem; margin-bottom:16px;">Choose a destination for the selected items</p>
+            <div id="moveDestScroll"></div>
+            <button onclick="document.getElementById('moveToFolderModal').style.display='none'" class="close-btn" style="margin-top:16px;">Cancel</button>
+        </div>
+    </div>
+
     <!-- ===== FOLDER PAGE ===== -->
     <div class="folder-page" id="folderPage">
         <div class="folder-page-header">
@@ -931,6 +1003,9 @@
             </button>
             <div class="folder-page-icon"><i class="fa-solid fa-folder-open"></i></div>
             <div class="folder-page-title" id="folderPageTitle">Folder</div>
+            <button class="folder-select-btn" id="folderPageSelectBtn" onclick="toggleFolderSelectionMode()">
+                <i class="fa-regular fa-square-check"></i> Select
+            </button>
             <button class="folder-rename-btn" id="folderPageRenameBtn" onclick="openRenameFolderModal()">
                 <i class="fa-solid fa-pen"></i> Rename
             </button>
@@ -957,6 +1032,8 @@
         let currentEditElement = null; 
         let userProgress = []; // Global progress store
         let isGuestMode = false; // Guest mode flag
+        let allChapterDocIds = new Set(); // All doc IDs belonging to chapters section
+        let folderChildrenMap = {};       // { folderId: [docIds] } for completion checks
 
         // ── DARK MODE ──
         window.toggleTheme = function() {
@@ -1031,43 +1108,66 @@
             }
 
             async function loadAllContent() {
+                // Reset global trackers
+                allChapterDocIds = new Set();
+                folderChildrenMap = {};
+
                 // Clear existing cards
                 document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => card.remove());
 
                 const snapshot = await db.collection('siteContent').get();
                 const docs = [];
                 snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
-
                 docs.sort((a, b) => (a.orderIndex ?? 99999) - (b.orderIndex ?? 99999));
 
+                // ── Pass 1: build folderChildrenMap and allChapterDocIds ──
                 docs.forEach(item => {
-                    if (!item.deleted && item.sectionId) {
-                        if(item.sectionId === 'NEW_SECTION') {
-                            // UPDATE: PASS ITEM ID FOR DELETION
-                            createNewSection(item.title, item.id);
-                        }
-                        else if(item.type === 'folder') {
-                            // Render a folder card — count its children
-                            const childCount = docs.filter(d => d.folderId === item.id && !d.deleted).length;
-                            let gridId = (item.sectionId === 'chapters') ? 'grid' :
-                                         (item.sectionId === 'general-topics') ? 'topicGrid' :
-                                         (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
-                            createFolderCard(gridId, { ...item, childCount });
-                        }
-                        else if(item.folderId) {
-                            // This card lives inside a folder — skip on main page
-                            return;
-                        }
-                        else {
-                            let gridId = (item.sectionId === 'chapters') ? 'grid' : 
-                                         (item.sectionId === 'general-topics') ? 'topicGrid' : 
-                                         (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
-                            createCard(gridId, item, item.id);
-                        }
+                    if(item.deleted || !item.sectionId) return;
+                    if(item.type === 'folder') {
+                        if(!folderChildrenMap[item.id]) folderChildrenMap[item.id] = [];
+                    } else if(item.folderId) {
+                        // Card inside a folder
+                        if(!folderChildrenMap[item.folderId]) folderChildrenMap[item.folderId] = [];
+                        folderChildrenMap[item.folderId].push(item.id);
+                        // Count toward chapters progress if folder belongs to chapters
+                        if(item.sectionId === 'chapters') allChapterDocIds.add(item.id);
+                    } else {
+                        // Standalone card
+                        if(item.sectionId === 'chapters') allChapterDocIds.add(item.id);
+                    }
+                });
+
+                // ── Pass 2: render cards ──
+                docs.forEach(item => {
+                    if(item.deleted || !item.sectionId) return;
+                    if(item.sectionId === 'NEW_SECTION') {
+                        createNewSection(item.title, item.id);
+                    } else if(item.type === 'folder') {
+                        const childCount = (folderChildrenMap[item.id] || []).length;
+                        let gridId = (item.sectionId === 'chapters') ? 'grid' :
+                                     (item.sectionId === 'general-topics') ? 'topicGrid' :
+                                     (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                        createFolderCard(gridId, { ...item, childCount });
+                    } else if(item.folderId) {
+                        // Lives inside a folder — skip main page render
+                        return;
+                    } else {
+                        let gridId = (item.sectionId === 'chapters') ? 'grid' :
+                                     (item.sectionId === 'general-topics') ? 'topicGrid' :
+                                     (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                        createCard(gridId, item, item.id);
                     }
                 });
 
                 if(isAdmin) enableAdminMode();
+
+                // ── Pass 3: mark folders as completed if all children checked ──
+                for(const [folderId, childIds] of Object.entries(folderChildrenMap)) {
+                    if(childIds.length > 0 && childIds.every(id => userProgress.includes(id))) {
+                        const card = document.querySelector(`.folder-card[data-doc-id="${folderId}"]`);
+                        if(card) card.classList.add('all-done');
+                    }
+                }
             }
 
             function createCard(gridId, data, docId) {
@@ -1125,8 +1225,12 @@
                     if(card.classList.contains('folder-card')) injectFolderAdminControls(card);
                     else injectAdminControls(card);
                 });
-                // Show select buttons for all sections
+                // Show select + create-folder buttons for all sections
                 document.querySelectorAll('.select-mode-btn').forEach(btn => btn.style.display = 'inline-flex');
+                document.querySelectorAll('.create-folder-btn').forEach(btn => btn.style.display = 'inline-flex');
+                // Show select button in folder page header (only if folder page is open)
+                const fpSelBtn = document.getElementById('folderPageSelectBtn');
+                if(fpSelBtn && activeFolderData.id) fpSelBtn.style.display = 'inline-flex';
                 
                 const grids = ['grid', 'topicGrid', 'gameGrid'];
                 document.querySelectorAll('.chapter-grid').forEach(g => { if(!grids.includes(g.id)) grids.push(g.id); });
@@ -1197,17 +1301,10 @@
             }
 
             window.updateProgressBar = function() {
-                // Count ONLY cards from 'chapters' section (sectionId = 'chapters') 
-                // This includes cards in the main grid AND inside folders that belong to 'chapters'
-                const allChaptersCards = document.querySelectorAll('[data-section="chapters"] .progress-check, #grid .progress-check, #folderPageGrid .progress-check[data-folder-section="chapters"]');
-                
-                // Simpler: count all progress-checks that have sectionId chapters
-                // The main grid has them with no data-folder-section, folder page cards get data-folder-section
-                const mainGridChecks = document.querySelectorAll('#grid .progress-check');
-                
-                // For total count we include both main grid + folder items in chapters
-                const total = mainGridChecks.length || 1;
-                const checked = Array.from(mainGridChecks).filter(cb => cb.checked).length;
+                // Count ALL docs that belong to chapters section (sectionId='chapters')
+                // including cards inside folders — tracked in allChapterDocIds
+                const total = allChapterDocIds.size || 1;
+                const checked = [...allChapterDocIds].filter(id => userProgress.includes(id)).length;
                 const pct = Math.round((checked / total) * 100);
                 document.getElementById('progressFill').style.width = pct + "%";
                 document.getElementById('progressText').innerText = pct + "%";
@@ -1241,7 +1338,14 @@
                 const docRef = await db.collection('siteContent').add(newItem);
                 document.getElementById('adminAddModal').style.display = 'none';
 
+                // Track in allChapterDocIds if relevant
+                if(realSection === 'chapters') allChapterDocIds.add(docRef.id);
+
                 if(folderId) {
+                    // Track in folderChildrenMap
+                    if(!folderChildrenMap[folderId]) folderChildrenMap[folderId] = [];
+                    folderChildrenMap[folderId].push(docRef.id);
+
                     // Add card directly into folder page grid
                     const folderGrid = document.getElementById('folderPageGrid');
                     const div = document.createElement('div');
@@ -1261,16 +1365,18 @@
                     `;
                     injectAdminControls(div);
                     const addBtn = document.getElementById('folderAddCardBtn');
-                    folderGrid.insertBefore(div, addBtn);
+                    if(addBtn) folderGrid.insertBefore(div, addBtn);
+                    else folderGrid.appendChild(div);
                     // Update item count
                     const countEl = document.getElementById(`fc-${folderId}`);
                     if(countEl) {
-                        const cnt = folderGrid.querySelectorAll('.chapter-card:not(.add-card)').length;
-                        countEl.textContent = `${cnt} items`;
+                        countEl.textContent = `${folderChildrenMap[folderId].length} items`;
                     }
+                    updateProgressBar();
                 } else {
-                    let gridId = (section === 'chapters') ? 'grid' : (section === 'general-topics') ? 'topicGrid' : (section === 'edu-games') ? 'gameGrid' : section;
+                    let gridId = (realSection === 'chapters') ? 'grid' : (realSection === 'general-topics') ? 'topicGrid' : (realSection === 'edu-games') ? 'gameGrid' : realSection;
                     createCard(gridId, { ...newItem, sectionId: realSection }, docRef.id);
+                    updateProgressBar();
                 }
             };
             window.openEditModal = function(btn) { 
@@ -1382,6 +1488,10 @@
                             style="${isAdmin ? 'display:inline-flex' : 'display:none'}">
                             <i class="fa-regular fa-square-check"></i> Select
                         </button>
+                        <button class="create-folder-btn" data-grid="${safeId}" onclick="openCreateFolderDirect('${safeId}')"
+                            style="${isAdmin ? 'display:inline-flex' : 'display:none'}">
+                            <i class="fa-solid fa-folder-plus"></i> New Folder
+                        </button>
                     </div>
                     <div class="chapter-grid" id="${safeId}">
                         <div class="chapter-card add-card" onclick="openAdminModal('${safeId}')">
@@ -1421,24 +1531,35 @@
             }
 
             // ==================== SELECTION MODE ====================
-            let selState = { active: false, gridId: null, selected: new Set() };
-            let activeFolderData = { id: null, name: null };
+            // context: 'homepage' | 'folder'
+            let selState = { active: false, gridId: null, selected: new Set(), context: 'homepage' };
+            let activeFolderData = { id: null, name: null, sectionId: null };
 
             window.toggleSelectionMode = function(gridId) {
                 if(selState.active && selState.gridId === gridId) {
                     exitSelectionMode();
                 } else {
                     if(selState.active) exitSelectionMode();
-                    enterSelectionMode(gridId);
+                    enterSelectionMode(gridId, 'homepage');
                 }
             };
 
-            function enterSelectionMode(gridId) {
-                selState = { active: true, gridId, selected: new Set() };
+            window.toggleFolderSelectionMode = function() {
+                if(selState.active && selState.context === 'folder') {
+                    exitSelectionMode();
+                } else {
+                    if(selState.active) exitSelectionMode();
+                    enterSelectionMode('folderPageGrid', 'folder');
+                }
+            };
+
+            function enterSelectionMode(gridId, context) {
+                selState = { active: true, gridId, selected: new Set(), context };
                 const grid = document.getElementById(gridId);
                 if(!grid) return;
 
-                grid.querySelectorAll('.chapter-card:not(.add-card):not(.folder-card)').forEach(card => {
+                // Include ALL cards (including folder-cards) in selection
+                grid.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => {
                     card.classList.add('selectable');
                     if(!card.querySelector('.select-overlay')) {
                         const ov = document.createElement('div');
@@ -1450,10 +1571,24 @@
                     card.onclick = function(e) { e.stopPropagation(); toggleCardSel(card); };
                 });
 
+                // Show/hide context-specific toolbar buttons
+                const folderBtn  = document.getElementById('toolbarFolderBtn');
+                const removeBtn  = document.getElementById('toolbarRemoveBtn');
+                if(context === 'folder') {
+                    if(folderBtn) folderBtn.style.display = 'none';
+                    if(removeBtn) removeBtn.style.display = 'flex';
+                    // Update folder page select btn style
+                    const fpBtn = document.getElementById('folderPageSelectBtn');
+                    if(fpBtn) { fpBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel'; fpBtn.classList.add('active'); }
+                } else {
+                    if(folderBtn) folderBtn.style.display = 'flex';
+                    if(removeBtn) removeBtn.style.display = 'none';
+                    const btn = document.querySelector(`.select-mode-btn[data-grid="${gridId}"]`);
+                    if(btn) { btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel'; btn.classList.add('active'); }
+                }
+
                 document.getElementById('selectionToolbar').classList.add('visible');
                 updateSelCount();
-                const btn = document.querySelector(`.select-mode-btn[data-grid="${gridId}"]`);
-                if(btn) { btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel'; btn.classList.add('active'); }
             }
 
             window.exitSelectionMode = function() {
@@ -1465,12 +1600,17 @@
                         if(card._origClick !== undefined) { card.onclick = card._origClick; delete card._origClick; }
                     });
                 }
-                selState = { active: false, gridId: null, selected: new Set() };
+                const wasFolder = selState.context === 'folder';
+                selState = { active: false, gridId: null, selected: new Set(), context: 'homepage' };
                 document.getElementById('selectionToolbar').classList.remove('visible');
                 document.querySelectorAll('.select-mode-btn').forEach(btn => {
                     btn.innerHTML = '<i class="fa-regular fa-square-check"></i> Select';
                     btn.classList.remove('active');
                 });
+                if(wasFolder) {
+                    const fpBtn = document.getElementById('folderPageSelectBtn');
+                    if(fpBtn) { fpBtn.innerHTML = '<i class="fa-regular fa-square-check"></i> Select'; fpBtn.classList.remove('active'); }
+                }
             };
 
             function toggleCardSel(card) {
@@ -1488,21 +1628,44 @@
 
             window.deleteSelectedCards = async function() {
                 if(selState.selected.size === 0) { alert("Select at least one card first!"); return; }
-                if(!confirm(`Delete ${selState.selected.size} card(s)? This cannot be undone.`)) return;
+                if(!confirm(`Delete ${selState.selected.size} item(s)? This cannot be undone.`)) return;
                 const batch = db.batch();
-                selState.selected.forEach(card => {
+                for(const card of selState.selected) {
                     const docId = card.getAttribute('data-doc-id');
-                    if(docId) batch.update(db.collection('siteContent').doc(docId), { deleted: true });
+                    if(!docId) continue;
+                    batch.update(db.collection('siteContent').doc(docId), { deleted: true });
+                    // If it's a folder, delete all its children too
+                    if(card.classList.contains('folder-card')) {
+                        const children = folderChildrenMap[docId] || [];
+                        children.forEach(cid => {
+                            batch.update(db.collection('siteContent').doc(cid), { deleted: true });
+                            allChapterDocIds.delete(cid);
+                        });
+                        delete folderChildrenMap[docId];
+                    }
+                    allChapterDocIds.delete(docId);
                     card.remove();
-                });
+                }
                 await batch.commit();
                 exitSelectionMode();
+                updateProgressBar();
             };
 
             window.promptCreateFolder = function() {
                 if(selState.selected.size === 0) { alert("Select at least one card first!"); return; }
+                // Can only create folder from homepage cards (not inside a folder)
+                if(selState.context === 'folder') { alert("Cannot create a folder inside a folder."); return; }
                 document.getElementById('folderNameInput').value = '';
                 document.getElementById('folderNameModal').style.display = 'flex';
+                setTimeout(() => document.getElementById('folderNameInput').focus(), 100);
+            };
+
+            // Create empty folder directly (no pre-selection needed)
+            window.openCreateFolderDirect = function(gridId) {
+                document.getElementById('folderNameInput').value = '';
+                document.getElementById('folderNameModal').style.display = 'flex';
+                // Store the target gridId for use in confirmCreateFolder
+                document.getElementById('folderNameModal').setAttribute('data-target-grid', gridId);
                 setTimeout(() => document.getElementById('folderNameInput').focus(), 100);
             };
 
@@ -1511,7 +1674,16 @@
                 if(!name) { document.getElementById('folderNameInput').focus(); return; }
                 document.getElementById('folderNameModal').style.display = 'none';
 
-                const gridId = selState.gridId;
+                // If triggered from toolbar (selection mode), use selState.gridId
+                // If triggered from New Folder button directly, use the modal's data-target-grid
+                let gridId;
+                if(selState.active && selState.context === 'homepage') {
+                    gridId = selState.gridId;
+                } else {
+                    gridId = document.getElementById('folderNameModal').getAttribute('data-target-grid') || 'grid';
+                }
+                document.getElementById('folderNameModal').removeAttribute('data-target-grid');
+
                 const sectionId = gridId === 'grid' ? 'chapters' :
                                    gridId === 'topicGrid' ? 'general-topics' :
                                    gridId === 'gameGrid' ? 'edu-games' : gridId;
@@ -1523,22 +1695,28 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 const folderId = folderRef.id;
+                folderChildrenMap[folderId] = [];
 
-                // Move selected cards into folder
-                const batch = db.batch();
-                const movedCards = [];
-                selState.selected.forEach(card => {
-                    const docId = card.getAttribute('data-doc-id');
-                    if(docId) {
-                        batch.update(db.collection('siteContent').doc(docId), { folderId });
-                        movedCards.push({ el: card, docId });
-                    }
-                });
-                await batch.commit();
-
-                movedCards.forEach(({ el }) => el.remove());
-                createFolderCard(gridId, { id: folderId, title: name, type: 'folder', childCount: movedCards.length });
-                exitSelectionMode();
+                if(selState.active && selState.selected.size > 0 && selState.context === 'homepage') {
+                    // Move selected cards into new folder
+                    const batch = db.batch();
+                    const movedCards = [];
+                    selState.selected.forEach(card => {
+                        const docId = card.getAttribute('data-doc-id');
+                        if(docId) {
+                            batch.update(db.collection('siteContent').doc(docId), { folderId });
+                            movedCards.push({ el: card, docId });
+                            folderChildrenMap[folderId].push(docId);
+                        }
+                    });
+                    await batch.commit();
+                    movedCards.forEach(({ el }) => el.remove());
+                    createFolderCard(gridId, { id: folderId, title: name, type: 'folder', sectionId, childCount: movedCards.length });
+                    exitSelectionMode();
+                } else {
+                    // Empty folder — just show it
+                    createFolderCard(gridId, { id: folderId, title: name, type: 'folder', sectionId, childCount: 0 });
+                }
             };
 
             // ==================== FOLDER CARD ====================
@@ -1556,6 +1734,7 @@
                 div.setAttribute('data-folder-name', folderData.title);
                 div.setAttribute('data-folder-section', folderData.sectionId || gridId);
                 div.onclick = function() { openFolderPage(folderData.id, folderData.title); };
+                if(folderData.isHidden) div.classList.add('unavailable');
 
                 div.innerHTML = `
                     <div class="folder-done-badge" title="All topics covered!">✓</div>
@@ -1582,6 +1761,10 @@
                     <div class="control-btn" onclick="openRenameFolderFromCard(this)" title="Rename"><i class="fa-solid fa-pen"></i></div>
                     <div class="control-btn" onclick="toggleFolderVisibility(event, this)" title="${isHidden ? 'Show' : 'Hide'}">
                         <i class="fa-regular ${isHidden ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </div>
+                    <div class="control-btn" onclick="deleteFolderFromCard(event, this)" title="Delete Folder"
+                        style="color:var(--danger);">
+                        <i class="fa-solid fa-trash"></i>
                     </div>
                 `;
                 controls.onclick = (e) => e.stopPropagation();
@@ -1643,6 +1826,7 @@
                 activeFolderData = { id: folderId, name: folderName, sectionId };
                 document.getElementById('folderPageTitle').textContent = folderName;
                 document.getElementById('folderPageRenameBtn').style.display = isAdmin ? 'inline-flex' : 'none';
+                document.getElementById('folderPageSelectBtn').style.display = isAdmin ? 'inline-flex' : 'none';
                 if(isAdmin) document.getElementById('folderAddCardBtn').style.display = 'flex';
                 else document.getElementById('folderAddCardBtn').style.display = 'none';
 
@@ -1742,8 +1926,182 @@
                 }
             }
 
+
+            // ==================== MOVE TO FOLDER ====================
+            window.openMoveModal = function() {
+                if(selState.selected.size === 0) { alert("Select at least one item first!"); return; }
+                const scroll = document.getElementById('moveDestScroll');
+                scroll.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light);"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+                document.getElementById('moveToFolderModal').style.display = 'flex';
+
+                // Build destination list from DOM sections + folders
+                let html = '';
+                // Sections
+                const sectionDefs = [
+                    { gridId: 'grid', label: 'Course Content (Homepage)' },
+                    { gridId: 'topicGrid', label: 'General Topics (Homepage)' },
+                    { gridId: 'gameGrid', label: 'Edu-Games (Homepage)' },
+                ];
+                // Dynamic sections
+                document.querySelectorAll('#content-sections-wrapper section.chapters-section').forEach(sec => {
+                    const grid = sec.querySelector('.chapter-grid');
+                    if(grid && !['grid','topicGrid','gameGrid'].includes(grid.id)) {
+                        const h2 = sec.querySelector('h2');
+                        sectionDefs.push({ gridId: grid.id, label: `${h2 ? h2.textContent : grid.id} (Homepage)` });
+                    }
+                });
+
+                html += '<div class="move-section-label">Sections (no folder)</div>';
+                sectionDefs.forEach(sd => {
+                    html += `<div class="move-dest-item" onclick="executeMove(null,'${sd.gridId}')">
+                        <i class="fa-solid fa-layer-group"></i> ${sd.label}
+                    </div>`;
+                });
+
+                // Folders (read from DOM folder-cards)
+                html += '<div class="move-section-label">Folders</div>';
+                let folderCount = 0;
+                document.querySelectorAll('.folder-card[data-doc-id]').forEach(fc => {
+                    const fid = fc.getAttribute('data-doc-id');
+                    const fname = fc.getAttribute('data-folder-name') || 'Folder';
+                    const fSec = fc.getAttribute('data-folder-section') || 'chapters';
+                    const fGrid = fSec === 'chapters' ? 'grid' : fSec === 'general-topics' ? 'topicGrid' : fSec === 'edu-games' ? 'gameGrid' : fSec;
+                    html += `<div class="move-dest-item folder-dest" onclick="executeMove('${fid}','${fGrid}','${fSec}')">
+                        <i class="fa-solid fa-folder"></i> ${fname}
+                    </div>`;
+                    folderCount++;
+                });
+                if(folderCount === 0) html += '<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:12px;">No folders yet</p>';
+
+                scroll.innerHTML = html;
+            };
+
+            window.executeMove = async function(targetFolderId, targetGridId, targetSectionId) {
+                document.getElementById('moveToFolderModal').style.display = 'none';
+                if(selState.selected.size === 0) return;
+
+                const realSectionId = targetSectionId || (
+                    targetGridId === 'grid' ? 'chapters' :
+                    targetGridId === 'topicGrid' ? 'general-topics' :
+                    targetGridId === 'gameGrid' ? 'edu-games' : targetGridId
+                );
+
+                const batch = db.batch();
+                const toProcess = [...selState.selected];
+
+                for(const card of toProcess) {
+                    const docId = card.getAttribute('data-doc-id');
+                    if(!docId) continue;
+                    const isFolder = card.classList.contains('folder-card');
+
+                    const updateData = { sectionId: realSectionId };
+                    if(targetFolderId) {
+                        updateData.folderId = targetFolderId;
+                    } else {
+                        updateData.folderId = firebase.firestore.FieldValue.delete();
+                    }
+                    batch.update(db.collection('siteContent').doc(docId), updateData);
+
+                    // Update allChapterDocIds
+                    if(!isFolder) {
+                        if(realSectionId === 'chapters') allChapterDocIds.add(docId);
+                        else allChapterDocIds.delete(docId);
+                    }
+
+                    // Update folderChildrenMap: remove from old folder
+                    for(const [fid, kids] of Object.entries(folderChildrenMap)) {
+                        const idx = kids.indexOf(docId);
+                        if(idx !== -1) { kids.splice(idx, 1); break; }
+                    }
+                    // Add to new folder
+                    if(targetFolderId) {
+                        if(!folderChildrenMap[targetFolderId]) folderChildrenMap[targetFolderId] = [];
+                        if(!isFolder) folderChildrenMap[targetFolderId].push(docId);
+                    }
+
+                    card.remove();
+                }
+                await batch.commit();
+
+                // If moving into a folder page currently open, re-render it
+                if(targetFolderId && activeFolderData.id === targetFolderId) {
+                    await openFolderPage(targetFolderId, activeFolderData.name);
+                } else if(targetFolderId) {
+                    // Just update count badge on folder card
+                    const countEl = document.getElementById(`fc-${targetFolderId}`);
+                    if(countEl && folderChildrenMap[targetFolderId]) {
+                        countEl.textContent = `${folderChildrenMap[targetFolderId].length} items`;
+                    }
+                } else {
+                    // Moving to homepage — re-render moved items
+                    for(const card of toProcess) {
+                        const docId = card.getAttribute('data-doc-id');
+                        if(!docId) continue;
+                        const snap = await db.collection('siteContent').doc(docId).get();
+                        if(snap.exists) {
+                            const data = snap.data();
+                            if(data.type === 'folder') {
+                                createFolderCard(targetGridId, { ...data, id: docId, childCount: (folderChildrenMap[docId]||[]).length });
+                            } else {
+                                createCard(targetGridId, { ...data }, docId);
+                            }
+                        }
+                    }
+                }
+
+                exitSelectionMode();
+                updateProgressBar();
+            };
+
+            // ── Remove selected cards from folder (move to homepage) ──
+            window.removeSelectedFromFolder = function() {
+                if(selState.selected.size === 0 || selState.context !== 'folder') return;
+                const sectionId = activeFolderData.sectionId || 'chapters';
+                const gridId = sectionId === 'chapters' ? 'grid' :
+                               sectionId === 'general-topics' ? 'topicGrid' :
+                               sectionId === 'edu-games' ? 'gameGrid' : sectionId;
+                executeMove(null, gridId, sectionId);
+            };
+
+            // ── Delete a folder (move its contents to homepage) ──
+            window.deleteFolderFromCard = async function(e, btn) {
+                e.stopPropagation();
+                const card = btn.closest('.folder-card');
+                const folderId = card.getAttribute('data-doc-id');
+                const folderName = card.getAttribute('data-folder-name') || 'this folder';
+                const sectionId = card.getAttribute('data-folder-section') || 'chapters';
+                const gridId = sectionId === 'chapters' ? 'grid' :
+                               sectionId === 'general-topics' ? 'topicGrid' :
+                               sectionId === 'edu-games' ? 'gameGrid' : sectionId;
+
+                if(!confirm(`Delete "${folderName}"? All cards inside will be moved back to the homepage section.`)) return;
+
+                // Get all children from Firebase
+                const snap = await db.collection('siteContent').where('folderId','==',folderId).get();
+                const batch = db.batch();
+                batch.update(db.collection('siteContent').doc(folderId), { deleted: true });
+                snap.forEach(doc => {
+                    batch.update(db.collection('siteContent').doc(doc.id), {
+                        folderId: firebase.firestore.FieldValue.delete()
+                    });
+                });
+                await batch.commit();
+
+                // Render children on homepage
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if(!data.deleted) createCard(gridId, { ...data, folderId: undefined }, doc.id);
+                });
+
+                // Update tracking
+                delete folderChildrenMap[folderId];
+                card.remove();
+                updateProgressBar();
+            };
+
             window.closeFolderPage = function() {
                 document.getElementById('folderPage').classList.remove('open');
+                if(selState.active && selState.context === 'folder') exitSelectionMode();
             };
 
         } catch (e) { console.error(e); }
