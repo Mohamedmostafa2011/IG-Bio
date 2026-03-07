@@ -285,6 +285,169 @@
             }
             .ai-tutor-float i { font-size: 24px; }
         }
+
+        /* ================= SELECTION MODE ================= */
+        .search-row {
+            display: flex; align-items: center; gap: 12px;
+            max-width: 500px; margin: 0 auto 3rem auto;
+        }
+        .search-row .search-container {
+            flex: 1; margin: 0;
+        }
+        .select-mode-btn {
+            background: var(--primary); color: white; border: none;
+            padding: 10px 18px; border-radius: 50px; cursor: pointer;
+            font-family: inherit; font-weight: 700; font-size: 0.82rem;
+            white-space: nowrap; display: none; transition: 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .select-mode-btn.active { background: var(--danger); }
+        .select-mode-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .chapter-card.selectable { cursor: pointer !important; }
+        .chapter-card.selected {
+            border: 2px solid var(--primary) !important;
+            background: rgba(37, 99, 235, 0.07) !important;
+            transform: scale(1.02);
+            box-shadow: 0 4px 18px rgba(37,99,235,0.18) !important;
+        }
+
+        .select-overlay {
+            position: absolute; top: 10px; left: 10px;
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2.5px solid var(--primary); background: white;
+            display: none; align-items: center; justify-content: center;
+            z-index: 30; transition: all 0.15s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .chapter-card.selectable .select-overlay { display: flex; }
+        .chapter-card.selected .select-overlay {
+            background: var(--primary);
+        }
+        .select-overlay-check {
+            color: white; font-size: 0.7rem; font-weight: 900;
+            opacity: 0; transition: opacity 0.15s;
+        }
+        .chapter-card.selected .select-overlay-check { opacity: 1; }
+
+        /* Selection Toolbar */
+        .selection-toolbar {
+            position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white;
+            padding: 14px 22px; border-radius: 50px;
+            display: flex; gap: 10px; align-items: center;
+            z-index: 5000; opacity: 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+            font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(.175,.885,.32,1.275);
+            pointer-events: none;
+        }
+        .selection-toolbar.visible {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1; pointer-events: all;
+        }
+        .sel-count-badge {
+            background: rgba(255,255,255,0.15); padding: 4px 12px;
+            border-radius: 20px; font-size: 0.82rem;
+        }
+        .sel-action-btn {
+            border: none; padding: 8px 16px; border-radius: 20px;
+            cursor: pointer; font-family: inherit; font-weight: 700;
+            font-size: 0.82rem; transition: 0.15s; display: flex;
+            align-items: center; gap: 6px;
+        }
+        .sel-action-btn:hover { opacity: 0.88; transform: scale(1.04); }
+        .sel-btn-delete { background: var(--danger); color: white; }
+        .sel-btn-folder { background: var(--accent); color: white; }
+        .sel-btn-cancel { background: rgba(255,255,255,0.15); color: white; }
+
+        /* ================= FOLDER CARD ================= */
+        .folder-card {
+            border: 2px solid #f59e0b !important;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+            align-items: flex-start !important; position: relative;
+        }
+        .folder-card:hover {
+            border-color: #d97706 !important;
+            box-shadow: 0 6px 20px rgba(245,158,11,0.2) !important;
+            transform: scale(1.02);
+        }
+        .folder-icon-wrap {
+            width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 14px; box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+        }
+        .folder-icon-wrap i { font-size: 1.5rem; color: white; }
+        .folder-card .folder-name {
+            font-size: 1.15rem; font-weight: 800; color: #92400e; margin-bottom: 6px;
+        }
+        .folder-card .folder-count {
+            font-size: 0.78rem; color: #b45309; font-weight: 600;
+            background: rgba(245,158,11,0.15); padding: 3px 10px; border-radius: 20px;
+            display: inline-block;
+        }
+        .folder-card .folder-arrow {
+            position: absolute; bottom: 18px; right: 18px;
+            width: 36px; height: 36px; background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .folder-card .folder-arrow i { color: white; font-size: 0.85rem; }
+
+        /* ================= FOLDER PAGE ================= */
+        .folder-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 4000;
+            transform: translateX(100%); transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .folder-page.open { transform: translateX(0); }
+
+        .folder-page-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white; padding: 20px 30px;
+            display: flex; align-items: center; gap: 18px;
+            flex-shrink: 0;
+        }
+        .folder-back-btn {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            font-size: 1.1rem; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .folder-back-btn:hover { background: rgba(255,255,255,0.28); }
+        .folder-page-icon {
+            width: 44px; height: 44px; background: rgba(245,158,11,0.25);
+            border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0;
+        }
+        .folder-page-icon i { font-size: 1.3rem; color: #fbbf24; }
+        .folder-page-title {
+            font-size: 1.6rem; font-weight: 800; flex: 1; min-width: 0;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .folder-rename-btn {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            padding: 9px 18px; border-radius: 20px; cursor: pointer;
+            font-family: inherit; font-weight: 700; font-size: 0.82rem;
+            transition: 0.2s; display: none; gap: 6px; align-items: center;
+            white-space: nowrap;
+        }
+        .folder-rename-btn:hover { background: rgba(255,255,255,0.25); }
+        .folder-page-body {
+            flex: 1; overflow-y: auto; padding: 40px 20px;
+            max-width: 1200px; margin: 0 auto; width: 100%;
+        }
+        #folderPageGrid { min-height: 200px; }
+
+        /* ================= FOLDER MODALS ================= */
+        .folder-modal-icon {
+            width: 60px; height: 60px; background: linear-gradient(135deg,#f59e0b,#d97706);
+            border-radius: 16px; display: flex; align-items: center;
+            justify-content: center; margin: 0 auto 18px;
+        }
+        .folder-modal-icon i { font-size: 1.8rem; color: white; }
     </style>
 </head>
 <body>
@@ -372,9 +535,14 @@
                     <i class="fa-solid fa-bars section-drag-handle"></i>
                     <h2>Course Content</h2>
                 </div>
-                <div class="search-container">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-bar" placeholder="Search chapters..." onkeyup="filterGrid('grid', this.value)">
+                <div class="search-row">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" class="search-bar" placeholder="Search chapters..." onkeyup="filterGrid('grid', this.value)">
+                    </div>
+                    <button class="select-mode-btn" data-grid="grid" onclick="toggleSelectionMode('grid')">
+                        <i class="fa-regular fa-square-check"></i> Select
+                    </button>
                 </div>
                 <div class="chapter-grid" id="grid">
                     <div class="chapter-card add-card" id="add-btn-chapters" onclick="openAdminModal('chapters')">
@@ -391,9 +559,14 @@
                     <i class="fa-solid fa-bars section-drag-handle"></i>
                     <h2>General Topics</h2>
                 </div>
-                <div class="search-container">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-bar" placeholder="Search topics..." onkeyup="filterGrid('topicGrid', this.value)">
+                <div class="search-row">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" class="search-bar" placeholder="Search topics..." onkeyup="filterGrid('topicGrid', this.value)">
+                    </div>
+                    <button class="select-mode-btn" data-grid="topicGrid" onclick="toggleSelectionMode('topicGrid')">
+                        <i class="fa-regular fa-square-check"></i> Select
+                    </button>
                 </div>
                 <div class="chapter-grid" id="topicGrid">
                     <div class="chapter-card add-card" id="add-btn-topics" onclick="openAdminModal('general-topics')">
@@ -408,9 +581,14 @@
                     <i class="fa-solid fa-bars section-drag-handle"></i>
                     <h2>Edu-Games</h2>
                 </div>
-                <div class="search-container">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-bar" placeholder="Search games..." onkeyup="filterGrid('gameGrid', this.value)">
+                <div class="search-row">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" class="search-bar" placeholder="Search games..." onkeyup="filterGrid('gameGrid', this.value)">
+                    </div>
+                    <button class="select-mode-btn" data-grid="gameGrid" onclick="toggleSelectionMode('gameGrid')">
+                        <i class="fa-regular fa-square-check"></i> Select
+                    </button>
                 </div>
                 <div class="chapter-grid" id="gameGrid">
                     <div class="chapter-card add-card" id="add-btn-games" onclick="openAdminModal('edu-games')">
@@ -479,6 +657,74 @@
     <a href="ai-tutor.html" class="ai-tutor-float" title="Ask AI Tutor">
         <i class="fa-solid fa-robot"></i>
     </a>
+
+    <!-- ===== SELECTION TOOLBAR ===== -->
+    <div class="selection-toolbar" id="selectionToolbar">
+        <span class="sel-count-badge" id="selCount">0 selected</span>
+        <button class="sel-action-btn sel-btn-delete" onclick="deleteSelectedCards()">
+            <i class="fa-solid fa-trash"></i> Delete
+        </button>
+        <button class="sel-action-btn sel-btn-folder" onclick="promptCreateFolder()">
+            <i class="fa-solid fa-folder-plus"></i> Folder
+        </button>
+        <button class="sel-action-btn sel-btn-cancel" onclick="exitSelectionMode()">
+            <i class="fa-solid fa-xmark"></i> Cancel
+        </button>
+    </div>
+
+    <!-- ===== FOLDER NAME MODAL ===== -->
+    <div id="folderNameModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="folder-modal-icon"><i class="fa-solid fa-folder-plus"></i></div>
+            <h2 style="color:var(--text); margin-bottom:6px;">Create Folder</h2>
+            <p style="color:var(--text-light); font-size:0.9rem; margin-bottom:20px;">Group the selected cards into a folder</p>
+            <div style="text-align:left; margin-bottom:18px;">
+                <label style="font-size:0.8rem; font-weight:800; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">Folder Name</label>
+                <input type="text" id="folderNameInput" class="auth-input" placeholder="e.g. Unit 1 — Cell Biology"
+                    onkeydown="if(event.key==='Enter') confirmCreateFolder()">
+            </div>
+            <button onclick="confirmCreateFolder()" class="cta-btn" style="width:100%;">
+                <i class="fa-solid fa-folder-plus"></i> Create Folder
+            </button>
+            <button onclick="document.getElementById('folderNameModal').style.display='none'" class="close-btn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ===== RENAME FOLDER MODAL ===== -->
+    <div id="renameFolderModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="folder-modal-icon"><i class="fa-solid fa-pen"></i></div>
+            <h2 style="color:var(--text); margin-bottom:6px;">Rename Folder</h2>
+            <p style="color:var(--text-light); font-size:0.9rem; margin-bottom:20px;">The folder page title will update automatically</p>
+            <input type="hidden" id="renameFolderId">
+            <div style="text-align:left; margin-bottom:18px;">
+                <label style="font-size:0.8rem; font-weight:800; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">New Name</label>
+                <input type="text" id="renameFolderInput" class="auth-input"
+                    onkeydown="if(event.key==='Enter') confirmRenameFolder()">
+            </div>
+            <button onclick="confirmRenameFolder()" class="cta-btn" style="width:100%;">
+                <i class="fa-solid fa-check"></i> Save Name
+            </button>
+            <button onclick="document.getElementById('renameFolderModal').style.display='none'" class="close-btn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ===== FOLDER PAGE ===== -->
+    <div class="folder-page" id="folderPage">
+        <div class="folder-page-header">
+            <button class="folder-back-btn" onclick="closeFolderPage()" title="Back">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="folder-page-icon"><i class="fa-solid fa-folder-open"></i></div>
+            <div class="folder-page-title" id="folderPageTitle">Folder</div>
+            <button class="folder-rename-btn" id="folderPageRenameBtn" onclick="openRenameFolderModal()">
+                <i class="fa-solid fa-pen"></i> Rename
+            </button>
+        </div>
+        <div class="folder-page-body">
+            <div class="chapter-grid" id="folderPageGrid"></div>
+        </div>
+    </div>
 
     <script>
         const firebaseConfig = {
@@ -562,6 +808,18 @@
                             // UPDATE: PASS ITEM ID FOR DELETION
                             createNewSection(item.title, item.id);
                         }
+                        else if(item.type === 'folder') {
+                            // Render a folder card — count its children
+                            const childCount = docs.filter(d => d.folderId === item.id && !d.deleted).length;
+                            let gridId = (item.sectionId === 'chapters') ? 'grid' :
+                                         (item.sectionId === 'general-topics') ? 'topicGrid' :
+                                         (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                            createFolderCard(gridId, { ...item, childCount });
+                        }
+                        else if(item.folderId) {
+                            // This card lives inside a folder — skip on main page
+                            return;
+                        }
                         else {
                             let gridId = (item.sectionId === 'chapters') ? 'grid' : 
                                          (item.sectionId === 'general-topics') ? 'topicGrid' : 
@@ -624,7 +882,12 @@
                 document.getElementById('adminBadge').style.display = 'inline-block';
                 document.getElementById('addSectionBtn').style.display = 'block';
                 document.querySelectorAll('.add-card').forEach(el => el.style.display = 'flex');
-                document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => injectAdminControls(card));
+                document.querySelectorAll('.chapter-card:not(.add-card)').forEach(card => {
+                    if(card.classList.contains('folder-card')) injectFolderAdminControls(card);
+                    else injectAdminControls(card);
+                });
+                // Show select buttons for all sections
+                document.querySelectorAll('.select-mode-btn').forEach(btn => btn.style.display = 'inline-flex');
                 
                 const grids = ['grid', 'topicGrid', 'gameGrid'];
                 document.querySelectorAll('.chapter-grid').forEach(g => { if(!grids.includes(g.id)) grids.push(g.id); });
@@ -823,6 +1086,16 @@
                             ${deleteHtml}
                         </div>
                     </div>
+                    <div class="search-row">
+                        <div class="search-container" style="margin:0; flex:1;">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" class="search-bar" placeholder="Search..." onkeyup="filterGrid('${safeId}', this.value)">
+                        </div>
+                        <button class="select-mode-btn" data-grid="${safeId}" onclick="toggleSelectionMode('${safeId}')"
+                            style="${isAdmin ? 'display:inline-flex' : 'display:none'}">
+                            <i class="fa-regular fa-square-check"></i> Select
+                        </button>
+                    </div>
                     <div class="chapter-grid" id="${safeId}">
                         <div class="chapter-card add-card" onclick="openAdminModal('${safeId}')">
                             <i class="fa-solid fa-plus"></i>
@@ -859,6 +1132,272 @@
                     c.style.display = c.innerText.toUpperCase().includes(v) ? 'flex' : 'none';
                 });
             }
+
+            // ==================== SELECTION MODE ====================
+            let selState = { active: false, gridId: null, selected: new Set() };
+            let activeFolderData = { id: null, name: null };
+
+            window.toggleSelectionMode = function(gridId) {
+                if(selState.active && selState.gridId === gridId) {
+                    exitSelectionMode();
+                } else {
+                    if(selState.active) exitSelectionMode();
+                    enterSelectionMode(gridId);
+                }
+            };
+
+            function enterSelectionMode(gridId) {
+                selState = { active: true, gridId, selected: new Set() };
+                const grid = document.getElementById(gridId);
+                if(!grid) return;
+
+                grid.querySelectorAll('.chapter-card:not(.add-card):not(.folder-card)').forEach(card => {
+                    card.classList.add('selectable');
+                    if(!card.querySelector('.select-overlay')) {
+                        const ov = document.createElement('div');
+                        ov.className = 'select-overlay';
+                        ov.innerHTML = '<span class="select-overlay-check">✓</span>';
+                        card.insertBefore(ov, card.firstChild);
+                    }
+                    card._origClick = card.onclick;
+                    card.onclick = function(e) { e.stopPropagation(); toggleCardSel(card); };
+                });
+
+                document.getElementById('selectionToolbar').classList.add('visible');
+                updateSelCount();
+                const btn = document.querySelector(`.select-mode-btn[data-grid="${gridId}"]`);
+                if(btn) { btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel'; btn.classList.add('active'); }
+            }
+
+            window.exitSelectionMode = function() {
+                if(!selState.active) return;
+                const grid = document.getElementById(selState.gridId);
+                if(grid) {
+                    grid.querySelectorAll('.chapter-card.selectable').forEach(card => {
+                        card.classList.remove('selectable','selected');
+                        if(card._origClick !== undefined) { card.onclick = card._origClick; delete card._origClick; }
+                    });
+                }
+                selState = { active: false, gridId: null, selected: new Set() };
+                document.getElementById('selectionToolbar').classList.remove('visible');
+                document.querySelectorAll('.select-mode-btn').forEach(btn => {
+                    btn.innerHTML = '<i class="fa-regular fa-square-check"></i> Select';
+                    btn.classList.remove('active');
+                });
+            };
+
+            function toggleCardSel(card) {
+                if(selState.selected.has(card)) {
+                    selState.selected.delete(card); card.classList.remove('selected');
+                } else {
+                    selState.selected.add(card); card.classList.add('selected');
+                }
+                updateSelCount();
+            }
+
+            function updateSelCount() {
+                document.getElementById('selCount').textContent = `${selState.selected.size} selected`;
+            }
+
+            window.deleteSelectedCards = async function() {
+                if(selState.selected.size === 0) { alert("Select at least one card first!"); return; }
+                if(!confirm(`Delete ${selState.selected.size} card(s)? This cannot be undone.`)) return;
+                const batch = db.batch();
+                selState.selected.forEach(card => {
+                    const docId = card.getAttribute('data-doc-id');
+                    if(docId) batch.update(db.collection('siteContent').doc(docId), { deleted: true });
+                    card.remove();
+                });
+                await batch.commit();
+                exitSelectionMode();
+            };
+
+            window.promptCreateFolder = function() {
+                if(selState.selected.size === 0) { alert("Select at least one card first!"); return; }
+                document.getElementById('folderNameInput').value = '';
+                document.getElementById('folderNameModal').style.display = 'flex';
+                setTimeout(() => document.getElementById('folderNameInput').focus(), 100);
+            };
+
+            window.confirmCreateFolder = async function() {
+                const name = document.getElementById('folderNameInput').value.trim();
+                if(!name) { document.getElementById('folderNameInput').focus(); return; }
+                document.getElementById('folderNameModal').style.display = 'none';
+
+                const gridId = selState.gridId;
+                const sectionId = gridId === 'grid' ? 'chapters' :
+                                   gridId === 'topicGrid' ? 'general-topics' :
+                                   gridId === 'gameGrid' ? 'edu-games' : gridId;
+
+                // Save folder to Firebase
+                const folderRef = await db.collection('siteContent').add({
+                    sectionId, type: 'folder', title: name,
+                    orderIndex: 9999,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                const folderId = folderRef.id;
+
+                // Move selected cards into folder
+                const batch = db.batch();
+                const movedCards = [];
+                selState.selected.forEach(card => {
+                    const docId = card.getAttribute('data-doc-id');
+                    if(docId) {
+                        batch.update(db.collection('siteContent').doc(docId), { folderId });
+                        movedCards.push({ el: card, docId });
+                    }
+                });
+                await batch.commit();
+
+                movedCards.forEach(({ el }) => el.remove());
+                createFolderCard(gridId, { id: folderId, title: name, type: 'folder', childCount: movedCards.length });
+                exitSelectionMode();
+            };
+
+            // ==================== FOLDER CARD ====================
+            function createFolderCard(gridId, folderData) {
+                let grid = document.getElementById(gridId);
+                if(!grid) return;
+                if(!grid.classList.contains('chapter-grid') && grid.querySelector('.chapter-grid')) {
+                    grid = grid.querySelector('.chapter-grid');
+                }
+
+                const div = document.createElement('div');
+                div.className = 'chapter-card folder-card';
+                div.setAttribute('data-doc-id', folderData.id);
+                div.setAttribute('data-type', 'folder');
+                div.setAttribute('data-folder-name', folderData.title);
+                div.onclick = function() { openFolderPage(folderData.id, folderData.title); };
+
+                div.innerHTML = `
+                    <div class="folder-icon-wrap"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="folder-name">${folderData.title}</div>
+                    <div class="folder-count" id="fc-${folderData.id}">${folderData.childCount || 0} items</div>
+                    <div class="folder-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                `;
+
+                if(isAdmin) injectFolderAdminControls(div);
+
+                const addBtn = grid.querySelector('.add-card');
+                if(addBtn && addBtn.parentNode === grid) grid.insertBefore(div, addBtn);
+                else grid.appendChild(div);
+            }
+
+            function injectFolderAdminControls(cardEl) {
+                if(cardEl.querySelector('.admin-controls')) return;
+                const controls = document.createElement('div');
+                controls.className = 'admin-controls';
+                controls.innerHTML = `
+                    <div class="control-btn drag-handle"><i class="fa-solid fa-bars"></i></div>
+                    <div class="control-btn" onclick="openRenameFolderFromCard(this)" title="Rename"><i class="fa-solid fa-pen"></i></div>
+                `;
+                controls.onclick = (e) => e.stopPropagation();
+                cardEl.appendChild(controls);
+                cardEl.classList.add('admin-view');
+                controls.style.display = 'flex';
+            }
+
+            window.openRenameFolderFromCard = function(btn) {
+                const card = btn.closest('.folder-card');
+                document.getElementById('renameFolderId').value = card.getAttribute('data-doc-id');
+                document.getElementById('renameFolderInput').value = card.getAttribute('data-folder-name');
+                document.getElementById('renameFolderModal').style.display = 'flex';
+                setTimeout(() => document.getElementById('renameFolderInput').select(), 100);
+            };
+
+            window.openRenameFolderModal = function() {
+                document.getElementById('renameFolderId').value = activeFolderData.id;
+                document.getElementById('renameFolderInput').value = activeFolderData.name;
+                document.getElementById('renameFolderModal').style.display = 'flex';
+                setTimeout(() => document.getElementById('renameFolderInput').select(), 100);
+            };
+
+            window.confirmRenameFolder = async function() {
+                const folderId = document.getElementById('renameFolderId').value;
+                const newName = document.getElementById('renameFolderInput').value.trim();
+                if(!newName) return;
+
+                await db.collection('siteContent').doc(folderId).update({ title: newName });
+
+                // Update home page folder card
+                const homeCard = document.querySelector(`.folder-card[data-doc-id="${folderId}"]`);
+                if(homeCard) {
+                    homeCard.querySelector('.folder-name').textContent = newName;
+                    homeCard.setAttribute('data-folder-name', newName);
+                }
+                // Update folder page title if open
+                if(activeFolderData.id === folderId) {
+                    activeFolderData.name = newName;
+                    document.getElementById('folderPageTitle').textContent = newName;
+                }
+                document.getElementById('renameFolderModal').style.display = 'none';
+            };
+
+            // ==================== FOLDER PAGE ====================
+            window.openFolderPage = async function(folderId, folderName) {
+                activeFolderData = { id: folderId, name: folderName };
+                document.getElementById('folderPageTitle').textContent = folderName;
+                document.getElementById('folderPageRenameBtn').style.display = isAdmin ? 'inline-flex' : 'none';
+
+                const folderGrid = document.getElementById('folderPageGrid');
+                folderGrid.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;"></i></div>';
+                document.getElementById('folderPage').classList.add('open');
+
+                const snapshot = await db.collection('siteContent')
+                    .where('folderId', '==', folderId).get();
+
+                const items = [];
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    if(!d.deleted) items.push({ id: doc.id, ...d });
+                });
+                items.sort((a, b) => (a.orderIndex ?? 99999) - (b.orderIndex ?? 99999));
+
+                folderGrid.innerHTML = '';
+
+                items.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'chapter-card';
+                    if(item.isHidden) div.classList.add('unavailable');
+                    div.setAttribute('data-doc-id', item.id);
+                    div.setAttribute('data-file', item.file || '');
+                    div.onclick = function() { if(item.file) window.location.href = item.file; };
+
+                    let subtitleHtml = item.subtitle ? `<div class="chapter-num">${item.subtitle}</div>` : '';
+                    div.innerHTML = `
+                        ${subtitleHtml}
+                        <div class="chapter-title" style="${!item.subtitle ? 'margin:auto' : ''}">${item.title}</div>
+                        <div class="chapter-icon"><i class="fa-solid fa-chevron-right"></i></div>
+                    `;
+                    if(isAdmin) injectAdminControls(div);
+                    folderGrid.appendChild(div);
+                });
+
+                // Update item count on folder card
+                const countEl = document.getElementById(`fc-${folderId}`);
+                if(countEl) countEl.textContent = `${items.length} items`;
+
+                // Drag-and-drop inside folder
+                if(isAdmin && items.length > 0) {
+                    Sortable.create(folderGrid, {
+                        handle: '.drag-handle', animation: 150,
+                        draggable: '.chapter-card:not(.add-card)',
+                        onEnd: async function() {
+                            const cards = folderGrid.querySelectorAll('.chapter-card');
+                            const batch = db.batch();
+                            cards.forEach((card, idx) => {
+                                const id = card.getAttribute('data-doc-id');
+                                if(id) batch.update(db.collection('siteContent').doc(id), { orderIndex: idx });
+                            });
+                            await batch.commit();
+                        }
+                    });
+                }
+            };
+
+            window.closeFolderPage = function() {
+                document.getElementById('folderPage').classList.remove('open');
+            };
 
         } catch (e) { console.error(e); }
     </script>
