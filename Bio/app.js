@@ -159,7 +159,7 @@ try {
         div.className = 'chapter-card';
         if(data.isHidden) div.classList.add('unavailable');
         
-        div.onclick = function() { window.location.href = data.file; };
+        div.onclick = function() { openFileInViewer(data.file); };
         div.setAttribute('data-doc-id', docId);
         div.setAttribute('data-file', data.file);
         div.setAttribute('data-section', data.sectionId || gridId);
@@ -329,7 +329,7 @@ try {
             div.setAttribute('data-doc-id', docRef.id);
             div.setAttribute('data-file', file);
             div.setAttribute('data-section', realSection);
-            div.onclick = function() { window.location.href = file; };
+            div.onclick = function() { openFileInViewer(file); };
             const isChecked = userProgress.includes(docRef.id) ? 'checked' : '';
             let subtitleHtml = num ? `<div class="chapter-num">${num}</div>` : '';
             div.innerHTML = `
@@ -378,7 +378,7 @@ try {
         if(card.querySelector('.chapter-num')) card.querySelector('.chapter-num').innerText = sub;
         else if(sub) card.innerHTML = `<div class="chapter-num">${sub}</div>` + card.innerHTML;
         card.setAttribute('data-file', file);
-        card.onclick = function() { window.location.href = file; };
+        card.onclick = function() { openFileInViewer(file); };
         
         document.getElementById('adminEditModal').style.display = 'none';
     }
@@ -836,7 +836,7 @@ try {
             div.setAttribute('data-doc-id', item.id);
             div.setAttribute('data-file', item.file || '');
             div.setAttribute('data-section', item.sectionId || '');
-            div.onclick = function() { if(item.file) window.location.href = item.file; };
+            div.onclick = function() { if(item.file) openFileInViewer(item.file); };
 
             const isChecked = userProgress.includes(item.id) ? 'checked' : '';
             let subtitleHtml = item.subtitle ? `<div class="chapter-num">${item.subtitle}</div>` : '';
@@ -1076,3 +1076,22 @@ try {
     };
 
 } catch (e) { console.error(e); }
+
+// ── IFRAME FILE VIEWER ──────────────────────────────────────────────
+window.openFileInViewer = function(filePath) {
+    if (!filePath) return;
+    const overlay = document.getElementById('fileViewerOverlay');
+    const iframe  = document.getElementById('fileViewerIframe');
+    iframe.src = filePath;
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+};
+
+window.closeFileViewer = function() {
+    const overlay = document.getElementById('fileViewerOverlay');
+    const iframe  = document.getElementById('fileViewerIframe');
+    overlay.style.display = 'none';
+    iframe.src = '';
+    document.body.style.overflow = '';
+};
+
