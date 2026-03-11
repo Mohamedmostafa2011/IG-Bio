@@ -123,16 +123,14 @@ try {
             } else if(item.type === 'folder') {
                 const childCount = (folderChildrenMap[item.id] || []).length;
                 let gridId = (item.sectionId === 'chapters') ? 'grid' :
-                             (item.sectionId === 'general-topics') ? 'topicGrid' :
-                             (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                                                          (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
                 createFolderCard(gridId, { ...item, childCount });
             } else if(item.folderId) {
                 // Lives inside a folder — skip main page render
                 return;
             } else {
                 let gridId = (item.sectionId === 'chapters') ? 'grid' :
-                             (item.sectionId === 'general-topics') ? 'topicGrid' :
-                             (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
+                                                          (item.sectionId === 'edu-games') ? 'gameGrid' : item.sectionId;
                 createCard(gridId, item, item.id);
             }
         });
@@ -210,7 +208,7 @@ try {
         const fpSelBtn = document.getElementById('folderPageSelectBtn');
         if(fpSelBtn && activeFolderData.id) fpSelBtn.style.display = 'inline-flex';
         
-        const grids = ['grid', 'topicGrid', 'gameGrid'];
+        const grids = ['grid', 'gameGrid'];
         document.querySelectorAll('.chapter-grid').forEach(g => { if(!grids.includes(g.id)) grids.push(g.id); });
 
         grids.forEach(gridId => {
@@ -352,7 +350,7 @@ try {
             }
             updateProgressBar();
         } else {
-            let gridId = (realSection === 'chapters') ? 'grid' : (realSection === 'general-topics') ? 'topicGrid' : (realSection === 'edu-games') ? 'gameGrid' : realSection;
+            let gridId = (realSection === 'chapters') ? 'grid' :(realSection === 'edu-games') ? 'gameGrid' : realSection;
             createCard(gridId, { ...newItem, sectionId: realSection }, docRef.id);
             updateProgressBar();
         }
@@ -663,7 +661,6 @@ try {
         document.getElementById('folderNameModal').removeAttribute('data-target-grid');
 
         const sectionId = gridId === 'grid' ? 'chapters' :
-                           gridId === 'topicGrid' ? 'general-topics' :
                            gridId === 'gameGrid' ? 'edu-games' : gridId;
 
         // Save folder to Firebase
@@ -917,13 +914,12 @@ try {
         // Sections
         const sectionDefs = [
             { gridId: 'grid', label: 'Course Content (Homepage)' },
-            { gridId: 'topicGrid', label: 'General Topics (Homepage)' },
             { gridId: 'gameGrid', label: 'Edu-Games (Homepage)' },
         ];
         // Dynamic sections
         document.querySelectorAll('#content-sections-wrapper section.chapters-section').forEach(sec => {
             const grid = sec.querySelector('.chapter-grid');
-            if(grid && !['grid','topicGrid','gameGrid'].includes(grid.id)) {
+            if(grid && !['grid','gameGrid'].includes(grid.id)) {
                 const h2 = sec.querySelector('h2');
                 sectionDefs.push({ gridId: grid.id, label: `${h2 ? h2.textContent : grid.id} (Homepage)` });
             }
@@ -943,7 +939,7 @@ try {
             const fid = fc.getAttribute('data-doc-id');
             const fname = fc.getAttribute('data-folder-name') || 'Folder';
             const fSec = fc.getAttribute('data-folder-section') || 'chapters';
-            const fGrid = fSec === 'chapters' ? 'grid' : fSec === 'general-topics' ? 'topicGrid' : fSec === 'edu-games' ? 'gameGrid' : fSec;
+            const fGrid = fSec === 'chapters' ? 'grid' :fSec === 'edu-games' ? 'gameGrid' : fSec;
             html += `<div class="move-dest-item folder-dest" onclick="executeMove('${fid}','${fGrid}','${fSec}')">
                 <i class="fa-solid fa-folder"></i> ${fname}
             </div>`;
@@ -960,7 +956,6 @@ try {
 
         const realSectionId = targetSectionId || (
             targetGridId === 'grid' ? 'chapters' :
-            targetGridId === 'topicGrid' ? 'general-topics' :
             targetGridId === 'gameGrid' ? 'edu-games' : targetGridId
         );
 
@@ -1036,7 +1031,6 @@ try {
         if(selState.selected.size === 0 || selState.context !== 'folder') return;
         const sectionId = activeFolderData.sectionId || 'chapters';
         const gridId = sectionId === 'chapters' ? 'grid' :
-                       sectionId === 'general-topics' ? 'topicGrid' :
                        sectionId === 'edu-games' ? 'gameGrid' : sectionId;
         executeMove(null, gridId, sectionId);
     };
@@ -1049,7 +1043,6 @@ try {
         const folderName = card.getAttribute('data-folder-name') || 'this folder';
         const sectionId = card.getAttribute('data-folder-section') || 'chapters';
         const gridId = sectionId === 'chapters' ? 'grid' :
-                       sectionId === 'general-topics' ? 'topicGrid' :
                        sectionId === 'edu-games' ? 'gameGrid' : sectionId;
 
         if(!confirm(`Delete "${folderName}"? All cards inside will be moved back to the homepage section.`)) return;
