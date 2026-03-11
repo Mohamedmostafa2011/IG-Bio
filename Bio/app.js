@@ -815,6 +815,7 @@ try {
         loader.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;"></i>';
         folderGrid.insertBefore(loader, document.getElementById('folderAddCardBtn'));
         document.getElementById('folderPage').classList.add('open');
+        history.pushState({ igbio: 'folder' }, '');
 
         const snapshot = await db.collection('siteContent')
             .where('folderId', '==', folderId).get();
@@ -1083,15 +1084,44 @@ window.openFileInViewer = function(filePath) {
     const overlay = document.getElementById('fileViewerOverlay');
     const iframe  = document.getElementById('fileViewerIframe');
     iframe.src = filePath;
-    overlay.style.display = 'flex';
+    overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    // Push a history state so the browser back button triggers close
+    history.pushState({ igbio: 'viewer' }, '');
 };
 
 window.closeFileViewer = function() {
     const overlay = document.getElementById('fileViewerOverlay');
     const iframe  = document.getElementById('fileViewerIframe');
-    overlay.style.display = 'none';
+    overlay.classList.remove('open');
     iframe.src = '';
     document.body.style.overflow = '';
 };
+
+// ── BACK BUTTON HANDLER ─────────────────────────────────────────────
+window.addEventListener('popstate', function(e) {
+    const overlay = document.getElementById('fileViewerOverlay');
+
+    // Priority 1: close viewer if open
+    if (overlay && overlay.classList.contains('open')) {
+        closeFileViewer();
+        return;
+    }
+
+    // Priority 2: close folder page if open
+    const folderPage = document.getElementById('folderPage');
+    if (folderPage && folderPage.classList.contains('open')) {
+        closeFolderPage();
+        return;
+    }
+});
+
+// Push a history state when a folder is opened so back button works
+const _origFolderPageOpen = document.getElementById('folderPage');
+// Wrap closeFolderPage to handle history cleanly
+const _basecloseFolderPage = window.closeFolderPage;
+window.closeFolderPage = function() {
+    if (_basecloseFolderPage) _basecloseFolderPage();
+};
+
 
