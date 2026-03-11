@@ -56,7 +56,6 @@
             <div style="font-weight:800; font-size:1.5rem; color:var(--primary);">IG-bio</div>
             <ul id="nav-links">
                 <li><a href="#chapters"><i class="fa-solid fa-book"></i> <span>Chapters</span></a></li>
-                <li><a href="#general-topics"><i class="fa-solid fa-layer-group"></i> <span>Topics</span></a></li>
                 <li><a href="#edu-games"><i class="fa-solid fa-gamepad"></i> <span>Games</span></a></li>
             </ul>
             <div class="nav-profile-area">
@@ -122,33 +121,6 @@
                 </div>
                 <div class="chapter-grid" id="grid">
                     <div class="chapter-card add-card" id="add-btn-chapters" onclick="openAdminModal('chapters')">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-                </div>
-            </section>
-
-            <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;"><hr class="section-divider"></div>
-
-            <!-- GENERAL TOPICS -->
-            <section class="chapters-section" id="general-topics">
-                <div class="section-header">
-                    <i class="fa-solid fa-bars section-drag-handle"></i>
-                    <h2>General Topics</h2>
-                </div>
-                <div class="search-row">
-                    <div class="search-container">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" class="search-bar" placeholder="Search topics..." onkeyup="filterGrid('topicGrid', this.value)">
-                    </div>
-                    <button class="select-mode-btn" data-grid="topicGrid" onclick="toggleSelectionMode('topicGrid')">
-                        <i class="fa-regular fa-square-check"></i> Select
-                    </button>
-                    <button class="create-folder-btn" data-grid="topicGrid" onclick="openCreateFolderDirect('topicGrid')">
-                        <i class="fa-solid fa-folder-plus"></i> New Folder
-                    </button>
-                </div>
-                <div class="chapter-grid" id="topicGrid">
-                    <div class="chapter-card add-card" id="add-btn-topics" onclick="openAdminModal('general-topics')">
                         <i class="fa-solid fa-plus"></i>
                     </div>
                 </div>
