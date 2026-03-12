@@ -385,7 +385,10 @@
     #fileViewerOverlay {
         display: none;
         position: fixed;
-        inset: 0;
+        top: 36px;   /* push below the 36px Clairo topbar */
+        left: 0;
+        right: 0;
+        bottom: 0;
         z-index: 9999;
         flex-direction: column;
         background: var(--bg, #0f0f1a);
