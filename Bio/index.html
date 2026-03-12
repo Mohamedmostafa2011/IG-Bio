@@ -19,8 +19,72 @@
 
     <!-- SortableJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+    <style>
+    /* ── CLAIRO TOP BAR ── */
+    #clairo-topbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 99999;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(8, 8, 15, 0.75);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        box-shadow: 0 1px 20px rgba(0,0,0,0.3);
+    }
+    #clairo-topbar a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    #clairo-topbar a:hover {
+        opacity: 0.8;
+        transform: scale(1.03);
+    }
+    #clairo-topbar img {
+        height: 22px;
+        filter: drop-shadow(0 0 6px rgba(0,255,170,0.3));
+    }
+    #clairo-topbar .topbar-label {
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+    #clairo-topbar .topbar-dot {
+        width: 4px; height: 4px;
+        border-radius: 50%;
+        background: #00ffaa;
+        box-shadow: 0 0 6px #00ffaa;
+        animation: topbar-pulse 2s ease infinite;
+    }
+    @keyframes topbar-pulse {
+        0%,100% { opacity:1; }
+        50% { opacity:0.3; }
+    }
+
+    /* Push everything down by topbar height */
+    body { padding-top: 36px; }
+    </style>
 </head>
 <body>
+
+    <!-- ── CLAIRO TOP BAR ── -->
+    <div id="clairo-topbar">
+        <a href="https://clairo.web.app" target="_blank">
+            <span class="topbar-label">Part of</span>
+            <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo"/>
+            <span class="topbar-dot"></span>
+        </a>
+    </div>
 
     <!-- LOGIN SCREEN -->
     <div id="auth-screen">
@@ -99,9 +163,7 @@
             <div class="feature-card" style="border-top-color: #ef4444;"><i class="fa-solid fa-clipboard-check feature-icon" style="color: #ef4444;"></i><h3>Exam Quizzes</h3></div>
         </div>
 
-        <!-- DYNAMIC CONTENT WRAPPER -->
         <div id="content-sections-wrapper">
-            <!-- CHAPTERS -->
             <section class="chapters-section" id="chapters">
                 <div class="section-header">
                     <i class="fa-solid fa-bars section-drag-handle"></i>
@@ -126,7 +188,6 @@
                 </div>
             </section>
 
-            <!-- EDU-GAMES -->
             <section class="chapters-section" id="edu-games">
                 <div class="section-header">
                     <i class="fa-solid fa-bars section-drag-handle"></i>
@@ -157,7 +218,7 @@
         <footer><p>© 2026 IG-bio. Designed for CIE IGCSE Syllabus 0610.</p></footer>
     </div>
 
-    <!-- MODALS -->
+    <!-- MODALS (unchanged) -->
     <div id="profileModal" class="modal-overlay">
         <div class="modal-box">
             <img src="" id="profileModalAvatar" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary); margin-bottom:15px;">
@@ -194,7 +255,6 @@
         </div>
     </div>
 
-    <!-- GUEST LIMIT MODAL -->
     <div id="guestLimitModal" class="modal-overlay">
         <div class="modal-box">
             <i class="fa-solid fa-lock" style="font-size:3rem; color:var(--primary); margin-bottom:15px;"></i>
@@ -207,12 +267,10 @@
         </div>
     </div>
 
-    <!-- AI TUTOR FLOATING BUTTON -->
     <a href="ai-tutor.html" class="ai-tutor-float" title="Ask AI Tutor">
         <i class="fa-solid fa-robot"></i>
     </a>
 
-    <!-- SELECTION TOOLBAR -->
     <div class="selection-toolbar" id="selectionToolbar">
         <span class="sel-count-badge" id="selCount">0 selected</span>
         <button class="sel-action-btn sel-btn-move" id="toolbarMoveBtn" onclick="openMoveModal()">
@@ -232,7 +290,6 @@
         </button>
     </div>
 
-    <!-- FOLDER NAME MODAL -->
     <div id="folderNameModal" class="modal-overlay">
         <div class="modal-box">
             <div class="folder-modal-icon"><i class="fa-solid fa-folder-plus"></i></div>
@@ -250,7 +307,6 @@
         </div>
     </div>
 
-    <!-- RENAME FOLDER MODAL -->
     <div id="renameFolderModal" class="modal-overlay">
         <div class="modal-box">
             <div class="folder-modal-icon"><i class="fa-solid fa-pen"></i></div>
@@ -269,7 +325,6 @@
         </div>
     </div>
 
-    <!-- MOVE TO FOLDER MODAL -->
     <div id="moveToFolderModal" class="modal-overlay">
         <div class="modal-box" style="max-width:520px;">
             <div class="folder-modal-icon"><i class="fa-solid fa-arrows-turn-right"></i></div>
@@ -280,7 +335,6 @@
         </div>
     </div>
 
-    <!-- FOLDER PAGE -->
     <div class="folder-page" id="folderPage">
         <div class="folder-page-header">
             <button class="folder-back-btn" onclick="closeFolderPage()" title="Back">
@@ -304,9 +358,7 @@
         </div>
     </div>
 
-    <!-- FILE VIEWER OVERLAY -->
     <div id="fileViewerOverlay">
-        <!-- Navbar -->
         <div id="fileViewerNav">
             <div class="fv-logo">
                 <i class="fa-solid fa-dna fv-logo-icon"></i>
@@ -316,12 +368,10 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
-        <!-- iFrame -->
         <iframe id="fileViewerIframe" src="" allow="fullscreen"></iframe>
     </div>
 
     <style>
-    /* ── FILE VIEWER ── */
     #fileViewerOverlay {
         display: none;
         position: fixed;
@@ -331,9 +381,7 @@
         background: var(--bg, #0f0f1a);
         animation: fvSlideIn 0.28s cubic-bezier(0.4,0,0.2,1);
     }
-    #fileViewerOverlay.open {
-        display: flex;
-    }
+    #fileViewerOverlay.open { display: flex; }
     @keyframes fvSlideIn {
         from { opacity: 0; transform: translateY(18px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -351,50 +399,14 @@
         border-bottom: 1px solid rgba(255,255,255,0.08);
         box-shadow: 0 2px 20px rgba(0,0,0,0.25);
     }
-    .fv-logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .fv-logo-icon {
-        font-size: 1.35rem;
-        color: var(--primary, #6c63ff);
-        filter: drop-shadow(0 0 8px var(--primary, #6c63ff));
-    }
-    .fv-logo-text {
-        font-family: 'Outfit', sans-serif;
-        font-weight: 800;
-        font-size: 1.25rem;
-        color: var(--primary, #6c63ff);
-        letter-spacing: -0.5px;
-    }
-    .fv-close-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        border: none;
-        background: rgba(255,255,255,0.07);
-        color: var(--text, #fff);
-        font-size: 1.15rem;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.15s;
-    }
-    .fv-close-btn:hover {
-        background: rgba(255,255,255,0.15);
-        transform: scale(1.08);
-    }
-    #fileViewerIframe {
-        flex: 1;
-        width: 100%;
-        border: none;
-        background: #fff;
-    }
+    .fv-logo { display: flex; align-items: center; gap: 10px; }
+    .fv-logo-icon { font-size: 1.35rem; color: var(--primary, #6c63ff); filter: drop-shadow(0 0 8px var(--primary, #6c63ff)); }
+    .fv-logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--primary, #6c63ff); letter-spacing: -0.5px; }
+    .fv-close-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.07); color: var(--text, #fff); font-size: 1.15rem; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+    .fv-close-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.08); }
+    #fileViewerIframe { flex: 1; width: 100%; border: none; background: #fff; }
     </style>
 
-    <!-- External JavaScript -->
     <script src="app.js"></script>
 </body>
 </html>
