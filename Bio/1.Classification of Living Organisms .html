@@ -1,59 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-#clairo-topbar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 99999;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(8, 8, 15, 0.75);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    box-shadow: 0 1px 20px rgba(0,0,0,0.3);
-}
-#clairo-topbar a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-#clairo-topbar a:hover {
-    opacity: 0.8;
-    transform: scale(1.03);
-}
-#clairo-topbar img {
-    height: 22px;
-    filter: drop-shadow(0 0 6px rgba(0,255,170,0.3));
-}
-#clairo-topbar .topbar-label {
-    font-family: 'Outfit', sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}
-#clairo-topbar .topbar-dot {
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: #00ffaa;
-    box-shadow: 0 0 6px #00ffaa;
-    animation: topbar-pulse 2s ease infinite;
-}
-@keyframes topbar-pulse {
-    0%,100% { opacity:1; }
-    50% { opacity:0.3; }
-}
-/* Push page content down */
-body { padding-top: 36px !important; }
-</style>
- 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IGCSE Biology: Classification of Living Organisms</title>
@@ -327,13 +274,6 @@ body { padding-top: 36px !important; }
     </style>
 </head>
 <body>
-    <div id="clairo-topbar">
-    <a href="https://clairo.web.app" target="_blank">
-        <span class="topbar-label">Part of</span>
-        <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo"/>
-        <span class="topbar-dot"></span>
-    </a>
-</div>
     <div id="loader">
         <div class="spinner"></div>
         <p style="margin-top: 10px; font-weight:600; color:var(--primary);">Generating File...</p>
@@ -1321,4 +1261,5 @@ body { padding-top: 36px !important; }
 </script>
 </body>
 </html>
+
 
