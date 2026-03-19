@@ -442,6 +442,85 @@
 
         .sidebar { position: relative; }
 
+        /* Bot avatar as Clairo logo */
+        .avatar.bot {
+            background: transparent;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            padding: 0;
+        }
+        .avatar.bot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 4px;
+        }
+
+        /* Follow-up bar above input */
+        .followup-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: rgba(99, 179, 237, 0.08);
+            border: 1px solid rgba(99, 179, 237, 0.2);
+            border-radius: 10px;
+            padding: 8px 14px;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .followup-bar.visible { display: flex; }
+        .followup-label {
+            color: var(--accent);
+            font-weight: 600;
+            white-space: nowrap;
+            font-size: 0.75rem;
+        }
+        .followup-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        .followup-cancel {
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1;
+            flex-shrink: 0;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0 2px;
+        }
+        .followup-cancel:hover { color: var(--text-primary); }
+
+        /* Text selection popup */
+        .selection-popup {
+            position: fixed;
+            display: none;
+            z-index: 9999;
+            transform: translateX(-50%);
+        }
+        .selection-popup.visible { display: block; }
+        .selection-popup-btn {
+            background: var(--accent);
+            color: #0d0f11;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 16px rgba(99,179,237,0.35);
+            white-space: nowrap;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .selection-popup-btn:hover { background: #90cdf4; transform: scale(1.04); }
+
         @media (max-width: 700px) {
             .sidebar { display: none; }
         }
@@ -514,6 +593,12 @@
 
     <!-- Input -->
     <div class="input-section">
+        <!-- Follow-up reply bar -->
+        <div class="followup-bar" id="followupBar">
+            <span class="followup-label">↩ Follow-up on:</span>
+            <span class="followup-text" id="followupText"></span>
+            <button class="followup-cancel" id="followupCancel" title="Cancel follow-up">✕</button>
+        </div>
         <div class="input-box">
             <textarea id="userInput" rows="1" placeholder="Ask a biology question..." oninput="autoResize(this)"></textarea>
             <button class="send-btn" id="sendBtn" onclick="sendQuestion()">
@@ -524,6 +609,11 @@
     </div>
 
 </main>
+
+<!-- Text selection follow-up popup -->
+<div class="selection-popup" id="selectionPopup">
+    <button class="selection-popup-btn" id="selectionPopupBtn">↩ Follow-up on this</button>
+</div>
 
 <script>
     // ── 500 Biology Question Shortcuts ──
@@ -868,22 +958,70 @@
     function renderSuggestions() {
         const grid = document.getElementById('suggestionGrid');
         if (!grid) return;
-        // Pick 4 random unique questions
         const shuffled = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5);
         const picked = shuffled.slice(0, 4);
         grid.innerHTML = picked.map(item => `
-            <div class="suggestion-card" onclick="insertPrompt(${JSON.stringify(item.q)})">
+            <div class="suggestion-card" onclick="autoSend(${JSON.stringify(item.q)})">
                 <span>${item.e}</span>${item.q}
             </div>
         `).join('');
     }
 
-    const chatArea = document.getElementById('chatArea');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    let welcomeVisible = true;
+    // ── DOM refs ──
+    const chatArea       = document.getElementById('chatArea');
+    const userInput      = document.getElementById('userInput');
+    const sendBtn        = document.getElementById('sendBtn');
+    const welcomeScreen  = document.getElementById('welcomeScreen');
+    const followupBar    = document.getElementById('followupBar');
+    const followupText   = document.getElementById('followupText');
+    const followupCancel = document.getElementById('followupCancel');
+    const selectionPopup = document.getElementById('selectionPopup');
+    const selectionBtn   = document.getElementById('selectionPopupBtn');
 
+    let welcomeVisible      = true;
+    let activeFollowup      = null;   // quoted text for follow-up
+    let conversationHistory = [];     // full memory: [{role, content}]
+
+    // ── Follow-up cancel ──
+    followupCancel.addEventListener('click', () => {
+        activeFollowup = null;
+        followupBar.classList.remove('visible');
+    });
+
+    // ── Text selection → popup ──
+    document.addEventListener('mouseup', (e) => {
+        if (e.target.closest('.input-section')) return;
+        setTimeout(() => {
+            const sel  = window.getSelection();
+            const text = sel ? sel.toString().trim() : '';
+            if (text.length > 3) {
+                const rect = sel.getRangeAt(0).getBoundingClientRect();
+                selectionPopup.style.left = (rect.left + rect.width / 2) + 'px';
+                selectionPopup.style.top  = (rect.top + window.scrollY - 48) + 'px';
+                selectionPopup.classList.add('visible');
+                selectionPopup._sel = text;
+            } else {
+                selectionPopup.classList.remove('visible');
+            }
+        }, 10);
+    });
+
+    document.addEventListener('mousedown', (e) => {
+        if (!e.target.closest('#selectionPopup')) selectionPopup.classList.remove('visible');
+    });
+
+    selectionBtn.addEventListener('click', () => {
+        const text = selectionPopup._sel;
+        if (!text) return;
+        activeFollowup = text;
+        followupText.textContent = text.length > 80 ? text.slice(0, 80) + '…' : text;
+        followupBar.classList.add('visible');
+        selectionPopup.classList.remove('visible');
+        window.getSelection().removeAllRanges();
+        userInput.focus();
+    });
+
+    // ── Helpers ──
     function autoResize(el) {
         el.style.height = 'auto';
         el.style.height = Math.min(el.scrollHeight, 160) + 'px';
@@ -895,14 +1033,22 @@
         autoResize(userInput);
     }
 
+    function autoSend(text) {
+        userInput.value = text;
+        autoResize(userInput);
+        sendQuestion();
+    }
+
     function clearChat() {
-        // Remove all message rows
         document.querySelectorAll('.message-row, .typing-row').forEach(el => el.remove());
-        // Show welcome screen again
+        conversationHistory = [];
+        activeFollowup = null;
+        followupBar.classList.remove('visible');
         if (!welcomeVisible) {
             chatArea.appendChild(welcomeScreen);
             welcomeScreen.style.display = 'flex';
             welcomeVisible = true;
+            renderSuggestions();
         }
     }
 
@@ -915,25 +1061,25 @@
 
     function addMessage(text, sender) {
         hideWelcome();
-
         const row = document.createElement('div');
         row.classList.add('message-row', sender);
 
         const avatar = document.createElement('div');
         avatar.classList.add('avatar', sender === 'bot' ? 'bot' : 'user-av');
-        avatar.innerHTML = sender === 'bot' ? '🧬' : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>';
+        if (sender === 'bot') {
+            avatar.innerHTML = `<img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo" onerror="this.parentElement.textContent='🧬'">`;
+        } else {
+            avatar.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>`;
+        }
 
         const content = document.createElement('div');
         content.classList.add('message-content');
-
         const bubble = document.createElement('div');
         bubble.classList.add('message-bubble');
-
-        let formatted = text
+        bubble.innerHTML = text
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n/g, '<br>');
-        bubble.innerHTML = formatted;
 
         content.appendChild(bubble);
         row.appendChild(avatar);
@@ -946,11 +1092,7 @@
         const row = document.createElement('div');
         row.classList.add('typing-row');
         row.id = 'typingIndicator';
-        row.innerHTML = `
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-        `;
+        row.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
         chatArea.appendChild(row);
         chatArea.scrollTop = chatArea.scrollHeight;
     }
@@ -961,30 +1103,44 @@
     }
 
     async function sendQuestion() {
-        const question = userInput.value.trim();
-        if (!question) return;
+        const raw = userInput.value.trim();
+        if (!raw) return;
 
-        addMessage(question, 'user');
+        // If follow-up active, inject quoted context into the actual API message
+        let apiMessage = raw;
+        if (activeFollowup) {
+            apiMessage = `Regarding this specific part of your previous answer: "${activeFollowup}"\n\n${raw}`;
+        }
+
+        // Show only the user's typed text in chat UI
+        addMessage(raw, 'user');
         userInput.value = '';
         userInput.style.height = 'auto';
+        activeFollowup = null;
+        followupBar.classList.remove('visible');
         sendBtn.disabled = true;
         addTypingIndicator();
+
+        // Push to memory
+        conversationHistory.push({ role: 'user', content: apiMessage });
 
         try {
             const response = await fetch('/api/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question })
+                body: JSON.stringify({ history: conversationHistory })
             });
 
             removeTypingIndicator();
             const data = await response.json();
-
             if (!response.ok) throw new Error(data.error || 'Server error.');
+
             addMessage(data.answer, 'bot');
+            conversationHistory.push({ role: 'assistant', content: data.answer });
 
         } catch (err) {
             removeTypingIndicator();
+            conversationHistory.pop(); // remove failed message
             addMessage(`❌ ${err.message}`, 'bot');
         } finally {
             sendBtn.disabled = false;
@@ -992,11 +1148,10 @@
         }
     }
 
-    // Render random suggestions on load
     renderSuggestions();
 
-    userInput.addEventListener("keydown", function(e) {
-        if (e.key === "Enter" && !e.shiftKey) {
+    userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendQuestion();
         }
