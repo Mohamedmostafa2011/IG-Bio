@@ -68,7 +68,7 @@
     .fv-close-btn:hover { background:rgba(255,255,255,0.15); transform:scale(1.08); }
 
     /* The viewer body holds iframe + chat panel side by side */
-    #fvBody { display:flex; flex:1; overflow:hidden; }
+    #fvBody { display:flex; flex:1; overflow:hidden; position:relative; }
     #fileViewerIframe { flex:1; border:none; background:#fff; transition:flex .35s cubic-bezier(0.4,0,0.2,1); min-width:0; }
 
     /* ── CLAIRO AI CHAT PANEL (inside viewer) ── */
@@ -82,9 +82,7 @@
         font-family: 'Outfit', system-ui, sans-serif;
     }
     #clairoPanel.cp-open { width: 360px; }
-
-    /* Minimized: panel collapses to a slim tab on the right edge */
-    #clairoPanel.cp-min { width: 44px; }
+    #clairoPanel.cp-min  { width: 44px; }
     #clairoPanel.cp-min .cp-body,
     #clairoPanel.cp-min .cp-input-row { display: none; }
     #clairoPanel.cp-min .cp-header { flex-direction: column; gap:6px; padding: 10px 0; justify-content: flex-start; }
@@ -170,7 +168,7 @@
     .fv-clairo-btn i { font-size: 13px; }
     .fv-clairo-btn.active { background:rgba(108,99,255,0.25); border-color:#6c63ff; color:#c4b5fd; }
 
-    /* Minimized pill tab on right edge — click to reopen */
+    /* Minimized pill tab on right edge */
     #cpMinTab {
         display: none; position: absolute; right: 0; top: 50%;
         transform: translateY(-50%);
@@ -180,11 +178,11 @@
         font-size: 11px; font-family:'Outfit',sans-serif; font-weight:600;
         letter-spacing:1px; writing-mode:vertical-rl; text-orientation:mixed;
         box-shadow: -3px 0 16px rgba(108,99,255,0.4);
-        transition: padding .2s;
+        transition: padding .2s; align-items:center; gap:6px;
     }
     #cpMinTab:hover { padding: 14px 10px; }
 
-    /* ── HOMEPAGE floating bot (unchanged behaviour) ── */
+    /* ── HOMEPAGE floating bot ── */
     .ai-tutor-float {
         position: fixed; bottom: 28px; left: 28px; z-index: 9998;
         width: 54px; height: 54px; border-radius: 50%;
@@ -351,7 +349,6 @@
                 <span class="fv-logo-text">IG-bio</span>
             </div>
             <div class="fv-nav-right">
-                <!-- Clairo toggle button in nav bar -->
                 <button class="fv-clairo-btn" id="fvClairoBtn" onclick="cpToggle()">
                     <i class="fa-solid fa-robot"></i>
                     <span id="fvClairoBtnLabel">Ask Clairo.ai</span>
@@ -362,17 +359,14 @@
             </div>
         </div>
 
-        <!-- Viewer body: iframe + chat panel -->
         <div id="fvBody">
             <iframe id="fileViewerIframe" src="" allow="fullscreen"></iframe>
 
-            <!-- Minimized tab (shown when panel is minimized) -->
             <button id="cpMinTab" onclick="cpRestore()" title="Open Clairo.ai">
                 <i class="fa-solid fa-robot" style="writing-mode:horizontal-tb;font-size:13px;"></i>
                 &nbsp;Clairo
             </button>
 
-            <!-- AI Chat Panel -->
             <div id="clairoPanel">
                 <div class="cp-header">
                     <div class="cp-avatar"><i class="fa-solid fa-robot" style="font-size:13px;"></i></div>
@@ -399,18 +393,14 @@
     <!-- ── CLAIRO AI PANEL LOGIC ── -->
     <script>
     (function () {
-        /* ── Config ── */
         const SUBJECT      = 'Biology';
         const SYLLABUS     = 'CIE IGCSE 0610';
-        const ACCENT_COLOR = '#6c63ff';
 
-        /* ── State ── */
         let panelOpen      = false;
         let panelMinimized = false;
-        let sessionMsgs    = [];   // persists for the chapter session
+        let sessionMsgs    = [];
         let currentChapter = '';
 
-        /* ── DOM refs ── */
         const panel       = document.getElementById('clairoPanel');
         const msgBox      = document.getElementById('cpMsgs');
         const input       = document.getElementById('cpInput');
@@ -421,7 +411,6 @@
         const chLabel     = document.getElementById('cpChapterLabel');
         const btnLabel    = document.getElementById('fvClairoBtnLabel');
 
-        /* ── Helpers ── */
         function ts() {
             const d = new Date();
             return d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
@@ -454,7 +443,6 @@
             }
         }
 
-        /* ── Panel open / close / minimize ── */
         window.cpToggle = function () {
             if (panelMinimized) { cpRestore(); return; }
             if (panelOpen) { cpClose(); } else { cpOpen(); }
@@ -497,7 +485,6 @@
             setTimeout(() => input.focus(), 350);
         };
 
-        /* ── Send message ── */
         async function sendMessage() {
             const text = input.value.trim();
             if (!text) return;
@@ -505,7 +492,6 @@
             input.value = '';
             showTyping();
 
-            /* Build conversation history for API (last 16 turns) */
             const history = sessionMsgs.slice(-16).map(m => ({
                 role: m.type === 'user' ? 'user' : 'assistant',
                 content: m.text.replace(/<[^>]+>/g, '')
@@ -537,33 +523,24 @@
         sendBtn.addEventListener('click', sendMessage);
         input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 
-        /* ── Hook into fileViewer open/close ──
-           We patch after app.js loads so we don't break existing logic */
         window.addEventListener('load', function () {
-            /* openFileViewer is called by app.js when a card is clicked.
-               We intercept it to capture the chapter title and reset session. */
             const _origOpen = window.openFileViewer;
             window.openFileViewer = function (fileSrc, title) {
-                /* Reset session for fresh chapter */
                 sessionMsgs = [];
                 currentChapter = title || SUBJECT;
                 chLabel.textContent = currentChapter;
-                /* Close panel silently (don't auto-open; user clicks to open) */
                 cpClose();
-                /* Call original */
                 if (typeof _origOpen === 'function') _origOpen.apply(this, arguments);
             };
 
             const _origClose = window.closeFileViewer;
             window.closeFileViewer = function () {
-                /* Wipe session when leaving chapter */
                 sessionMsgs = [];
                 cpClose();
                 if (typeof _origClose === 'function') _origClose.apply(this, arguments);
             };
         });
 
-        /* Keyboard shortcut: Escape closes panel */
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape' && panelOpen) cpClose();
         });
