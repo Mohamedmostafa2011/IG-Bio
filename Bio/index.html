@@ -379,11 +379,7 @@
                         <button class="cp-ctrl" onclick="cpClose()" title="Close">&#10005;</button>
                     </div>
                 </div>
-                <div class="cp-body" id="cpMsgs"></div>
-                <div class="cp-input-row">
-                    <input class="cp-input" id="cpInput" placeholder="Ask about this chapter…" autocomplete="off">
-                    <button class="cp-send" id="cpSend"><i class="fa-solid fa-paper-plane" style="font-size:13px;"></i></button>
-                </div>
+                <iframe id="clairoIframe" src="" style="flex:1;border:none;width:100%;background:#0d0d1a;" allow="microphone; clipboard-write"></iframe>
             </div>
         </div>
     </div>
@@ -393,55 +389,18 @@
     <!-- ── CLAIRO AI PANEL LOGIC ── -->
     <script>
     (function () {
-        const SUBJECT      = 'Biology';
-        const SYLLABUS     = 'CIE IGCSE 0610';
+        const CLAIRO_URL = 'https://ig-bio.vercel.app/clairo.ai';
 
         let panelOpen      = false;
         let panelMinimized = false;
-        let sessionMsgs    = [];
-        let currentChapter = '';
 
         const panel       = document.getElementById('clairoPanel');
-        const msgBox      = document.getElementById('cpMsgs');
-        const input       = document.getElementById('cpInput');
-        const sendBtn     = document.getElementById('cpSend');
+        const clairoIframe= document.getElementById('clairoIframe');
         const minBtn      = document.getElementById('cpMinBtn');
         const minTab      = document.getElementById('cpMinTab');
         const fvClairoBtn = document.getElementById('fvClairoBtn');
         const chLabel     = document.getElementById('cpChapterLabel');
         const btnLabel    = document.getElementById('fvClairoBtnLabel');
-
-        function ts() {
-            const d = new Date();
-            return d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
-        }
-
-        function addMsg(text, type, save) {
-            const wrap = document.createElement('div');
-            wrap.className = 'cp-msg ' + type;
-            wrap.innerHTML = `<div class="cp-bubble">${text}</div><div class="cp-time">${ts()}</div>`;
-            msgBox.appendChild(wrap);
-            msgBox.scrollTop = msgBox.scrollHeight;
-            if (save !== false) sessionMsgs.push({ type, text });
-        }
-
-        function showTyping() {
-            const t = document.createElement('div');
-            t.className = 'cp-msg bot'; t.id = 'cpTypingDot';
-            t.innerHTML = '<div class="cp-typing"><span></span><span></span><span></span></div>';
-            msgBox.appendChild(t);
-            msgBox.scrollTop = msgBox.scrollHeight;
-        }
-        function removeTyping() { document.getElementById('cpTypingDot')?.remove(); }
-
-        function rebuildMessages() {
-            msgBox.innerHTML = '';
-            if (sessionMsgs.length === 0) {
-                addMsg(`Hi! I'm Clairo 👋 Ask me anything about <strong>${currentChapter || SUBJECT}</strong>.`, 'bot', false);
-            } else {
-                sessionMsgs.forEach(m => addMsg(m.text, m.type, false));
-            }
-        }
 
         window.cpToggle = function () {
             if (panelMinimized) { cpRestore(); return; }
@@ -454,8 +413,10 @@
             minTab.style.display = 'none';
             fvClairoBtn.classList.add('active');
             btnLabel.textContent = 'Close Clairo';
-            rebuildMessages();
-            setTimeout(() => input.focus(), 400);
+            // Load iframe only once
+            if (!clairoIframe.src || clairoIframe.src === window.location.href) {
+                clairoIframe.src = CLAIRO_URL;
+            }
         }
 
         window.cpClose = function () {
@@ -481,61 +442,18 @@
             minTab.style.display = 'none';
             fvClairoBtn.classList.add('active');
             btnLabel.textContent = 'Close Clairo';
-            msgBox.scrollTop = msgBox.scrollHeight;
-            setTimeout(() => input.focus(), 350);
         };
-
-        async function sendMessage() {
-            const text = input.value.trim();
-            if (!text) return;
-            addMsg(text, 'user');
-            input.value = '';
-            showTyping();
-
-            const history = sessionMsgs.slice(-16).map(m => ({
-                role: m.type === 'user' ? 'user' : 'assistant',
-                content: m.text.replace(/<[^>]+>/g, '')
-            }));
-
-            const systemPrompt = `You are Clairo, a friendly and expert ${SUBJECT} tutor for ${SYLLABUS}. The student is currently studying: "${currentChapter}". Give concise, clear answers. Relate answers to the syllabus when helpful. Use simple language. Keep replies under 5 sentences unless a detailed explanation is truly necessary. Format with line breaks for readability, but avoid markdown headers.`;
-
-            try {
-                const res = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: 'claude-sonnet-4-20250514',
-                        max_tokens: 500,
-                        system: systemPrompt,
-                        messages: history
-                    })
-                });
-                const data = await res.json();
-                removeTyping();
-                const reply = data?.content?.[0]?.text || "Sorry, I couldn't get a response. Please try again.";
-                addMsg(reply, 'bot');
-            } catch (err) {
-                removeTyping();
-                addMsg('Connection issue — please check your internet and try again.', 'bot');
-            }
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-        input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 
         window.addEventListener('load', function () {
             const _origOpen = window.openFileViewer;
             window.openFileViewer = function (fileSrc, title) {
-                sessionMsgs = [];
-                currentChapter = title || SUBJECT;
-                chLabel.textContent = currentChapter;
+                chLabel.textContent = title || 'Biology';
                 cpClose();
                 if (typeof _origOpen === 'function') _origOpen.apply(this, arguments);
             };
 
             const _origClose = window.closeFileViewer;
             window.closeFileViewer = function () {
-                sessionMsgs = [];
                 cpClose();
                 if (typeof _origClose === 'function') _origClose.apply(this, arguments);
             };
