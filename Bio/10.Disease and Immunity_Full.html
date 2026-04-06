@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IG-Bio | Ch 10: Diseases & Immunity</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #134e4a;
+            --accent: #f43f5e;
+            --bg: #f0f9ff;
+            --text: #334155;
+            --sidebar-w: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed; top: 20px; left: 20px; z-index: 3000;
+            background: var(--primary); color: white; border: none;
+            width: 50px; height: 50px; border-radius: 50%;
+            font-size: 1.4rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .menu-toggle:active { transform: scale(0.9); }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1999;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        aside {
+            width: var(--sidebar-w);
+            background: #0f172a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            flex-shrink: 0;
+            z-index: 2000;
+            border-right: 1px solid #1e293b;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand {
+            font-size: 1.5rem; font-weight: 800; color: #2dd4bf; margin-bottom: 40px;
+            display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;
+        }
+
+        .nav-item {
+            padding: 16px; margin-bottom: 8px; border-radius: 8px;
+            cursor: pointer; color: #cbd5e1; font-weight: 600;
+            display: flex; align-items: center; gap: 15px; transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.4); }
+
+        main { flex: 1; position: relative; overflow: hidden; width: 100%; }
+
+        .view-panel {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto; padding: 0; display: none; opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .view-panel.active { display: block; opacity: 1; }
+
+        .paper {
+            max-width: 950px; margin: 0 auto; background: white;
+            padding: 80px; min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-family: 'Inter', sans-serif; font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px; letter-spacing: -1px; }
+        .meta { color: #64748b; text-transform: uppercase; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; }
+
+        h2 {
+            font-family: 'Inter', sans-serif; font-size: 1.8rem; color: #1e293b;
+            margin-top: 60px; margin-bottom: 25px; padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 10px;
+        }
+
+        h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; color: var(--primary); margin-top: 35px; margin-bottom: 15px; }
+
+        p {
+            font-family: 'Crimson Pro', serif; font-size: 1.2rem; line-height: 1.8;
+            color: #334155; margin-bottom: 20px;
+        }
+        li { font-family: 'Crimson Pro', serif; font-size: 1.15rem; line-height: 1.7; margin-bottom: 8px; margin-left: 20px; }
+
+        .concept-box {
+            background: #ccfbf1; border-left: 5px solid var(--primary);
+            padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
+        }
+        .concept-box strong { color: var(--primary-dark); font-family: 'Inter', sans-serif; }
+
+        .exam-tip {
+            background: #fff1f2; border: 1px solid #fda4af; border-radius: 8px;
+            padding: 20px; margin: 30px 0; display: flex; gap: 15px; align-items: flex-start;
+        }
+        .exam-tip i { color: var(--accent); font-size: 1.5rem; margin-top: 3px; }
+        .exam-tip strong { color: #9f1239; }
+
+        .t-wrap { overflow-x: auto; margin: 30px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #ecfeff; color: var(--primary-dark); padding: 16px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 700; border-bottom: 2px solid #99f6e4; }
+        td { padding: 16px; border-bottom: 1px solid #e2e8f0; vertical-align: top; font-family: 'Crimson Pro', serif; font-size: 1.1rem; }
+        tr:last-child td { border-bottom: none; }
+
+        .mm-wrapper { padding: 80px; display: inline-flex; min-width: 100%; justify-content: center; background: #f8fafc; }
+        .tree ul { padding-top: 20px; position: relative; display: flex; justify-content: center; }
+        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 10px 0 10px; }
+        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #94a3b8; width: 50%; height: 20px; }
+        .tree li::after { right: auto; left: 50%; border-left: 2px solid #94a3b8; }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; }
+        .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid #94a3b8; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #94a3b8; width: 0; height: 20px; }
+
+        .node {
+            background: white; border: 1px solid #cbd5e1; padding: 12px 18px; border-radius: 8px;
+            display: inline-block; min-width: 140px; font-family: 'Inter', sans-serif; font-weight: 600; color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; z-index: 2;
+        }
+        .root-node { background: var(--primary-dark); color: white; transform: scale(1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .quiz-area { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .q-card { background: white; padding: 30px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; }
+        .q-opt {
+            display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid #e2e8f0;
+            margin-top: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s;
+        }
+        .q-opt:hover { background: #f1f5f9; border-color: #94a3b8; }
+        .q-let { font-weight: 900; color: #94a3b8; background: #f1f5f9; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+        .q-opt.correct { background: #ccfbf1; border-color: var(--primary); }
+        .q-opt.correct .q-let { background: var(--primary); color: white; }
+        .q-opt.wrong { background: #ffe4e6; border-color: #f43f5e; }
+        .q-opt.wrong .q-let { background: #f43f5e; color: white; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            aside { position: fixed; top: 0; left: -100%; height: 100%; width: 85%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+            aside.active { left: 0; }
+            .paper { padding: 30px 20px; }
+            h1 { font-size: 2.2rem; }
+            .mm-wrapper { justify-content: flex-start; padding: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <aside id="sidebar">
+        <div class="brand"><i class="fa-solid fa-shield-virus"></i> IG-BIO HEALTH</div>
+
+        <div class="nav-item active" onclick="switchTab('notes', this)">
+            <i class="fa-solid fa-book-medical"></i> Full Notes
+        </div>
+        <div class="nav-item" onclick="switchTab('mindmap', this)">
+            <i class="fa-solid fa-network-wired"></i> Mind Map
+        </div>
+        <div class="nav-item" onclick="switchTab('quiz', this)">
+            <i class="fa-solid fa-clipboard-question"></i> 50 Qs Quiz
+        </div>
+
+        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #334155;">
+             <div class="nav-item" onclick="genPDF()" style="color:#2dd4bf; border-color:#134e4a;">
+                 <i class="fa-solid fa-file-pdf"></i> Save as PDF
+             </div>
+        </div>
+    </aside>
+
+    <main>
+
+        <!-- 1. DETAILED NOTES -->
+        <div id="notes" class="view-panel active">
+            <div class="paper" id="pdf-source">
+                <span class="meta">IGCSE Biology 0610 &bull; Chapter 10</span>
+                <h1>Diseases & Immunity</h1>
+                <p>A disease is an abnormal condition affecting the body. Transmissible diseases are caused by pathogens (microorganisms that cause disease) and can be passed from one person to another. This chapter explores pathogen types, body defences, immunity, and antibiotics.</p>
+
+                <h2>1. Pathogens</h2>
+                <div class="concept-box">
+                    <strong>Key Definition: Pathogen</strong><br>
+                    A disease-causing microorganism. The four main types are bacteria, viruses, fungi, and protoctists.
+                </div>
+
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Type</th><th>Structure</th><th>Example / Disease</th><th>Notes</th></tr>
+                        <tr><td><strong>Bacteria</strong></td><td>Living cells (unicellular). Have a cell wall, cell membrane, cytoplasm, no nucleus.</td><td>Tuberculosis (TB), Cholera</td><td>Reproduce rapidly by binary fission. Produce toxins that damage tissues.</td></tr>
+                        <tr><td><strong>Viruses</strong></td><td>Not cells. Protein coat surrounding genetic material (DNA or RNA).</td><td>HIV/AIDS, Measles, Influenza</td><td>Replicate inside host cells (they are parasites). Cause cell damage/bursting.</td></tr>
+                        <tr><td><strong>Protoctists</strong></td><td>Unicellular eukaryotic organisms.</td><td>Malaria (Plasmodium)</td><td>Often have complex life cycles involving two hosts.</td></tr>
+                        <tr><td><strong>Fungi</strong></td><td>Can be single-celled (yeast) or multicellular (hyphae/mycelium). Have cell walls (chitin).</td><td>Rose Black Spot</td><td>Produce spores. Can be pathogens of plants or humans (e.g. Athlete's foot).</td></tr>
+                    </table>
+                </div>
+
+                <h2>2. Transmission of Diseases</h2>
+                <p>Pathogens are transmitted via specific routes:</p>
+                <ul>
+                    <li><strong>Droplet Infection:</strong> Coughing, sneezing, or talking expels droplets containing pathogens (e.g. TB, Influenza).</li>
+                    <li><strong>Direct Contact:</strong> Touching contaminated surfaces or skin-to-skin contact (e.g. Athlete's foot).</li>
+                    <li><strong>Water:</strong> Ingesting contaminated water (e.g. Cholera).</li>
+                    <li><strong>Vectors:</strong> Animals that carry pathogens from one host to another (e.g. Female Anopheles mosquito for Malaria).</li>
+                </ul>
+
+                <h3>Case Study: Malaria</h3>
+                <p>Caused by the protoctist <em>Plasmodium</em>. The mosquito acts as a <strong>vector</strong> (it is not the cause). It pierces the skin and injects saliva containing the pathogen directly into the blood. Prevented by mosquito nets, draining swamps, and insecticides.</p>
+
+                <h3>Case Study: Cholera</h3>
+                <p>Caused by the bacterium <em>Vibrio cholerae</em>. Ingested via dirty water. The bacteria attach to the intestine wall and secrete a <strong>toxin</strong>. This toxin causes chloride ions to be secreted into the gut, drawing water out of the blood by osmosis, leading to severe watery diarrhoea, dehydration, and potentially death. Treated with Oral Rehydration Therapy (ORT).</p>
+
+                <div class="exam-tip">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Exam Warning: Vector vs Cause</strong><br>
+                        The mosquito is the <strong>vector</strong> for Malaria, not the cause. The cause is the protoctist <em>Plasmodium</em>. A vector is simply the organism that carries the pathogen from one host to another.
+                    </div>
+                </div>
+
+                <h2>3. The Body's Defences</h2>
+
+                <h3>Physical & Chemical Barriers (Non-Specific)</h3>
+                <ul>
+                    <li><strong>Skin:</strong> Acts as a tough, waterproof barrier. Also secretes sebum (antimicrobial chemicals) and sweat (contains lysozymes that destroy bacterial cell walls).</li>
+                    <li><strong>Mucous Membranes:</strong> Line the respiratory and digestive tracts. Mucus traps pathogens.</li>
+                    <li><strong>Cilia:</strong> Tiny hair-like structures in the trachea and bronchi that sweep mucus up and out of the lungs.</li>
+                    <li><strong>Stomach Acid:</strong> Hydrochloric acid (very low pH) kills most ingested pathogens.</li>
+                </ul>
+
+                <h3>Phagocytes (White Blood Cells)</h3>
+                <p>If pathogens breach the barriers, <strong>phagocytes</strong> carry out <strong>phagocytosis</strong>:</p>
+                <ol>
+                    <li>Phagocyte detects chemicals released by the pathogen.</li>
+                    <li>It engulfs the pathogen by changing shape to surround it (forming a phagosome).</li>
+                    <li>Lysosomes (vesicles containing digestive enzymes) fuse with the phagosome.</li>
+                    <li>The enzymes break down and digest the pathogen.</li>
+                </ol>
+
+                <div class="concept-box">
+                    <strong>Key Point: Phagocytosis is Non-Specific</strong><br>
+                    Phagocytes attack <em>any</em> foreign organism they encounter. They do not distinguish between different types of pathogen &mdash; this is an innate, non-specific defence.
+                </div>
+
+                <h3>Blood Clotting</h3>
+                <p>Prevents pathogens from entering through open wounds and stops blood loss:</p>
+                <ol>
+                    <li><strong>Platelets</strong> (cell fragments) are activated at the wound site.</li>
+                    <li>They release <strong>thromboplastin</strong>.</li>
+                    <li>Thromboplastin converts the soluble protein <strong>prothrombin</strong> into the enzyme <strong>thrombin</strong>.</li>
+                    <li>Thrombin converts soluble <strong>fibrinogen</strong> into insoluble <strong>fibrin</strong>.</li>
+                    <li>Fibrin forms a tangled mesh (net) over the wound, trapping red blood cells to form a <strong>scab</strong>.</li>
+                </ol>
+
+                <h2>4. The Immune System (Lymphocytes)</h2>
+                <div class="concept-box">
+                    <strong>Key Definitions:</strong><br>
+                    <strong>Antigen:</strong> A molecule on the surface of a pathogen that triggers an immune response.<br>
+                    <strong>Antibody:</strong> A specific Y-shaped protein produced by lymphocytes that binds to a specific antigen to destroy or neutralise it.
+                </div>
+
+                <p><strong>Lymphocytes</strong> are a second type of white blood cell. They recognise specific antigens:</p>
+                <ol>
+                    <li>A lymphocyte encounters a foreign antigen on a pathogen.</li>
+                    <li>It starts to reproduce rapidly by <strong>mitosis</strong> to create identical clones.</li>
+                    <li>These clones produce massive amounts of <strong>specific antibodies</strong> shaped perfectly to fit that antigen (like a lock and key).</li>
+                    <li>Antibodies attach to antigens, causing pathogens to clump together (<strong>agglutination</strong>), making it easier for phagocytes to engulf them, or they neutralise toxins directly.</li>
+                </ol>
+
+                <p>After the infection is cleared, some lymphocytes remain as <strong>memory cells</strong>. These can produce antibodies much faster if the same pathogen enters the body again, giving <strong>long-term immunity</strong>.</p>
+
+                <div class="exam-tip">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Exam Warning: Antigen vs Antibody</strong><br>
+                        Do not confuse them! <strong>Antigen</strong> is on the pathogen (the lock). <strong>Antibody</strong> is made by the body's lymphocytes (the key). Each antibody is specific to ONE type of antigen. You cannot use the same antibody for different diseases.
+                    </div>
+                </div>
+
+                <h2>5. Types of Immunity</h2>
+                <div class="t-wrap">
+                    <table>
+                        <tr><th>Type</th><th>How it is Acquired</th><th>Example</th><th>Duration</th></tr>
+                        <tr><td><strong>Active Natural</strong></td><td>Catching the disease and fighting it off.</td><td>Getting measles and recovering.</td><td>Long-term (often lifetime).</td></tr>
+                        <tr><td><strong>Active Artificial</strong></td><td>Vaccination (introducing dead/weakened pathogen).</td><td>MMR vaccine.</td><td>Long-term (often lifetime).</td></tr>
+                        <tr><td><strong>Passive Natural</strong></td><td>Antibodies passed from mother to baby via placenta or breast milk.</td><td>Newborn immunity.</td><td>Short-term (antibodies are broken down).</td></tr>
+                        <tr><td><strong>Passive Artificial</strong></td><td>Injection of pre-made antibodies from an immune animal or person.</td><td>Anti-venom for snake bites; rabies immunoglobulin.</td><td>Short-term.</td></tr>
+                    </table>
+                </div>
+
+                <div class="concept-box">
+                    <strong>Key Distinction: Active vs Passive</strong><br>
+                    <strong>Active</strong> = Your own body makes the antibodies (slow response, but long-lasting because memory cells are created).<br>
+                    <strong>Passive</strong> = You are given pre-made antibodies (immediate protection, but short-lived because no memory cells are created and the antibodies are eventually broken down).
+                </div>
+
+                <h2>6. Antibiotics & Antivirals</h2>
+                <div class="concept-box">
+                    <strong>Key Definition: Antibiotics</strong><br>
+                    Chemicals produced by fungi or bacteria that kill or inhibit the growth of <strong>bacteria</strong> (e.g. Penicillin destroys bacterial cell walls). They do NOT kill human cells because human cells do not have the same cell wall structures.
+                </div>
+
+                <div class="exam-tip">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Huge Exam Trap: Viruses vs Bacteria</strong><br>
+                        Antibiotics <strong>DO NOT</strong> work against viruses. Viruses have no cell walls, no ribosomes, and no independent metabolism &mdash; they replicate inside host cells. An antibiotic that targets bacterial structures cannot target a virus without killing the human host cell. Taking antibiotics for a viral cold is useless and drives antibiotic resistance.
+                    </div>
+                </div>
+
+                <h3>Antibiotic Resistance</h3>
+                <ul>
+                    <li>Bacteria can mutate randomly. Some mutations make them resistant to an antibiotic.</li>
+                    <li>If a patient doesn't finish their antibiotic course, the weaker bacteria die but the resistant ones survive and reproduce (natural selection).</li>
+                    <li>This creates "superbugs" like <strong>MRSA</strong> (Methicillin-Resistant <em>Staphylococcus aureus</em>), which are very difficult to treat.</li>
+                </ul>
+
+                <h2>7. Culturing Microorganisms (Practical)</h2>
+                <p>Used to investigate the effect of disinfectants or antibiotics on bacterial growth:</p>
+                <ul>
+                    <li><strong>Nutrient Agar:</strong> Contains carbohydrates, minerals, amino acids, and agar (a jelly derived from seaweed to solidify the medium).</li>
+                    <li><strong>Aseptic Technique:</strong> Sterilising equipment (Bunsen flame for the inoculating loop, autoclave for agar) to prevent contamination of the culture or the environment.</li>
+                    <li><strong>Method:</strong> The wire loop is dipped in bacterial culture, then streaked across the agar plate in a zigzag pattern. The lid is taped loosely (to allow oxygen in) but not fully sealed (to prevent dangerous anaerobic pathogens from growing).</li>
+                    <li><strong>Incubation:</strong> Plates are stored <strong>upside down</strong> (to stop condensation dripping onto the bacteria) at ~25&deg;C in schools (safe temperature) or ~37&deg;C in industry (matches human body temperature for faster growth, but requires stricter safety protocols).</li>
+                </ul>
+
+                <h3>Measuring Antibiotic Effectiveness</h3>
+                <p>Small paper discs soaked in different antibiotics are placed on an agar plate that has been evenly spread with bacteria. After incubation, a <strong>clear zone</strong> (area of no bacterial growth) appears around each disc. The <strong>larger the clear zone</strong>, the more effective the antibiotic is against that bacterium.</p>
+
+                <div style="height:100px;"></div>
+            </div>
+        </div>
+
+        <!-- 2. MIND MAP -->
+        <div id="mindmap" class="view-panel">
+            <div class="mm-wrapper">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="node root-node">DISEASE & IMMUNITY</div>
+                            <ul>
+                                <li>
+                                    <div class="node">Pathogens</div>
+                                    <ul>
+                                        <li><div class="node">Bacteria (TB/Cholera)</div></li>
+                                        <li><div class="node">Viruses (HIV/Measles)</div></li>
+                                        <li><div class="node">Protoctists (Malaria)</div></li>
+                                        <li><div class="node">Fungi (Black Spot)</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Transmission</div>
+                                    <ul>
+                                        <li><div class="node">Droplets (Cough)</div></li>
+                                        <li><div class="node">Water (Cholera)</div></li>
+                                        <li><div class="node">Vectors (Mosquito)</div></li>
+                                        <li><div class="node">Direct Contact</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Defences</div>
+                                    <ul>
+                                        <li><div class="node">Skin & Mucus</div></li>
+                                        <li><div class="node">Phagocytosis</div></li>
+                                        <li><div class="node">Blood Clotting</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Immunity</div>
+                                    <ul>
+                                        <li><div class="node">Lymphocytes</div></li>
+                                        <li><div class="node">Antibodies (Y-shape)</div></li>
+                                        <li><div class="node">Active vs Passive</div></li>
+                                        <li><div class="node">Vaccination</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node">Treatment</div>
+                                    <ul>
+                                        <li><div class="node">Antibiotics (Bacteria)</div></li>
+                                        <li><div class="node">Antivirals</div></li>
+                                        <li><div class="node">Resistance (MRSA)</div></li>
+                                        <li><div class="node">Culturing (Agar)</div></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. QUIZ -->
+        <div id="quiz" class="view-panel">
+            <div class="quiz-area" id="q-container"></div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            if (sb.style.left === '0px') {
+                sb.style.left = '-100%';
+                ov.classList.remove('active');
+            } else {
+                sb.style.left = '0px';
+                ov.classList.add('active');
+            }
+        }
+
+        function switchTab(id, btn) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').style.left = '-100%';
+                document.getElementById('overlay').classList.remove('active');
+            }
+        }
+
+        function genPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('pdf-source');
+            const origWidth = element.style.width;
+            element.style.width = '900px';
+
+            html2canvas(element, { scale: 2 }).then(canvas => {
+                element.style.width = origWidth;
+                const img = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const w = 210;
+                const h = 297;
+                const imgH = canvas.height * w / canvas.width;
+                let hLeft = imgH;
+                let pos = 0;
+
+                pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                hLeft -= h;
+                while (hLeft >= 0) {
+                    pos = hLeft - imgH;
+                    pdf.addPage();
+                    pdf.addImage(img, 'PNG', 0, pos, w, imgH);
+                    hLeft -= h;
+                }
+                pdf.save('IG_Bio_Ch10_Diseases_Immunity.pdf');
+            });
+        }
+
+        const qData = [
+            { q: "What is a pathogen?", o: ["A disease-causing microorganism", "A type of white blood cell", "A chemical that kills bacteria", "A protein on a cell surface"], a: 0 },
+            { q: "Which pathogen type has a protein coat but no cellular structure?", o: ["Virus", "Bacterium", "Fungus", "Protoctist"], a: 0 },
+            { q: "Which pathogen causes Malaria?", o: ["Protoctist (Plasmodium)", "Virus", "Bacterium", "Fungus"], a: 0 },
+            { q: "What is the vector for Malaria?", o: ["Female Anopheles mosquito", "Tsetse fly", "Housefly", "Flea"], a: 0 },
+            { q: "Which disease is transmitted via contaminated water?", o: ["Cholera", "Tuberculosis", "Measles", "HIV/AIDS"], a: 0 },
+            { q: "Which type of pathogen causes Tuberculosis (TB)?", o: ["Bacterium", "Virus", "Protoctist", "Fungus"], a: 0 },
+            { q: "How is TB primarily transmitted?", o: ["Droplet infection", "Water contamination", "Vector", "Direct skin contact"], a: 0 },
+            { q: "What does the Cholera toxin do in the intestines?", o: ["Causes chloride ions to be secreted into the gut", "Destroys the intestinal wall", "Stops digestion completely", "Produces blood in the stool"], a: 0 },
+            { q: "What happens to water in the gut during a Cholera infection?", o: ["Moves into the gut by osmosis", "Moves into the blood", "Is excreted as urine", "Stays inside the cells"], a: 0 },
+            { q: "What is the best treatment for Cholera dehydration?", o: ["Oral Rehydration Therapy (ORT)", "Antibiotics only", "Painkillers", "Blood transfusion"], a: 0 },
+            { q: "Which substance in ORT helps co-transport sodium ions?", o: ["Glucose", "Water", "Salt only", "Insulin"], a: 0 },
+            { q: "What is the body's first line of defence against pathogens?", o: ["Skin", "Phagocytes", "Lymphocytes", "Antibodies"], a: 0 },
+            { q: "What substance in sweat and tears kills bacteria?", o: ["Lysozyme", "Antibody", "Antitoxin", "Insulin"], a: 0 },
+            { q: "What is the role of cilia in the trachea?", o: ["Sweep mucus up and out of the lungs", "Produce mucus", "Digest pathogens", "Absorb oxygen"], a: 0 },
+            { q: "Which white blood cell carries out phagocytosis?", o: ["Phagocyte", "Lymphocyte", "Erythrocyte", "Platelet"], a: 0 },
+            { q: "What is the process where a cell engulfs a pathogen?", o: ["Phagocytosis", "Osmosis", "Diffusion", "Exocytosis"], a: 0 },
+            { q: "What do lysosomes contain to destroy engulfed pathogens?", o: ["Digestive enzymes", "Antibodies", "Antigens", "DNA"], a: 0 },
+            { q: "Which cell fragment is involved in blood clotting?", o: ["Platelet", "Phagocyte", "Red blood cell", "Lymphocyte"], a: 0 },
+            { q: "Which enzyme converts fibrinogen into fibrin?", o: ["Thrombin", "Thromboplastin", "Lysozyme", "Catalase"], a: 0 },
+            { q: "What does fibrin form during blood clotting?", o: ["A mesh/net to trap red blood cells", "A toxin", "An antibody", "A cell membrane"], a: 0 },
+            { q: "What triggers the blood clotting cascade?", o: ["Thromboplastin from platelets", "Fibrinogen", "Antibodies", "Oxygen"], a: 0 },
+            { q: "Which white blood cell produces antibodies?", o: ["Lymphocyte", "Phagocyte", "Platelet", "Erythrocyte"], a: 0 },
+            { q: "What is an antigen?", o: ["A molecule on the surface of a pathogen", "A protein made by lymphocytes", "A type of antibiotic", "A digestive enzyme"], a: 0 },
+            { q: "What shape are antibodies typically described as?", o: ["Y-shaped", "X-shaped", "Circular", "Spherical"], a: 0 },
+            { q: "Why are antibodies described as 'specific'?", o: ["Each one binds to a specific antigen shape", "They only work in the blood", "They are produced by phagocytes", "They target all bacteria equally"], a: 0 },
+            { q: "What happens when antibodies bind to antigens on pathogens?", o: ["They clump together (agglutination)", "They divide by mitosis", "They turn into viruses", "They become red blood cells"], a: 0 },
+            { q: "What is active natural immunity?", o: ["Catching a disease and recovering", "Getting a vaccination", "Drinking breast milk", "Receiving an injection of antibodies"], a: 0 },
+            { q: "What is active artificial immunity?", o: ["Vaccination", "Breastfeeding", "Getting a snake bite", "Having the flu"], a: 0 },
+            { q: "Why is breast milk an example of passive natural immunity?", o: ["It contains pre-made antibodies from the mother", "It contains dead pathogens", "It stimulates the baby's lymphocytes", "It contains antibiotics"], a: 0 },
+            { q: "How long does passive immunity typically last?", o: ["Short-term", "Lifetime", "5 years", "It is permanent"], a: 0 },
+            { q: "What do memory cells do?", o: ["Allow rapid antibody production on second exposure", "Produce mucus", "Digest pathogens", "Clot the blood"], a: 0 },
+            { q: "What usually forms the basis of a vaccine?", o: ["Dead or weakened pathogens", "Live, dangerous pathogens", "Antibiotics", "White blood cells"], a: 0 },
+            { q: "What is an antibiotic?", o: ["A chemical that kills or inhibits bacteria", "A chemical that kills viruses", "A type of white blood cell", "A vaccine"], a: 0 },
+            { q: "Why do antibiotics NOT work against viruses?", o: ["Viruses lack cellular structures/metabolism to target", "Viruses are too small", "Antibodies kill antibiotics", "Viruses live in the stomach acid"], a: 0 },
+            { q: "Which disease is caused by a virus?", o: ["Measles", "Cholera", "Tuberculosis", "Athlete's foot"], a: 0 },
+            { q: "What does MRSA stand for?", o: ["Methicillin-Resistant Staphylococcus aureus", "Major Respiratory Skin Ailment", "Microbial Resistant Strep A", "Multiple Red Blood Cell Anomaly"], a: 0 },
+            { q: "What is the main cause of antibiotic resistance?", o: ["Overuse and incomplete courses of antibiotics", "Using too many vaccines", "Eating contaminated food", "Poor hygiene only"], a: 0 },
+            { q: "Why must you finish a full course of antibiotics?", o: ["To ensure all bacteria are killed, preventing resistant survivors", "To save money", "Because they taste bad", "To cure a viral infection"], a: 0 },
+            { q: "What is the jelly-like substance used to grow bacteria in the lab?", o: ["Agar", "Gelatin", "Starch", "Cellulose"], a: 0 },
+            { q: "How is an inoculating loop sterilised before use?", o: ["Heating in a Bunsen burner until red hot", "Washing with water", "Wiping with alcohol", "Placing in a fridge"], a: 0 },
+            { q: "Why should the lid of a petri dish be taped loosely, not fully sealed?", o: ["To allow oxygen in and prevent anaerobic pathogen growth", "To let bacteria escape", "To evaporate the water", "To cool the agar faster"], a: 0 },
+            { q: "At what temperature are bacterial cultures incubated in school labs?", o: ["25\u00B0C", "37\u00B0C", "100\u00B0C", "4\u00B0C"], a: 0 },
+            { q: "Why are petri dishes stored upside down during incubation?", o: ["To prevent condensation dripping onto the culture", "To save space", "To keep them warm", "To block out light"], a: 0 },
+            { q: "What does 'aseptic technique' mean?", o: ["Working in a way that prevents contamination", "Working in the dark", "Working with dangerous viruses", "Working without gloves"], a: 0 },
+            { q: "Which plant disease is caused by a fungus?", o: ["Rose black spot", "Tobacco mosaic virus", "Cholera", "Malaria"], a: 0 },
+            { q: "How is rose black spot transmitted?", o: ["By wind or water splashes", "By insects biting leaves", "By contaminated soil only", "By sunlight"], a: 0 },
+            { q: "Which structure do bacteria have that viruses lack?", o: ["Cell wall and cytoplasm", "Protein coat", "DNA or RNA", "Capsid"], a: 0 },
+            { q: "Where does the mosquito inject the malaria pathogen into a human?", o: ["Into the blood", "Into the stomach", "Into the lungs", "Onto the skin surface only"], a: 0 },
+            { q: "Antivenom for a snake bite is an example of what type of immunity?", o: ["Passive artificial", "Active natural", "Active artificial", "Passive natural"], a: 0 }
+        ];
+
+        const qDiv = document.getElementById('q-container');
+        const lets = ['A', 'B', 'C', 'D'];
+
+        qData.forEach((q, idx) => {
+            let opts = q.o.map((txt, i) => ({ txt, i }));
+            opts.sort(() => Math.random() - 0.5);
+
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            card.innerHTML = `
+                <h3 style="margin:0 0 15px 0; font-size:1.1rem; color:#334155;">${idx + 1}. ${q.q}</h3>
+                ${opts.map((o, k) => `
+                    <div class="q-opt" onclick="check(${idx}, ${o.i}, this)">
+                        <div class="q-let">${lets[k]}</div>
+                        <div>${o.txt}</div>
+                    </div>
+                `).join('')}
+            `;
+            qDiv.appendChild(card);
+        });
+
+        function check(qIdx, oIdx, el) {
+            const parent = el.parentElement;
+            if (parent.classList.contains('locked')) return;
+            parent.classList.add('locked');
+
+            if (oIdx === qData[qIdx].a) {
+                el.classList.add('correct');
+            } else {
+                el.classList.add('wrong');
+                const text = qData[qIdx].o[qData[qIdx].a];
+                for (let child of parent.children) {
+                    if (child.innerText.includes(text)) child.classList.add('correct');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
