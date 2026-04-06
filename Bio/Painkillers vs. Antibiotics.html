@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painkillers vs. Antibiotics — Key Differences Explained</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        geist: ['Geist', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        trust: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: #050505;
+            font-family: 'Geist', sans-serif;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #404040; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0px); }
+        }
+
+        .anim-up {
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+        .delay-700 { animation-delay: 0.7s; }
+        .delay-800 { animation-delay: 0.8s; }
+
+        .gradient-text {
+            background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 4rem 4rem;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+
+        .highlight-glow {
+            box-shadow: 0 0 18px rgba(6,182,212,0.55);
+        }
+
+        .card-hover {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-hover:hover {
+            border-color: rgba(6,182,212,0.35);
+            transform: translateY(-2px);
+        }
+
+        .timeline-line {
+            background: linear-gradient(to bottom, rgba(6,182,212,0.5), rgba(6,182,212,0.05));
+        }
+
+        .video-card {
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.04), transparent 50%);
+        }
+
+        .tag {
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.25);
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .pulse-dot {
+            animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .float-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .compare-arrow {
+            background: linear-gradient(to right, rgba(6,182,212,0.3), rgba(6,182,212,0.05));
+            height: 1px;
+        }
+    </style>
+</head>
+<body class="text-white antialiased overflow-x-hidden">
+
+    <!-- Background Effects -->
+    <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full pointer-events-none z-0"
+         style="background: radial-gradient(circle, rgba(6,182,212,0.06), transparent 70%);"></div>
+
+    <!-- Digital Rain Canvas -->
+    <canvas id="rain" class="fixed inset-0 w-full h-full pointer-events-none z-0" style="opacity: 0.2;"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-5xl h-12 z-50 flex items-center justify-between pl-6 pr-2 rounded-full border border-white/10 shadow-2xl anim-up"
+         style="background: rgba(10,10,10,0.8); backdrop-filter: blur(12px);">
+        <div class="flex items-center gap-3">
+            <div class="h-6 w-6 rounded flex items-center justify-center"
+                 style="background: linear-gradient(to top right, #06b6d4, #67e8f9); box-shadow: 0 0 18px rgba(6,182,212,0.55);">
+                <iconify-icon icon="lucide:pill" width="14" class="text-black"></iconify-icon>
+            </div>
+            <span class="font-space font-semibold text-sm tracking-tight">MedExplainer</span>
+        </div>
+        <div class="flex items-center gap-1">
+            <a href="#concepts" class="text-xs text-neutral-400 hover:text-white transition-colors duration-200 px-3 py-1.5 rounded-full hover:bg-white/5">Concepts</a>
+            <a href="#comparison" class="text-xs text-neutral-400 hover:text-white transition-colors duration-200 px-3 py-1.5 rounded-full hover:bg-white/5">Comparison</a>
+            <a href="#considerations" class="text-xs text-neutral-400 hover:text-white transition-colors duration-200 px-3 py-1.5 rounded-full hover:bg-white/5">Considerations</a>
+            <a href="https://youtu.be/r_5GM3_u0Wo?si=oSRIJEsf6gVIbH0A" target="_blank"
+               class="ml-2 h-8 px-4 rounded-full bg-trust-500 text-black text-xs font-semibold flex items-center gap-1.5 hover:bg-trust-400 transition-all"
+               style="box-shadow: 0 0 18px rgba(6,182,212,0.55);">
+                <iconify-icon icon="lucide:play" width="12"></iconify-icon>
+                Watch Video
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[80vh] flex flex-col items-center justify-center pt-40 pb-20 px-6 text-center z-10">
+        <div class="anim-up">
+            <div class="tag inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-trust-500 pulse-dot"></span>
+                <span class="text-[11px] font-medium tracking-wider uppercase text-trust-400">Video Summary</span>
+            </div>
+        </div>
+
+        <h1 class="font-space font-bold text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight gradient-text max-w-5xl anim-up delay-100">
+            Painkillers vs.<br>Antibiotics
+        </h1>
+
+        <p class="mt-8 text-lg md:text-xl font-light leading-relaxed tracking-tight text-neutral-400 max-w-2xl anim-up delay-200">
+            Understanding the fundamental differences between two essential medication categories — how they work, what they target, and why it matters.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-4 mt-10 anim-up delay-300">
+            <a href="https://youtu.be/r_5GM3_u0Wo?si=oSRIJEsf6gVIbH0A" target="_blank"
+               class="h-12 px-8 rounded-full bg-trust-500 text-black text-sm font-semibold tracking-tight flex items-center gap-2 hover:bg-trust-400 transition-all duration-300"
+               style="box-shadow: 0 0 18px rgba(6,182,212,0.55);">
+                <iconify-icon icon="lucide:play" width="16"></iconify-icon>
+                Watch on YouTube
+            </a>
+            <a href="#concepts"
+               class="h-12 px-8 rounded-full bg-white/5 border border-white/10 text-sm font-medium tracking-tight flex items-center gap-2 hover:bg-white/10 transition-colors duration-200">
+                <iconify-icon icon="lucide:arrow-down" width="16"></iconify-icon>
+                Explore Summary
+            </a>
+        </div>
+
+        <!-- Video Embed Card -->
+        <div class="mt-16 w-full max-w-4xl video-card rounded-3xl border border-white/10 overflow-hidden anim-up delay-400"
+             style="backdrop-filter: blur(24px); background: rgba(10,10,10,0.6);">
+            <div class="aspect-video w-full relative">
+                <img src="https://img.youtube.com/vi/r_5GM3_u0Wo/maxresdefault.jpg" alt="Video Thumbnail"
+                     class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+                <a href="https://youtu.be/r_5GM3_u0Wo?si=oSRIJEsf6gVIbH0A" target="_blank"
+                   class="absolute inset-0 flex items-center justify-center group">
+                    <div class="w-20 h-20 rounded-full bg-trust-500/90 flex items-center justify-center group-hover:scale-110 group-hover:bg-trust-400 transition-all duration-300 highlight-glow">
+                        <iconify-icon icon="lucide:play" width="32" class="text-black ml-1"></iconify-icon>
+                    </div>
+                </a>
+                <div class="absolute bottom-4 left-6 flex items-center gap-3">
+                    <span class="text-xs text-neutral-400 font-mono">3:22</span>
+                    <span class="w-1 h-1 rounded-full bg-neutral-600"></span>
+                    <span class="text-xs text-neutral-500">YouTube</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Concepts Section -->
+    <section id="concepts" class="relative py-24 px-6 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 anim-up">
+                <div class="tag inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6">
+                    <iconify-icon icon="lucide:book-open" width="12" class="text-trust-400"></iconify-icon>
+                    <span class="text-[11px] font-medium tracking-wider uppercase text-trust-400">Key Concepts</span>
+                </div>
+                <h2 class="font-space font-bold text-3xl md:text-5xl leading-[1.05] tracking-tight gradient-text">
+                    Symptoms vs. Root Causes
+                </h2>
+                <p class="mt-4 text-neutral-400 text-lg font-light tracking-tight max-w-2xl mx-auto">
+                    The first critical distinction: some medications make you feel better, others cure what's making you sick.
+                </p>
+            </div>
+
+            <!-- Concept 1: Symptom Relief -->
+            <div class="mb-8 anim-up delay-100">
+                <div class="rounded-2xl border border-white/10 p-6 md:p-8 card-hover"
+                     style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center float-icon"
+                                 style="background: rgba(6,182,212,0.08);">
+                                <iconify-icon icon="lucide:thermometer" width="22" class="text-trust-400"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <h3 class="font-space font-semibold text-lg text-white">Relieving Symptoms</h3>
+                                <span class="text-[10px] font-mono text-neutral-500 tracking-wider px-2 py-0.5 rounded bg-white/5 border border-white/5">0:22 – 0:34</span>
+                            </div>
+                            <p class="text-neutral-400 text-sm leading-relaxed">
+                                Symptom-relief medications like <span class="text-trust-400 font-medium">painkillers</span> for a headache or cough medicine for a sore throat help you feel better temporarily. They manage the discomfort but do not address the underlying cause of the illness.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concept 2: Treating Disease -->
+            <div class="mb-8 anim-up delay-200">
+                <div class="rounded-2xl border border-white/10 p-6 md:p-8 card-hover"
+                     style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center float-icon" style="animation-delay: 0.5s;">
+                                <iconify-icon icon="lucide:crosshair" width="22" class="text-trust-400"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <h3 class="font-space font-semibold text-lg text-white">Treating the Disease</h3>
+                                <span class="text-[10px] font-mono text-neutral-500 tracking-wider px-2 py-0.5 rounded bg-white/5 border border-white/5">0:22 – 0:34</span>
+                            </div>
+                            <p class="text-neutral-400 text-sm leading-relaxed">
+                                Disease-targeting medications like <span class="text-trust-400 font-medium">antibiotics</span> go after the root cause — the actual pathogen responsible for the infection. This is the fundamental philosophical difference between these two categories.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concept 3: How Painkillers Work -->
+            <div class="mb-8 anim-up delay-300">
+                <div class="rounded-2xl border border-white/10 p-6 md:p-8 card-hover"
+                     style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center float-icon" style="animation-delay: 1s;">
+                                <iconify-icon icon="lucide:pill" width="22" class="text-trust-400"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <h3 class="font-space font-semibold text-lg text-white">How Painkillers Work</h3>
+                                <span class="text-[10px] font-mono text-neutral-500 tracking-wider px-2 py-0.5 rounded bg-white/5 border border-white/5">0:44 – 1:06</span>
+                            </div>
+                            <p class="text-neutral-400 text-sm leading-relaxed">
+                                Drugs like <span class="text-white font-medium">aspirin</span> and <span class="text-white font-medium">paracetamol</span> reduce pain signals in your body, making you feel better. However, they do <span class="text-red-400/80 font-medium">not eliminate the actual pathogens</span> causing the illness — they only mask the symptoms.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concept 4: How Antibiotics Work -->
+            <div class="anim-up delay-400">
+                <div class="rounded-2xl border border-white/10 p-6 md:p-8 card-hover"
+                     style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center float-icon" style="animation-delay: 1.5s;">
+                                <iconify-icon icon="lucide:shield-check" width="22" class="text-trust-400"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <h3 class="font-space font-semibold text-lg text-white">How Antibiotics Work</h3>
+                                <span class="text-[10px] font-mono text-neutral-500 tracking-wider px-2 py-0.5 rounded bg-white/5 border border-white/5">1:13 – 1:26</span>
+                            </div>
+                            <p class="text-neutral-400 text-sm leading-relaxed">
+                                Antibiotics are specifically designed to <span class="text-trust-400 font-medium">kill bacteria</span> or <span class="text-trust-400 font-medium">inhibit their growth</span>. Unlike painkillers, they target the actual organism causing the infection, addressing the root cause rather than just the symptoms.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="relative py-24 px-6 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 anim-up">
+                <div class="tag inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6">
+                    <iconify-icon icon="lucide:git-compare" width="12" class="text-trust-400"></iconify-icon>
+                    <span class="text-[11px] font-medium tracking-wider uppercase text-trust-400">Side-by-Side</span>
+                </div>
+                <h2 class="font-space font-bold text-3xl md:text-5xl leading-[1.05] tracking-tight gradient-text">
+                    Painkillers vs. Antibiotics
+                </h2>
+            </div>
+
+            <!-- Comparison Grid -->
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Painkillers Card -->
+                <div class="anim-up delay-100">
+                    <div class="rounded-3xl border border-white/10 p-8 h-full card-hover"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-10 h-10 rounded-lg border border-amber-500/20 flex items-center justify-center bg-amber-500/10">
+                                <iconify-icon icon="lucide:heart-pulse" width="20" class="text-amber-400"></iconify-icon>
+                            </div>
+                            <div>
+                                <h3 class="font-space font-semibold text-white">Painkillers</h3>
+                                <p class="text-[11px] text-neutral-500 tracking-wider uppercase">Symptom Relief</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <iconify-icon icon="lucide:check" width="16" class="text-amber-400 mt-0.5 flex-shrink-0"></iconify-icon>
+                                <p class="text-sm text-neutral-400">Reduce pain and discomfort</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <iconify-icon icon="lucide:check" width="16" class="text-amber-400 mt-0.5 flex-shrink-0"></iconify-icon>
+                                <p class="text-sm text-neutral-400">Lower fever and inflammation</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <iconify-icon icon="lucide:check" width="16" class="text-amber-400 mt-0.5 flex-shrink-0"></iconify-icon>
+                                <p class="text-sm text-neutral-400">Work against any cause (viral, bacterial, etc.)</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <iconify-icon icon="lucide:x" width="16" class="text-red-400/60 mt-0.5 flex-shrink-0"></iconify-icon>
+                                <p class="text-sm text-neutral-500">Do not kill pathogens</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <iconify-icon icon="lucide:x" width="16" class="text-red-400/60 mt-0.5 flex-shrink-0"></iconify-icon>
+                                <p class="text-sm text-neutral-500">Do not cure the underlying disease</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-white/5">
+                            <p class="text-[11px] text-neutral-600 uppercase tracking-wider mb-2">Examples</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/5 text-neutral-400">Aspirin</span>
+                                <span class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/5 text-neutral-400">Paracetamol</span>
+                                <span class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/5 text-neutral-400">Ibuprofen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Antibiotics Card -->
+                <div class="anim-up delay-200">
+                    <div class="rounded-3xl border border-trust-500/20 p-8 h-full card-hover relative overflow-hidden"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="absolute top-0 right-0 w-48 h-48 pointer-events-none"
+                             style="background: radial-gradient(circle, rgba(6,182,212,0.06), transparent 70%);"></div>
+                        <div class="relative">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-10 h-10 rounded-lg border border-trust-500/25 flex items-center justify-center bg-trust-500/10">
+                                    <iconify-icon icon="lucide:shield-check" width="20" class="text-trust-400"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h3 class="font-space font-semibold text-white">Antibiotics</h3>
+                                    <p class="text-[11px] text-neutral-500 tracking-wider uppercase">Disease Treatment</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="lucide:check" width="16" class="text-trust-400 mt-0.5 flex-shrink-0"></iconify-icon>
+                                    <p class="text-sm text-neutral-400">Kill bacteria directly</p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="lucide:check" width="16" class="text-trust-400 mt-0.5 flex-shrink-0"></iconify-icon>
+                                    <p class="text-sm text-neutral-400">Inhibit bacterial growth</p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="lucide:check" width="16" class="text-trust-400 mt-0.5 flex-shrink-0"></iconify-icon>
+                                    <p class="text-sm text-neutral-400">Treat the root cause of infection</p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="lucide:x" width="16" class="text-red-400/60 mt-0.5 flex-shrink-0"></iconify-icon>
+                                    <p class="text-sm text-neutral-500">Only work against bacteria</p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <iconify-icon icon="lucide:x" width="16" class="text-red-400/60 mt-0.5 flex-shrink-0"></iconify-icon>
+                                    <p class="text-sm text-neutral-500">Completely ineffective against viruses</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-white/5">
+                                <p class="text-[11px] text-neutral-600 uppercase tracking-wider mb-2">Examples</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-xs px-3 py-1 rounded-full bg-trust-500/10 border border-trust-500/15 text-trust-400">Amoxicillin</span>
+                                    <span class="text-xs px-3 py-1 rounded-full bg-trust-500/10 border border-trust-500/15 text-trust-400">Penicillin</span>
+                                    <span class="text-xs px-3 py-1 rounded-full bg-trust-500/10 border border-trust-500/15 text-trust-400">Azithromycin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Antibiotics Fail Against Viruses -->
+    <section class="relative py-24 px-6 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 anim-up">
+                <div class="tag inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6">
+                    <iconify-icon icon="lucide:alert-triangle" width="12" class="text-red-400"></iconify-icon>
+                    <span class="text-[11px] font-medium tracking-wider uppercase text-red-400">Critical Insight</span>
+                </div>
+                <h2 class="font-space font-bold text-3xl md:text-5xl leading-[1.05] tracking-tight gradient-text">
+                    Why Antibiotics Fail<br>Against Viruses
+                </h2>
+                <p class="mt-4 text-neutral-400 text-lg font-light tracking-tight max-w-2xl mx-auto">
+                    This is one of the most important — and most misunderstood — concepts in medicine.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Target Specificity -->
+                <div class="anim-up delay-100">
+                    <div class="rounded-3xl border border-white/10 p-8 h-full card-hover"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-10 h-10 rounded-lg border border-red-500/20 flex items-center justify-center bg-red-500/10">
+                                <iconify-icon icon="lucide:target" width="20" class="text-red-400"></iconify-icon>
+                            </div>
+                            <div>
+                                <h3 class="font-space font-semibold text-white text-base">Target Specificity</h3>
+                                <span class="text-[10px] font-mono text-neutral-600 tracking-wider">1:27 – 2:16</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neutral-400 leading-relaxed mb-5">
+                            Antibiotics are precision tools designed to interfere with <span class="text-white font-medium">bacterial structures</span> — cell walls, protein synthesis, DNA replication. Viruses have fundamentally different structures.
+                        </p>
+                        <div class="rounded-xl border border-white/5 p-4" style="background: rgba(255,255,255,0.02);">
+                            <div class="flex items-center gap-3">
+                                <iconify-icon icon="lucide:quote" width="16" class="text-red-400/60 flex-shrink-0"></iconify-icon>
+                                <p class="text-xs text-neutral-500 italic leading-relaxed">
+                                    "Using antibiotics against a virus is like using a flyswatter against a tree — the tool simply doesn't match the target."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biological Hiding -->
+                <div class="anim-up delay-200">
+                    <div class="rounded-3xl border border-white/10 p-8 h-full card-hover"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-10 h-10 rounded-lg border border-red-500/20 flex items-center justify-center bg-red-500/10">
+                                <iconify-icon icon="lucide:eye-off" width="20" class="text-red-400"></iconify-icon>
+                            </div>
+                            <div>
+                                <h3 class="font-space font-semibold text-white text-base">Biological Hiding</h3>
+                                <span class="text-[10px] font-mono text-neutral-600 tracking-wider">1:27 – 2:16</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neutral-400 leading-relaxed mb-5">
+                            Viruses reproduce <span class="text-white font-medium">inside human host cells</span>, hijacking our cellular machinery. This makes them extremely difficult to destroy without simultaneously harming the body's own cells.
+                        </p>
+                        <div class="flex items-center gap-4 mt-6">
+                            <div class="flex-1 h-px bg-gradient-to-r from-red-500/30 to-transparent"></div>
+                            <div class="flex items-center gap-2">
+                                <iconify-icon icon="lucide:bug" width="14" class="text-red-400/50"></iconify-icon>
+                                <span class="text-[10px] text-neutral-600 uppercase tracking-wider">Viral shelter</span>
+                            </div>
+                            <div class="flex-1 h-px bg-gradient-to-l from-red-500/30 to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Important Considerations -->
+    <section id="considerations" class="relative py-24 px-6 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 anim-up">
+                <div class="tag inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6">
+                    <iconify-icon icon="lucide:alert-circle" width="12" class="text-trust-400"></iconify-icon>
+                    <span class="text-[11px] font-medium tracking-wider uppercase text-trust-400">Important Considerations</span>
+                </div>
+                <h2 class="font-space font-bold text-3xl md:text-5xl leading-[1.05] tracking-tight gradient-text">
+                    What You Need to Know
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Selection -->
+                <div class="anim-up delay-100">
+                    <div class="rounded-2xl border border-white/10 p-6 card-hover h-full"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center bg-white/5 mb-5">
+                            <iconify-icon icon="lucide:microscope" width="20" class="text-trust-400"></iconify-icon>
+                        </div>
+                        <span class="text-[10px] font-mono text-neutral-600 tracking-wider">2:21 – 2:37</span>
+                        <h3 class="font-space font-semibold text-white mt-2 mb-3">Not One-Size-Fits-All</h3>
+                        <p class="text-sm text-neutral-400 leading-relaxed">
+                            Not all antibiotics work on all bacteria. Doctors may perform <span class="text-white font-medium">lab tests</span> to identify the specific pathogen before prescribing the right antibiotic — precision matters.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Resistance -->
+                <div class="anim-up delay-200">
+                    <div class="rounded-2xl border border-red-500/20 p-6 card-hover h-full relative overflow-hidden"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full pointer-events-none"
+                             style="background: radial-gradient(circle, rgba(239,68,68,0.08), transparent 70%);"></div>
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-lg border border-red-500/20 flex items-center justify-center bg-red-500/10 mb-5">
+                                <iconify-icon icon="lucide:shield-alert" width="20" class="text-red-400"></iconify-icon>
+                            </div>
+                            <span class="text-[10px] font-mono text-neutral-600 tracking-wider">2:40 – 2:54</span>
+                            <h3 class="font-space font-semibold text-white mt-2 mb-3">Antibiotic Resistance</h3>
+                            <p class="text-sm text-neutral-400 leading-relaxed">
+                                A <span class="text-red-400 font-medium">significant global concern</span>: bacteria are evolving to resist existing antibiotics, rendering once-effective treatments useless. Misuse accelerates this process.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modern Medicine -->
+                <div class="anim-up delay-300">
+                    <div class="rounded-2xl border border-trust-500/15 p-6 card-hover h-full relative overflow-hidden"
+                         style="background: rgba(10,10,10,0.6); backdrop-filter: blur(24px);">
+                        <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full pointer-events-none"
+                             style="background: radial-gradient(circle, rgba(6,182,212,0.08), transparent 70%);"></div>
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-lg border border-trust-500/20 flex items-center justify-center bg-trust-500/10 mb-5">
+                                <iconify-icon icon="lucide:sparkles" width="20" class="text-trust-400"></iconify-icon>
+                            </div>
+                            <span class="text-[10px] font-mono text-neutral-600 tracking-wider">2:57 – 3:22</span>
+                            <h3 class="font-space font-semibold text-white mt-2 mb-3">Modern Advancements</h3>
+                            <p class="text-sm text-neutral-400 leading-relaxed">
+                                Modern medicine allows us to treat <span class="text-trust-400 font-medium">both symptoms and root causes simultaneously</span>, significantly improving quality of life and longevity around the world.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Takeaway Banner -->
+    <section class="relative py-24 px-6 z-10">
+        <div class="max-w-4xl mx-auto anim-up">
+            <div class="rounded-3xl border border-trust-500/20 p-8 md:p-12 text-center relative overflow-hidden"
+                 style="background: rgba(6,182,212,0.03); backdrop-filter: blur(24px);">
+                <div class="absolute inset-0 pointer-events-none"
+                     style="background: radial-gradient(circle at center, rgba(6,182,212,0.06), transparent 60%);"></div>
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-2xl border border-trust-500/20 flex items-center justify-center bg-trust-500/10 mx-auto mb-6"
+                         style="box-shadow: 0 0 18px rgba(6,182,212,0.25);">
+                        <iconify-icon icon="lucide:lightbulb" width="26" class="text-trust-400"></iconify-icon>
+                    </div>
+                    <h2 class="font-space font-bold text-2xl md:text-3xl tracking-tight text-white mb-4">Key Takeaway</h2>
+                    <p class="text-neutral-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+                        Painkillers relieve <span class="text-white font-medium">symptoms</span> but don't cure disease. Antibiotics target the <span class="text-trust-400 font-medium">root cause</span> — but only for bacterial infections. Using antibiotics for viruses is not just ineffective, it contributes to <span class="text-red-400 font-medium">antibiotic resistance</span>, one of the greatest threats to global health.
+                    </p>
+                    <a href="https://youtu.be/r_5GM3_u0Wo?si=oSRIJEsf6gVIbH0A" target="_blank"
+                       class="inline-flex items-center gap-2 mt-8 h-12 px-8 rounded-full bg-trust-500 text-black text-sm font-semibold tracking-tight hover:bg-trust-400 transition-all duration-300"
+                       style="box-shadow: 0 0 18px rgba(6,182,212,0.55);">
+                        <iconify-icon icon="lucide:play" width="16"></iconify-icon>
+                        Watch the Full Video
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative py-12 px-6 z-10 border-t border-white/5">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <a href="https://clairo.web.app" target="_blank" class="flex items-center gap-3 group">
+                    <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png"
+                         alt="Clairo Logo" class="h-8 w-8 rounded-lg object-cover">
+                    <div>
+                        <span class="text-sm font-medium text-white group-hover:text-trust-400 transition-colors duration-200">Powered by Clairo</span>
+                        <span class="text-xs text-neutral-600 ml-2">clairo.web.app</span>
+                    </div>
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://youtu.be/r_5GM3_u0Wo?si=oSRIJEsf6gVIbH0A" target="_blank"
+                   class="text-xs text-neutral-500 hover:text-trust-400 transition-colors duration-200 flex items-center gap-1.5">
+                    <iconify-icon icon="lucide:external-link" width="12"></iconify-icon>
+                    Source Video
+                </a>
+                <span class="w-1 h-1 rounded-full bg-neutral-700"></span>
+                <span class="text-xs text-neutral-600">Video Summary</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Digital Rain Canvas
+        const canvas = document.getElementById('rain');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const chars = ['⟟', 'Δ', '0', '1'];
+        const colWidth = 20;
+        let columns = [];
+
+        function initColumns() {
+            const numCols = Math.floor(canvas.width / colWidth);
+            columns = [];
+            for (let i = 0; i < numCols; i++) {
+                columns.push(Math.random() * canvas.height / 14);
+            }
+        }
+        initColumns();
+        window.addEventListener('resize', initColumns);
+
+        function drawRain() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#06b6d4';
+            ctx.font = '14px JetBrains Mono, monospace';
+
+            for (let i = 0; i < columns.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(char, i * colWidth, columns[i] * 14);
+                if (columns[i] * 14 > canvas.height && Math.random() > 0.975) {
+                    columns[i] = 0;
+                }
+                columns[i]++;
+            }
+        }
+
+        setInterval(drawRain, 50);
+
+        // Scroll-triggered animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.anim-up').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            // Allow hero elements to play immediately
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                el.style.animationPlayState = 'running';
+            } else {
+                observer.observe(el);
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
