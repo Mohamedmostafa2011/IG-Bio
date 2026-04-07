@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antibiotic Resistance - Clairo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated water effect background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 200, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(140, 180, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(100, 220, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(160, 190, 255, 0.15) 0%, transparent 50%);
+            animation: wave 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes wave {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg); 
+            }
+            25% { 
+                transform: translate(5%, -5%) rotate(1deg); 
+            }
+            50% { 
+                transform: translate(-5%, 5%) rotate(-1deg); 
+            }
+            75% { 
+                transform: translate(3%, 3%) rotate(0.5deg); 
+            }
+        }
+
+        /* Water droplets */
+        .water-drop {
+            position: fixed;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-30px) translateX(20px); opacity: 0.6; }
+        }
+
+        .drop1 { width: 100px; height: 100px; top: 10%; left: 10%; animation-delay: 0s; }
+        .drop2 { width: 150px; height: 150px; top: 60%; left: 80%; animation-delay: 5s; }
+        .drop3 { width: 80px; height: 80px; top: 40%; left: 60%; animation-delay: 10s; }
+        .drop4 { width: 120px; height: 120px; top: 80%; left: 20%; animation-delay: 3s; }
+        .drop5 { width: 90px; height: 90px; top: 20%; left: 85%; animation-delay: 7s; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Powered by header */
+        .powered-by {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 30px;
+            padding: 25px 45px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .logo {
+            width: 165px;
+            height: 120px;
+            display: block;
+            margin: 0 auto 15px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        }
+
+        .powered-text {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1em;
+            font-weight: 400;
+        }
+
+        .powered-text a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .powered-text a:hover {
+            opacity: 0.7;
+        }
+
+        /* Main title */
+        .main-title {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 50px 40px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .main-title h1 {
+            color: white;
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.6em;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* Glass cards */
+        .glass-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            border-radius: 30px;
+            padding: 45px;
+            margin-bottom: 35px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .glass-section:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .section-header {
+            color: white;
+            font-size: 2.2em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Definition boxes */
+        .definition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .definition-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .definition-card:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: scale(1.03);
+        }
+
+        .def-title {
+            color: #fff;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .def-content {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.05em;
+            line-height: 1.7;
+        }
+
+        /* Zone grid */
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .zone-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zone-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            animation: shimmer 6s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .zone-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .zone-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .zone-title {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .zone-content {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.05em;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .zone-content strong {
+            color: white;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .highlight-box {
+            background: rgba(255, 215, 100, 0.15);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid rgba(255, 215, 100, 0.6);
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Steps section */
+        .steps-list {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px 40px;
+            margin-top: 25px;
+        }
+
+        .steps-list ol {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1em;
+            line-height: 2;
+            padding-left: 25px;
+        }
+
+        .steps-list li {
+            margin-bottom: 20px;
+            padding-left: 10px;
+        }
+
+        .steps-list strong {
+            color: white;
+        }
+
+        /* Key messages */
+        .key-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 25px 0;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .key-message:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .key-message-text {
+            color: white;
+            font-size: 1.3em;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        /* Creator footer */
+        .creator-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .creator-text {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3em;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .creator-name {
+            color: white;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .main-title h1 {
+                font-size: 2.2em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .section-header {
+                font-size: 1.7em;
+            }
+
+            .zone-grid,
+            .definition-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .glass-section {
+                padding: 30px 25px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Water drops -->
+    <div class="water-drop drop1"></div>
+    <div class="water-drop drop2"></div>
+    <div class="water-drop drop3"></div>
+    <div class="water-drop drop4"></div>
+    <div class="water-drop drop5"></div>
+
+    <div class="container">
+        <!-- Powered by Section -->
+        <div class="powered-by">
+            <div class="logo-container">
+                <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo Logo" class="logo">
+                <div class="powered-text">Powered by <a href="https://clairo.web.app" target="_blank">Clairo</a></div>
+            </div>
+        </div>
+
+        <!-- Main Title -->
+        <div class="main-title">
+            <h1>Antibiotic Resistance</h1>
+            <div class="subtitle">"Good Luck!" Campaign</div>
+        </div>
+
+        <!-- Definitions Section -->
+        <div class="glass-section">
+            <h2 class="section-header">📚 Key Definitions</h2>
+            <div class="definition-grid">
+                <div class="definition-card">
+                    <div class="def-title">💊 Drug Definition</div>
+                    <div class="def-content">A substance that modifies chemical reactions in the body.</div>
+                </div>
+                <div class="definition-card">
+                    <div class="def-title">🦠 Antibiotics</div>
+                    <div class="def-content">Like penicillin, destroy bacteria, but not viruses!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The 4 Zones -->
+        <div class="glass-section">
+            <h2 class="section-header">🎯 The Four Zones of Antibiotic Resistance</h2>
+            <div class="zone-grid">
+                <!-- Zone 1 -->
+                <div class="zone-card">
+                    <div class="zone-badge">①</div>
+                    <div class="zone-title">Zone 1: The Initial Struggle</div>
+                    <div class="zone-content">
+                        <strong>NATURAL VARIATION:</strong>
+                        <p>A few bacteria are naturally resistant to antibiotics from the start.</p>
+                    </div>
+                </div>
+
+                <!-- Zone 2 -->
+                <div class="zone-card">
+                    <div class="zone-badge">②</div>
+                    <div class="zone-title">Zone 2: The Attack</div>
+                    <div class="zone-content">
+                        <strong>ANTIBIOTIC (PENICILLIN)</strong>
+                        <p><strong>SURVIVAL:</strong> Antibiotic kills non-resistant strains, leaving resistant ones alive.</p>
+                    </div>
+                </div>
+
+                <!-- Zone 3 -->
+                <div class="zone-card">
+                    <div class="zone-badge">③</div>
+                    <div class="zone-title">Zone 3: The End-Result</div>
+                    <div class="zone-content">
+                        <strong>MRSA SUPERBUG (STAPHYLOCOCCUS AUREUS)</strong>
+                        <div class="highlight-box">
+                            ⚠️ <strong>MRSA: SERIOUS INFECTION!</strong><br>
+                            Resistant to penicillin and others.
+                        </div>
+                        <div class="highlight-box">
+                            📈 <strong>RATE OF DEVELOPMENT:</strong><br>
+                            Over-prescription speeds this up!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zone 4 -->
+                <div class="zone-card">
+                    <div class="zone-badge">④</div>
+                    <div class="zone-title">Zone 4: The Solution</div>
+                    <div class="zone-content">
+                        <strong>A SORE THROAT? (VIRUS) - NO ANTIBIOTICS</strong>
+                        <div class="highlight-box">
+                            🔑 <strong>PREVENTION IS KEY:</strong><br>
+                            Only use antibiotics when really needed.
+                        </div>
+                        <div class="highlight-box">
+                            ✅ <strong>FINISH THE ENTIRE COURSE</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Steps of Resistance -->
+        <div class="glass-section">
+            <h2 class="section-header">🔬 Steps of Resistance</h2>
+            <div class="steps-list">
+                <ol>
+                    <li><strong>Some of the bacteria are resistant to antibiotics.</strong></li>
+                    <li><strong>This means that when you treat the bacteria,</strong> only the non-resistant strains of bacteria are killed.</li>
+                    <li><strong>The individual resistant bacteria will survive and reproduce,</strong> so the population will increase.</li>
+                    <li><strong>This resistant strain could cause a serious infection</strong> that can't be treated by antibiotics.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Key Messages -->
+        <div class="glass-section">
+            <h2 class="section-header">⚡ Important Messages</h2>
+            <div class="key-message">
+                <div class="key-message-text">
+                    🏆 <strong>FINISHED THE WHOLE COURSE!</strong><br>
+                    To kill ALL bacteria and prevent resistant ones from surviving.
+                </div>
+            </div>
+            <div class="key-message">
+                <div class="key-message-text">
+                    💡 It's important that you finish the whole course.
+                </div>
+            </div>
+        </div>
+
+        <!-- Creator Footer -->
+        <div class="creator-footer">
+            <div class="creator-text">
+                Created by: <span class="creator-name">Yahya Amer "elmagnifico"</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
