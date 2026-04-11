@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clairo Bio Revision</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0a0a0f;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(120, 80, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(100, 200, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(180, 100, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: floatOrb 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(120, 80, 255, 0.15);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: rgba(80, 180, 255, 0.12);
+            bottom: -80px;
+            right: -80px;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: rgba(180, 100, 255, 0.1);
+            top: 50%;
+            left: 60%;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(40px, 30px) scale(1.02); }
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 700px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .card {
+            background: rgba(15, 15, 25, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 28px;
+            padding: 50px 45px 45px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(120, 80, 255, 0.4), rgba(100, 200, 255, 0.3), transparent);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 0%, rgba(120, 80, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Brand Link */
+        .brand-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            cursor: pointer;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .brand-link:hover {
+            opacity: 0.8;
+        }
+
+        .brand-link:hover .logo-wrapper {
+            border-color: rgba(120, 80, 255, 0.4);
+            background: rgba(120, 80, 255, 0.08);
+            box-shadow: 0 0 20px rgba(120, 80, 255, 0.15);
+        }
+
+        .brand-link:hover .brand-url {
+            color: rgba(120, 160, 255, 0.7);
+        }
+
+        .logo-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 76px;
+            height: 76px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(120, 80, 255, 0.15);
+            margin-bottom: 20px;
+            position: relative;
+            animation: logoFloat 4s ease-in-out infinite;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .logo-wrapper img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .brand-link:hover .brand-name {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .brand-url {
+            font-size: 12px;
+            color: rgba(120, 160, 255, 0.4);
+            letter-spacing: 1px;
+            transition: color 0.2s ease;
+        }
+
+        .subject-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(80, 200, 120, 0.1), rgba(80, 200, 120, 0.05));
+            border: 1px solid rgba(80, 200, 120, 0.15);
+            border-radius: 100px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subject-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #50c878;
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(80, 200, 120, 0.4); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(80, 200, 120, 0); }
+        }
+
+        .subject-badge span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #50c878;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            font-size: 38px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(200, 200, 255, 0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            line-height: 1.6;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 12px 0;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.6;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInItem 0.5s ease forwards;
+        }
+
+        .features li:not(:last-child) {
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .features li:nth-child(1) { animation-delay: 0.3s; }
+        .features li:nth-child(2) { animation-delay: 0.4s; }
+        .features li:nth-child(3) { animation-delay: 0.5s; }
+        .features li:nth-child(4) { animation-delay: 0.6s; }
+        .features li:nth-child(5) { animation-delay: 0.7s; }
+
+        @keyframes fadeInItem {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .features li .check-icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 7px;
+            background: rgba(120, 80, 255, 0.1);
+            border: 1px solid rgba(120, 80, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+        }
+
+        .features li .check-icon svg {
+            width: 12px;
+            height: 12px;
+            color: rgba(150, 120, 255, 0.8);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7850ff, #6040e0);
+            color: #ffffff;
+            border: 1px solid rgba(120, 80, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(120, 80, 255, 0.2);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(120, 80, 255, 0.35);
+        }
+
+        .btn-primary:hover svg {
+            transform: translateY(2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:hover svg {
+            transform: scale(1.1);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        /* Powered By Footer */
+        .powered-by {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            margin-top: 22px;
+            opacity: 0;
+            animation: fadeInPowered 0.6s ease 0.9s forwards;
+        }
+
+        @keyframes fadeInPowered {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .powered-by a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            padding: 8px 16px 8px 10px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.25s ease;
+        }
+
+        .powered-by a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(120, 80, 255, 0.2);
+        }
+
+        .powered-by-text {
+            font-size: 11.5px;
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .powered-by-logo {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .powered-by-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.5px;
+        }
+
+        .powered-by-divider {
+            width: 1px;
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Preview Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeInModal 0.3s ease;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 900px;
+            height: 85vh;
+            background: #0f0f1a;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+        }
+
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-header-left img {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .modal-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .modal-close {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 60, 60, 0.1);
+            border-color: rgba(255, 60, 60, 0.2);
+            color: #ff6b6b;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(120, 80, 255, 0.3);
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 24px 35px;
+                border-radius: 22px;
+            }
+
+            .title {
+                font-size: 26px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 15px 20px;
+            }
+
+            .modal-content {
+                height: 90vh;
+                border-radius: 16px;
+            }
+
+            .powered-by-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="card">
+
+            <!-- Brand — fully clickable -->
+            <a class="brand-link" href="https://clairo.web.app" target="_blank" rel="noopener noreferrer">
+                <div class="logo-wrapper">
+                    <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo Logo" />
+                </div>
+                <div class="brand-name">Clairo</div>
+                <div class="brand-url">clairo.web.app</div>
+            </a>
+
+            <!-- Subject Badge -->
+            <div style="text-align: center; position: relative; z-index: 1;">
+                <div class="subject-badge">
+                    <span class="dot"></span>
+                    <span>Biology</span>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="title-section">
+                <h1 class="title">Clairo Final Revision</h1>
+                <p class="subtitle">CIE IGCSE Biology 0610 &nbsp;|&nbsp; All 20 Chapters + P6 Guide</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Features -->
+            <ul class="features">
+                <li>
+                    <span class="check-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    All 20 Chapters — 2 Pages Each with Full Detail
+                </li>
+                <li>
+                    <span class="check-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    Key Definitions, Equations & Complete Tables
+                </li>
+                <li>
+                    <span class="check-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    Exam Tips & High-Yield Facts for Full Marks
+                </li>
+                <li>
+                    <span class="check-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    Complete P6 Practical Guide + Worked Examples
+                </li>
+                <li>
+                    <span class="check-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    Index Page with Chapter & Section Page Numbers
+                </li>
+            </ul>
+
+            <!-- Buttons -->
+            <div class="buttons">
+                <a href="https://huggingface.co/datasets/MidoSTM11/Ig-Bio/resolve/main/ClairoRevision_Biology.pdf" download class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download PDF
+                </a>
+                <button class="btn btn-secondary" onclick="openPreview()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Preview
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Powered By -->
+        <div class="powered-by">
+            <span class="powered-by-text">Powered by</span>
+            <a href="https://clairo.web.app" target="_blank" rel="noopener noreferrer">
+                <img
+                    class="powered-by-logo"
+                    src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png"
+                    alt="Clairo Logo"
+                />
+                <span class="powered-by-name">Clairo</span>
+                <span class="powered-by-divider"></span>
+                <span style="font-size:11px; color: rgba(255,255,255,0.2); font-weight:400; letter-spacing:0.3px;">clairo.web.app</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo" />
+                    <h3>Clairo — Biology Revision Guide</h3>
+                </div>
+                <button class="modal-close" onclick="closePreview()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfFrame" src="" title="PDF Preview"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 22; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            p.style.animationDelay = (Math.random() * 12) + 's';
+            const size = (Math.random() * 2 + 1) + 'px';
+            p.style.width = size;
+            p.style.height = size;
+            p.style.opacity = Math.random() * 0.4;
+            particlesContainer.appendChild(p);
+        }
+
+        const pdfURL = 'https://huggingface.co/datasets/MidoSTM11/Ig-Bio/resolve/main/ClairoRevision_Biology.pdf';
+
+        function openPreview() {
+            const modal = document.getElementById('previewModal');
+            document.getElementById('pdfFrame').src = pdfURL;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreview() {
+            const modal = document.getElementById('previewModal');
+            modal.classList.remove('active');
+            document.getElementById('pdfFrame').src = '';
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('previewModal').addEventListener('click', function(e) {
+            if (e.target === this) closePreview();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePreview();
+        });
+    </script>
+</body>
+</html>
