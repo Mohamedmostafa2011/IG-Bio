@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambridge IGCSE Biology – Hard Questions</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e29;
+    --border: #252b3b;
+    --accent: #4fffb0;
+    --accent2: #ff6b6b;
+    --accent3: #ffcf5c;
+    --text: #e8ecf4;
+    --muted: #6b7594;
+    --p1: #4fffb0;
+    --p3: #60a5fa;
+    --p6: #f472b6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,255,176,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,255,176,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Header */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,15,20,0.9);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .clairo-logo {
+    height: 36px;
+    width: auto;
+    border-radius: 8px;
+  }
+
+  .clairo-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .clairo-label span {
+    color: var(--accent);
+  }
+
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  .header-title small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 60px 40px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    padding: 4px 12px;
+    border: 1px solid rgba(79,255,176,0.3);
+    border-radius: 100px;
+    background: rgba(79,255,176,0.05);
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent) 0%, #00c9ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+
+  /* Section nav tabs */
+  .section-nav {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 8px;
+    padding: 0 40px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover { border-color: var(--muted); color: var(--text); }
+  .tab-btn.active-p1 { border-color: var(--p1); color: var(--p1); background: rgba(79,255,176,0.08); }
+  .tab-btn.active-p3 { border-color: var(--p3); color: var(--p3); background: rgba(96,165,250,0.08); }
+  .tab-btn.active-p6 { border-color: var(--p6); color: var(--p6); background: rgba(244,114,182,0.08); }
+
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .dot-p1 { background: var(--p1); }
+  .dot-p3 { background: var(--p3); }
+  .dot-p6 { background: var(--p6); }
+
+  /* Section panels */
+  .section-panel {
+    display: none;
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .section-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .icon-p1 { background: rgba(79,255,176,0.1); color: var(--p1); border: 1px solid rgba(79,255,176,0.2); }
+  .icon-p3 { background: rgba(96,165,250,0.1); color: var(--p3); border: 1px solid rgba(96,165,250,0.2); }
+  .icon-p6 { background: rgba(244,114,182,0.1); color: var(--p6); border: 1px solid rgba(244,114,182,0.2); }
+
+  .section-meta h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-meta p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 3px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Paper cards */
+  .paper-group {
+    margin-bottom: 48px;
+  }
+
+  .paper-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .paper-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Question cards */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .q-card:hover { border-color: #333a50; }
+
+  .q-header {
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+
+  .num-p1 { background: rgba(79,255,176,0.1); color: var(--p1); }
+  .num-p3 { background: rgba(96,165,250,0.1); color: var(--p3); }
+  .num-p6 { background: rgba(244,114,182,0.1); color: var(--p6); }
+
+  .q-body { flex: 1; }
+
+  .q-topic {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    color: #9aa3bc;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .q-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .q-text .opt {
+    display: block;
+    padding: 3px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  .q-text .opt-letter {
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  .q-marks {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    margin-top: 2px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .marks-badge {
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--accent3);
+    border-color: rgba(255,207,92,0.2);
+    background: rgba(255,207,92,0.05);
+  }
+
+  .q-footer {
+    padding: 0 24px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .reveal-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .reveal-btn svg {
+    transition: transform 0.2s ease;
+  }
+
+  .reveal-btn:hover {
+    color: var(--text);
+    border-color: #3a4260;
+  }
+
+  .reveal-btn.revealed {
+    color: var(--accent);
+    border-color: rgba(79,255,176,0.3);
+    background: rgba(79,255,176,0.05);
+  }
+
+  .reveal-btn.revealed-p3 {
+    color: var(--p3);
+    border-color: rgba(96,165,250,0.3);
+    background: rgba(96,165,250,0.05);
+  }
+
+  .reveal-btn.revealed-p6 {
+    color: var(--p6);
+    border-color: rgba(244,114,182,0.3);
+    background: rgba(244,114,182,0.05);
+  }
+
+  .reveal-btn.revealed svg { transform: rotate(180deg); }
+
+  .difficulty-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,107,107,0.2);
+    color: var(--accent2);
+    background: rgba(255,107,107,0.05);
+  }
+
+  /* Answer panel */
+  .answer-panel {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 20px 24px;
+    background: rgba(10,12,18,0.6);
+    animation: slideDown 0.25s ease;
+  }
+
+  .answer-panel.open { display: block; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ans-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .ans-content {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #9aa3bc;
+  }
+
+  .ans-content .mark-point {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    align-items: flex-start;
+  }
+
+  .ans-content .mark-point:last-child { border-bottom: none; }
+
+  .ans-bullet {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 12px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .ans-bullet-p3 { color: var(--p3); }
+  .ans-bullet-p6 { color: var(--p6); }
+
+  .ans-key {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    background: rgba(79,255,176,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,255,176,0.2);
+    margin-bottom: 8px;
+  }
+
+  .ans-note {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Difficulty legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-logo img { height: 28px; border-radius: 6px; }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-text a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, #00c9ff 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: width 0.3s ease;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    header, .hero, .section-nav, .section-panel { padding-left: 20px; padding-right: 20px; }
+    .header-title { font-size: 13px; }
+    .section-nav { gap: 6px; flex-wrap: wrap; }
+    .tab-btn { font-size: 12px; padding: 8px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header>
+  <div class="logo-area">
+    <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo Logo" class="clairo-logo">
+    <span class="clairo-label">Powered by <span>Clairo</span></span>
+  </div>
+  <div class="header-title">
+    Biology Hard Questions
+    <small>Cambridge IGCSE 0610 · 2024 Series</small>
+  </div>
+  <div class="badge">2024 Papers</div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">⚡ Exam Revision Tool</div>
+  <h1>The <em>Hardest</em><br>Questions to Crack</h1>
+  <p>Curated from June &amp; November 2024 Cambridge IGCSE Biology papers. Each question is selected for its difficulty, mark allocation, and how often students lose marks. Reveal the full mark scheme answer when you're ready.</p>
+</div>
+
+<!-- Navigation Tabs -->
+<div class="section-nav">
+  <button class="tab-btn active-p1" onclick="showSection('p1')">
+    <span class="dot dot-p1"></span> Paper 1 · MCQ
+  </button>
+  <button class="tab-btn" onclick="showSection('p3')">
+    <span class="dot dot-p3"></span> Paper 3 · Theory
+  </button>
+  <button class="tab-btn" onclick="showSection('p6')">
+    <span class="dot dot-p6"></span> Paper 6 · Practical
+  </button>
+</div>
+
+<!-- ===== PAPER 1 ===== -->
+<div class="section-panel active" id="panel-p1">
+  <div class="section-header">
+    <div class="section-icon icon-p1">P1</div>
+    <div class="section-meta">
+      <h2>Paper 1 — Multiple Choice (Core)</h2>
+      <p>40 questions · 45 minutes · Questions 28–40 are typically hardest</p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#4fffb0"></div> Hard concept / tricky wording</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffcf5c"></div> Data interpretation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b6b"></div> High distractor rate</div>
+  </div>
+
+  <!-- November 2024 (v1) -->
+  <div class="paper-group">
+    <div class="paper-label">November 2024 (v1) — 0610/11</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q29</div>
+        <div class="q-body">
+          <div class="q-topic">Genetics — Inheritance &amp; Chromosomes</div>
+          <div class="q-text">
+            A cell contains 46 chromosomes. The cell divides by meiosis.<br>
+            How many chromosomes are in each of the cells produced?
+            <span class="opt"><span class="opt-letter">A</span> 11</span>
+            <span class="opt"><span class="opt-letter">B</span> 23</span>
+            <span class="opt"><span class="opt-letter">C</span> 46</span>
+            <span class="opt"><span class="opt-letter">D</span> 92</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ High distractor rate</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">B</div>
+          <div class="ans-note">Meiosis halves the chromosome number. 46 ÷ 2 = 23. Students commonly choose A (dividing by 4) confusing with second division products, or C thinking chromosomes are preserved.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q33</div>
+        <div class="q-body">
+          <div class="q-topic">Hormones — Insulin and Blood Glucose</div>
+          <div class="q-text">
+            A person eats a large meal. Which sequence shows what happens to blood glucose?
+            <span class="opt"><span class="opt-letter">A</span> blood glucose rises → glucagon secreted → liver converts glycogen to glucose</span>
+            <span class="opt"><span class="opt-letter">B</span> blood glucose rises → insulin secreted → liver converts glucose to glycogen</span>
+            <span class="opt"><span class="opt-letter">C</span> blood glucose falls → insulin secreted → liver converts glycogen to glucose</span>
+            <span class="opt"><span class="opt-letter">D</span> blood glucose falls → glucagon secreted → liver converts glucose to glycogen</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ High distractor rate</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">B</div>
+          <div class="ans-note">After a meal, blood glucose rises. The pancreas secretes insulin (not glucagon). Insulin causes the liver to convert excess glucose into glycogen for storage. Glucagon does the opposite — it raises blood glucose when it drops.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q37</div>
+        <div class="q-body">
+          <div class="q-topic">Ecology — Population &amp; Food Webs</div>
+          <div class="q-text">
+            In a food web, owls eat rabbits and rabbits eat grass. If a disease kills most of the rabbits, what is the most likely effect?
+            <span class="opt"><span class="opt-letter">A</span> grass decreases; owls increase</span>
+            <span class="opt"><span class="opt-letter">B</span> grass decreases; owls decrease</span>
+            <span class="opt"><span class="opt-letter">C</span> grass increases; owls decrease</span>
+            <span class="opt"><span class="opt-letter">D</span> grass increases; owls increase</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Data interpretation</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">C</div>
+          <div class="ans-note">Fewer rabbits → less grass eaten → grass population increases. Fewer rabbits → owls have less food → owl population decreases. Students often get confused about the indirect effect on grass.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q39</div>
+        <div class="q-body">
+          <div class="q-topic">DNA &amp; Protein Synthesis</div>
+          <div class="q-text">
+            Which statement about DNA is correct?
+            <span class="opt"><span class="opt-letter">A</span> DNA contains the sugar ribose</span>
+            <span class="opt"><span class="opt-letter">B</span> DNA is made of amino acids</span>
+            <span class="opt"><span class="opt-letter">C</span> DNA is found in the nucleus of cells</span>
+            <span class="opt"><span class="opt-letter">D</span> DNA leaves the nucleus during protein synthesis</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ Hard concept</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">C</div>
+          <div class="ans-note">DNA is found in the nucleus. DNA contains deoxyribose (not ribose — that's RNA). DNA is made of nucleotides (not amino acids). It is mRNA, not DNA, that leaves the nucleus during protein synthesis.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Nov 2024 v1 -->
+
+  <!-- June 2024 (v1) -->
+  <div class="paper-group">
+    <div class="paper-label">June 2024 (v1) — 0610/11</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q31</div>
+        <div class="q-body">
+          <div class="q-topic">Transport in Plants — Transpiration Rate</div>
+          <div class="q-text">
+            Which conditions would produce the fastest rate of transpiration?
+            <span class="opt"><span class="opt-letter">A</span> high humidity, high temperature, high wind speed</span>
+            <span class="opt"><span class="opt-letter">B</span> high humidity, low temperature, low wind speed</span>
+            <span class="opt"><span class="opt-letter">C</span> low humidity, high temperature, high wind speed</span>
+            <span class="opt"><span class="opt-letter">D</span> low humidity, low temperature, low wind speed</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ Hard concept</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">C</div>
+          <div class="ans-note">Transpiration is fastest when: humidity is LOW (large concentration gradient for water vapour), temperature is HIGH (more kinetic energy, stomata open wider), wind speed is HIGH (removes water vapour quickly). Students often think high humidity increases transpiration — the opposite is true.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q35</div>
+        <div class="q-body">
+          <div class="q-topic">Respiration — Aerobic vs Anaerobic</div>
+          <div class="q-text">
+            Which row correctly describes aerobic and anaerobic respiration in mammals?
+            <span class="opt"><span class="opt-letter">A</span> Aerobic: produces lactic acid. Anaerobic: uses oxygen</span>
+            <span class="opt"><span class="opt-letter">B</span> Aerobic: uses oxygen, produces CO₂ and water. Anaerobic: produces lactic acid only</span>
+            <span class="opt"><span class="opt-letter">C</span> Aerobic: produces ethanol. Anaerobic: produces lactic acid and CO₂</span>
+            <span class="opt"><span class="opt-letter">D</span> Aerobic: produces ethanol and CO₂. Anaerobic: uses less energy</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ Hard concept</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">B</div>
+          <div class="ans-note">In mammals: Aerobic = glucose + oxygen → CO₂ + water + ATP. Anaerobic = glucose → lactic acid (no CO₂, no ethanol in mammals — ethanol is produced by yeast). Students confuse yeast anaerobic respiration with mammalian anaerobic.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q38</div>
+        <div class="q-body">
+          <div class="q-topic">Natural Selection &amp; Evolution</div>
+          <div class="q-text">
+            A population of beetles lives on dark tree bark. Birds eat the beetles. Some beetles have a mutation giving them dark colouring. What will happen over many generations?
+            <span class="opt"><span class="opt-letter">A</span> All beetles will have mutations</span>
+            <span class="opt"><span class="opt-letter">B</span> Dark beetles will increase in number</span>
+            <span class="opt"><span class="opt-letter">C</span> Light beetles will increase in number</span>
+            <span class="opt"><span class="opt-letter">D</span> The bird population will increase</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Data interpretation</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">B</div>
+          <div class="ans-note">Dark beetles are better camouflaged on dark bark → less likely to be eaten by birds → more likely to survive and reproduce → pass dark alleles to offspring → frequency of dark colouring increases over generations. This is natural selection in action.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Jun 2024 v1 -->
+
+  <!-- November 2024 (v2) -->
+  <div class="paper-group">
+    <div class="paper-label">November 2024 (v2) — 0610/12</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q30</div>
+        <div class="q-body">
+          <div class="q-topic">Circulatory System — Heart Structure</div>
+          <div class="q-text">
+            The left ventricle has a thicker muscular wall than the right ventricle. Why?
+            <span class="opt"><span class="opt-letter">A</span> It pumps blood at a lower pressure</span>
+            <span class="opt"><span class="opt-letter">B</span> It pumps blood to the lungs only</span>
+            <span class="opt"><span class="opt-letter">C</span> It pumps blood to the whole body</span>
+            <span class="opt"><span class="opt-letter">D</span> It receives blood from the body</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ Hard concept</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">C</div>
+          <div class="ans-note">The left ventricle pumps oxygenated blood to the entire body via the aorta — a much longer distance requiring higher pressure. The right ventricle only pumps to the nearby lungs (short distance, lower pressure needed). Thicker muscle = stronger contraction = higher pressure.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p1">Q36</div>
+        <div class="q-body">
+          <div class="q-topic">Excretion — Kidney Function</div>
+          <div class="q-text">
+            Which row shows what happens to glucose and urea between the glomerulus and the collecting duct?
+            <span class="opt"><span class="opt-letter">A</span> Glucose: filtered then reabsorbed. Urea: filtered, not reabsorbed</span>
+            <span class="opt"><span class="opt-letter">B</span> Glucose: not filtered. Urea: filtered then reabsorbed</span>
+            <span class="opt"><span class="opt-letter">C</span> Glucose: filtered, not reabsorbed. Urea: filtered then reabsorbed</span>
+            <span class="opt"><span class="opt-letter">D</span> Glucose: filtered then reabsorbed. Urea: not filtered</span>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">1 mark</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p1')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ High distractor rate</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme Answer</div>
+        <div class="ans-content">
+          <div class="ans-key">A</div>
+          <div class="ans-note">Glucose: filtered out at glomerulus → completely reabsorbed back into blood (useful substance, none lost in urine). Urea: filtered out at glomerulus → NOT reabsorbed → leaves in urine (waste product). Urea is a small molecule that passes through but stays as waste.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- end p1 panel -->
+
+<!-- ===== PAPER 3 ===== -->
+<div class="section-panel" id="panel-p3">
+  <div class="section-header">
+    <div class="section-icon icon-p3">P3</div>
+    <div class="section-meta">
+      <h2>Paper 3 — Theory (Core)</h2>
+      <p>80 marks · 1 hour 15 minutes · Extended-answer questions require precise wording</p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> Requires explain / describe (multi-mark)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffcf5c"></div> Graph / calculation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b6b"></div> Students frequently lose all marks</div>
+  </div>
+
+  <!-- November 2024 (v1) -->
+  <div class="paper-group">
+    <div class="paper-label">November 2024 (v1) — 0610/31</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q2(c)</div>
+        <div class="q-body">
+          <div class="q-topic">Ecology — Food Web Explanation</div>
+          <div class="q-text">
+            <strong>Context:</strong> A food web includes: algae → small fish → large fish (coral grouper) → sharks; algae → sea urchins → turtles; sea cucumbers → turtles.<br><br>
+            Overharvesting of the large fish (coral grouper) would cause the turtle population to decrease. <strong>Using the food web, explain why the turtle population would decrease.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 Chain reasoning required</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — Any 3 from:</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Sharks eat more turtles (because there are fewer large fish for sharks to eat)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Because there are fewer large fish / coral grouper for sharks to eat</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Population of small fish increases (less predation by large fish)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>More small fish eating algae / algal population decreases</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Less food (sea cucumbers) for turtles / turtles only eat sea cucumbers</span></div>
+          <div class="ans-note">⚠ Must follow food web logic. Simply saying "less food" without a chain earns 0. Must link large fish → sharks → turtles OR large fish → small fish → algae → sea cucumbers → turtles.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q3(b)(i)</div>
+        <div class="q-body">
+          <div class="q-topic">Photosynthesis — Gas Exchange Adaptation</div>
+          <div class="q-text">
+            <strong>Context:</strong> A cross-section of a leaf shows parts labelled A (spongy mesophyll), B (stomata), C (guard cells), D (air spaces).<br><br>
+            <strong>Explain how the parts labelled A, B, C and D in the diagram adapt the leaf for gas exchange during photosynthesis.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">4 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 4-mark explain</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — Any 4 from (must mention each label):</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">A</span><span><strong>Spongy mesophyll:</strong> orientation of cells allows gases to move easily to palisade mesophyll</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">B</span><span><strong>Stomata:</strong> hole / opening that lets named gases (CO₂ / O₂) enter or leave the leaf</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">C</span><span><strong>Guard cells:</strong> open and close stomata / control stomatal size</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">D</span><span><strong>Air spaces:</strong> allow gases to move (easily) / allow gases to reach palisade mesophyll by diffusion</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Gases move by diffusion (if not already credited)</span></div>
+          <div class="ans-note">⚠ Must explicitly link each labelled structure to its role. Describing a structure without linking to gas exchange gets 0.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q7(b)</div>
+        <div class="q-body">
+          <div class="q-topic">Human Impact — Effects of Deforestation</div>
+          <div class="q-text">
+            <strong>Outline the undesirable effects of deforestation.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 Students frequently lose marks</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — Any 3 from:</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Reducing biodiversity</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Disruption of food webs and food chains</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Habitat destruction / extinction of species</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Loss of soil / soil erosion / flooding</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Increased carbon dioxide in atmosphere → enhanced greenhouse effect / global warming / climate change</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">✓</span><span>Change in rainfall patterns (AVP)</span></div>
+          <div class="ans-note">⚠ "Kills animals" alone = 0. Must state the consequence e.g. "habitat destruction leads to loss of species / extinction." Link deforestation clearly to each effect.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q8(c)</div>
+        <div class="q-body">
+          <div class="q-topic">Respiration — Rate Calculation</div>
+          <div class="q-text">
+            <strong>Context:</strong> Results table showing glucose concentration 0.4 mol/dm³ takes 60 seconds to produce 1 cm³ of gas.<br><br>
+            The rate of gas production can be calculated using: <strong>rate = 1 ÷ time</strong><br><br>
+            <strong>Calculate the rate of gas production for the 0.4 mol/dm³ glucose solution. Give your answer to two decimal places.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">2 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Calculation</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">MP1</span><span>Correct calculation: 1 ÷ 60 = 0.016666... cm³ per s</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">MP2</span><span>Correct rounding to 2 decimal places: <strong>0.02 cm³ per s</strong></span></div>
+          <div class="ans-note">⚠ MP2 carries ecf from MP1. If MP1 is wrong but MP2 is correctly rounded from it, MP2 is still awarded. Units must be cm³ per s.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Nov 2024 v1 P3 -->
+
+  <!-- June 2024 (v1) -->
+  <div class="paper-group">
+    <div class="paper-label">June 2024 (v1) — 0610/31</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q2(c)(i)</div>
+        <div class="q-body">
+          <div class="q-topic">Enzymes — Comparing Enzyme Activity Graphs</div>
+          <div class="q-text">
+            <strong>Context:</strong> Graph shows two enzymes (A and B) with rate of activity vs temperature. Both are active between 40–45°C. Enzyme A is active at lower temperatures, Enzyme B at higher.<br><br>
+            <strong>Describe and compare the activity of enzymes A and B shown in the graph. (4 marks)</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">4 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Graph comparison</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — Any 4 from:</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">1</span><span>The (rate of) activity of both enzymes increases then decreases with increasing temperature</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">2</span><span>Both enzymes are active between 40 and 45/46°C</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">3</span><span>Enzyme A is active at lower temperatures / Enzyme B is active at higher temperatures</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">4</span><span>The optimum temperature of A is lower than B (or reverse argument)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">5</span><span>Enzyme A is denatured at a lower temperature than B (or reverse argument)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">6</span><span>Correct data quote for either enzyme supporting any marking point</span></div>
+          <div class="ans-note">⚠ Enzyme A active range: 0–44/45/46°C. Enzyme B active range: 39/40/41–89/90/91°C. Data quotes earn a separate mark — always quote values from graph.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q3(a)(i)</div>
+        <div class="q-body">
+          <div class="q-topic">Cells &amp; Diffusion — Surface Area Calculation</div>
+          <div class="q-text">
+            <strong>Context:</strong> Agar blocks of different sizes were placed in acid. A student measures how far the yellow region (acid front) has moved in each block after a set time.<br><br>
+            The surface area to volume ratio of a cube with 5mm sides = ?<br>
+            <strong>Calculate the surface area to volume ratio of a cube with sides of 5 mm. Give your answer to the nearest whole number.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">2 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Calculation</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">MP1</span><span>Correct calculation: SA = 6 × (5²) = 150 mm². Volume = 5³ = 125 mm³. Ratio = 150/125 = 1.2</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">MP2</span><span>Rounded to nearest whole number: <strong>82</strong> (this is for a different cube — check paper context; for 5mm cube: <strong>1.2</strong> or value matches actual question)</span></div>
+          <div class="ans-note">⚠ The mark scheme answer is 82 — check your paper for the actual cube dimensions. MP1 = correct method and calculation. MP2 = correct rounding. ecf applies from MP1.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q6(a)(i)</div>
+        <div class="q-body">
+          <div class="q-topic">Ecology — Reasons for Habitat Destruction</div>
+          <div class="q-text">
+            <strong>Describe reasons for habitat destruction, other than crop production. (3 marks)</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 Frequently incomplete answers</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — Any 3 from:</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">1</span><span>Increased housing / urbanisation / industrial development / building of factories or roads / railways / infrastructure / building dams</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">2</span><span>Livestock production / more meat consumption</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">3</span><span>Extraction of named natural resources / mining</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">4</span><span>Freshwater or marine pollution / acid rain</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">5</span><span>Climate change / global warming</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">6</span><span>Natural disaster / war / flooding (AVP)</span></div>
+          <div class="ans-note">⚠ Note: crop production is excluded. "Farming" alone may not score — must specify livestock or other non-crop use. Name a specific resource for mining to score.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q7(a)</div>
+        <div class="q-body">
+          <div class="q-topic">Digestion — Identifying Digestive System Organs</div>
+          <div class="q-text">
+            <strong>Context:</strong> Diagram of digestive system with structures labelled A–J.<br><br>
+            State the letter that identifies:<br>
+            — the gall bladder<br>
+            — the organ that secretes salivary amylase<br>
+            — where egestion occurs<br>
+            — where most absorption occurs<br>
+            — where physical digestion occurs<br>
+            — where the pH is acidic
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">6 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 6-mark identify — must know all organs</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — June 2024 (v1)</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">H</span><span>Gall bladder</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">A</span><span>Salivary glands (secretes salivary amylase)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">F</span><span>Where egestion occurs (anus/rectum area)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">G</span><span>Where most absorption occurs (small intestine / ileum)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">C</span><span>Where physical digestion occurs (mouth / stomach)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">C</span><span>Where pH is acidic (stomach)</span></div>
+          <div class="ans-note">⚠ Letters are specific to the diagram in paper 0610/31/M/J/24. Key concepts: egestion = release of faeces via anus; absorption = mainly small intestine (ileum); physical digestion = mouth (chewing) and stomach (churning); acidic pH = stomach (HCl).</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Jun 2024 v1 P3 -->
+
+  <!-- November 2024 (v2) -->
+  <div class="paper-group">
+    <div class="paper-label">November 2024 (v2) — 0610/32</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p3">Q1(d)(i)</div>
+        <div class="q-body">
+          <div class="q-topic">Circulatory System — Identifying Organs in Double Circulation</div>
+          <div class="q-text">
+            <strong>Context:</strong> Diagram shows the double circulatory system with organs labelled A, B and C.<br><br>
+            Identify organs A, B and C: A = ?, B = ?, C = ?
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p3')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ Hard concept</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — November 2024 (v2)</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">A</span><span>Lungs</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">B</span><span>Heart</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p3">C</span><span>Kidney (or body organs)</span></div>
+          <div class="ans-note">⚠ Double circulation = pulmonary (heart → lungs → heart) + systemic (heart → body → heart). Right side of heart → lungs. Left side of heart → body. Blood passes through heart twice per complete circuit.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- end p3 panel -->
+
+<!-- ===== PAPER 6 ===== -->
+<div class="section-panel" id="panel-p6">
+  <div class="section-header">
+    <div class="section-icon icon-p6">P6</div>
+    <div class="section-meta">
+      <h2>Paper 6 — Alternative to Practical</h2>
+      <p>40 marks · 1 hour · Planning, analysis, evaluation &amp; interpretation</p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div> Experimental design / planning</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffcf5c"></div> Calculation with significant figures</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b6b"></div> Variables / controls</div>
+  </div>
+
+  <!-- November 2024 (v1) -->
+  <div class="paper-group">
+    <div class="paper-label">November 2024 (v1) — 0610/61</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q1(a)(i)</div>
+        <div class="q-body">
+          <div class="q-topic">Osmosis — Recording Results in a Table</div>
+          <div class="q-text">
+            <strong>Context:</strong> Investigation of osmosis using dialysis tubing bags in sucrose solution (test-tube S) and distilled water (test-tube W). Measurements taken at 0 and 15 minutes.<br><br>
+            <strong>Draw a table to record the results for test-tubes S and W at 0 minutes and at 15 minutes.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 Table design</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP1</span><span>Table drawn with minimum of 3 columns and a header line</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP2</span><span>Suitable headings for test-tube AND distance with units in mm or cm</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP3</span><span>Recording of four correct measurements for both S and W at 0 min and 15 min: S₀ = W₀ = 53.5±2 mm; S₁₅ = 65.0±2 mm; W₁₅ = 53.5±2 mm (approximately unchanged)</span></div>
+          <div class="ans-note">⚠ Common errors: no units in headings (-1), table with only 2 columns, missing header line. Test-tube S bag increases in length (water enters by osmosis into sucrose solution). Test-tube W stays the same (equal concentrations).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q1(b)(iv)</div>
+        <div class="q-body">
+          <div class="q-topic">Osmosis — Variables to Keep Constant</div>
+          <div class="q-text">
+            <strong>Identify two variables that should be kept constant in this osmosis investigation.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">2 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 Variables — frequently too vague</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — Any 2 from:</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">✓</span><span>Volume of water in the test-tubes</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">✓</span><span>Volume of liquid in the tubing bag</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">✓</span><span>Time dialysis tubing bags left in test-tubes / water-bath</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">✓</span><span>Temperature of the water-bath</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">✓</span><span>Type / brand of dialysis tubing</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">✓</span><span>Where measurements were taken from</span></div>
+          <div class="ans-note">⚠ "Same conditions" = 0. Must be specific. "Same temperature" scores, "same environment" does not. Always give measurable, specific variables.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q2</div>
+        <div class="q-body">
+          <div class="q-topic">Transport in Plants — Planning an Investigation</div>
+          <div class="q-text">
+            <strong>Context:</strong> A student investigates the effect of temperature on the rate of transpiration using celery stalks and dye.<br><br>
+            <strong>Plan an investigation to find out how temperature affects the rate of transpiration. Include: independent variable, dependent variable, method details, variables to keep constant, repetition, and a safety precaution. (6 marks)</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">6 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 6-mark planning — hardest question type</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme — 1 mark each:</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">1</span><span><strong>Independent variable:</strong> at least two different temperatures stated</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">2</span><span><strong>Dependent variable:</strong> time for dye to reach leaves / a set distance, OR distance dye moves in a set time, OR number of cut sections containing dye</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">3+4</span><span><strong>Method details (max 2):</strong> how to maintain air temperature at different levels; idea of slicing end off celery before immersion; cutting sections with knife/scalpel</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">5-7</span><span><strong>Variables kept constant (max 3):</strong> wind speed, humidity, light intensity, length/height of celery, number of leaves/surface area, species/type/age of celery, concentration/volume/colour of dye, time in dye, thickness of cut sections</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">8</span><span><strong>Repetition:</strong> two or more replicates at each temperature / repeat at least two more times</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">9</span><span><strong>Safety precaution:</strong> cutting on flat/stable surface; cut away from body; wear gloves/goggles</span></div>
+          <div class="ans-note">⚠ A planning question needs ALL components. Forgetting repetition or safety loses easy marks. "Keep everything else the same" for variables = 0; must list specific variables.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q3(a)</div>
+        <div class="q-body">
+          <div class="q-topic">Magnification — Calculating Actual Size</div>
+          <div class="q-text">
+            <strong>Context:</strong> Photograph of a banana borer insect at magnification ×8. Line AB represents the length of the insect.<br><br>
+            <strong>Measure line AB in Fig. 3.1. Then calculate the actual length of the banana borer using:</strong><br>
+            magnification = length of line AB ÷ actual length<br>
+            <strong>Give your answer to two significant figures.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Sig. figs. calculation</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP1</span><span>Correct measurement of line AB = 90 ± 1 mm</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP2</span><span>Correct calculation: actual length = 90 ÷ 8 = 11.25 mm → any number of sig figs</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP3</span><span>Rounded to 2 significant figures: <strong>11 mm</strong></span></div>
+          <div class="ans-note">⚠ ecf applies: if measured length is different but calculation method is correct, MP2 and MP3 can still be awarded. Must state answer in mm. 2 sig figs ≠ 2 decimal places.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q3(d)(ii)</div>
+        <div class="q-body">
+          <div class="q-topic">Data Presentation — Drawing a Bar Chart</div>
+          <div class="q-text">
+            <strong>Context:</strong> Data table showing protein content (g per 100g) for 7 fruits: apple 0.3, apricot 1.4, avocado 2.0, banana 1.1, guava 2.6, passion fruit 2.2, pineapple 0.9.<br><br>
+            <strong>Plot a bar chart on the grid of this data. (4 marks)</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">4 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Graph drawing — 4 marks</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP1</span><span>Axes labelled including units (protein content / g per 100 g of fruit; fruit type on x-axis)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP2</span><span>Suitable linear scale on protein axis AND fruit names in centre of bars; bars occupy at least half the grid in both directions</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP3</span><span>All bars plotted accurately ± ½ a small square</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP4</span><span>Bars of equal width and NOT touching, with equal space between bars</span></div>
+          <div class="ans-note">⚠ Bar charts must have bars NOT touching (unlike histograms). Lose MP4 if bars touch or widths are unequal. Lose MP1 if units are missing from axis label. All 7 fruits must be plotted for MP3.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Nov 2024 v1 P6 -->
+
+  <!-- June 2024 (v1) -->
+  <div class="paper-group">
+    <div class="paper-label">June 2024 (v1) — 0610/61</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q3(b)</div>
+        <div class="q-body">
+          <div class="q-topic">Biochemistry — Food Tests (Starch, Protein, Fat)</div>
+          <div class="q-text">
+            (i) <strong>State the names of the reagents used to test samples of plant tissue for starch and protein.</strong><br><br>
+            (ii) <strong>Describe the method you would use to test a sample of plant tissue for fat.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">2 + 2 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">⚡ Hard concept — must know all tests</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">Starch</span><span>Iodine solution (iodine in potassium iodide) → turns blue-black if starch present</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">Protein</span><span>Biuret reagent (potassium hydroxide + copper sulfate) → turns purple/violet if protein present</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">Fat method</span><span>Add ethanol to the sample; shake to dissolve any fat; pour into water; white / cloudy emulsion forms if fat is present</span></div>
+          <div class="ans-note">⚠ For the fat test: must state ethanol, then water, then observe white emulsion. Just "ethanol test" = 0. Benedict's reagent tests for reducing sugars (not starch). Biuret uses KOH + CuSO₄ (not just copper sulfate alone).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q3(c)</div>
+        <div class="q-body">
+          <div class="q-topic">Enzymes — Pectinase Investigation Analysis</div>
+          <div class="q-text">
+            <strong>Context:</strong> Table of data: pectinase concentration (%) vs volume of juice (cm³ per g apple). Data: 0.2%→0.69, 0.4%→0.77, 0.5%→0.81, 0.6%→0.85, 0.8%→0.92, 1.0%→0.92<br><br>
+            (d)(i) A sample of 150g of apple was placed with 0.8% pectinase. <strong>Calculate the volume of juice collected. (1 mark)</strong><br><br>
+            (d)(iii) <strong>Describe the relationship between volume of juice and pectinase concentration. (2 marks)</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Calculation + graph description</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">d(i)</span><span>0.92 cm³/g × 150 g = <strong>138 cm³</strong></span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">d(iii) MP1</span><span>As pectinase concentration increases, the volume of juice increases (up to 0.8%)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">d(iii) MP2</span><span>Between 0.8% and 1.0%, the volume of juice stays the same / levels off / plateaus (at 0.92 cm³/g)</span></div>
+          <div class="ans-note">⚠ Must describe BOTH parts: the increase AND the plateau. Only stating "increases" = 1 mark maximum. Include data values for full credit. The plateau happens because substrate (cell walls) becomes limiting.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q3(a)(ii)</div>
+        <div class="q-body">
+          <div class="q-topic">Magnification — Calculating Actual Diameter</div>
+          <div class="q-text">
+            <strong>Context:</strong> Photograph of persimmon fruit cross-section. Magnification ×2.2. Line PQ represents diameter.<br><br>
+            Measure line PQ. Then calculate the actual diameter using:<br>
+            <strong>magnification = length of PQ in photo ÷ actual diameter</strong><br>
+            Give answer to <strong>three significant figures.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">3 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">📊 Sig. figs. calculation</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP1</span><span>Correct measurement of PQ from photo (check actual paper for value)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP2</span><span>Correct calculation: actual diameter = measured length ÷ 2.2 (any sig figs)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP3</span><span>Answer correctly rounded to 3 significant figures (e.g. 43.6 mm → 43.6; 43.64 → 43.6)</span></div>
+          <div class="ans-note">⚠ 3 significant figures ≠ 3 decimal places. Example: 43.636... → 3 sig figs = 43.6. Example: 0.04364 → 3 sig figs = 0.0436 (leading zeros don't count). ecf applies from MP1 to MP2 and MP3.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Jun 2024 v1 P6 -->
+
+  <!-- June 2024 (v2) -->
+  <div class="paper-group">
+    <div class="paper-label">June 2024 (v2) — 0610/62</div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num num-p6">Q1(a)(ii)</div>
+        <div class="q-body">
+          <div class="q-topic">Diffusion — Recording Experimental Results</div>
+          <div class="q-text">
+            <strong>Context:</strong> Investigation of acid diffusion in agar blocks. Different concentrations of acid (1.00, 0.10, 0.01 mol/dm³) used. Heights of yellow region measured in mm.<br><br>
+            <strong>Draw a table to record the results for all three concentrations. Include column headings with units.</strong>
+          </div>
+        </div>
+        <div class="q-marks"><span class="marks-badge">4 marks</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="reveal-btn" onclick="toggleAnswer(this, 'p6')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          Reveal Mark Scheme
+        </button>
+        <span class="difficulty-pill">🔴 Table design — 4 marks</span>
+      </div>
+      <div class="answer-panel">
+        <div class="ans-label">Mark Scheme</div>
+        <div class="ans-content">
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP1</span><span>Table drawn with headings underlined AND minimum of two columns/rows</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP2</span><span>Suitable headings with units: concentration / mol per dm³ AND height (of yellow agar) / mm or cm</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP3</span><span>Three concentrations and three heights recorded (1.00, 0.10, 0.01)</span></div>
+          <div class="mark-point"><span class="ans-bullet ans-bullet-p6">MP4</span><span>All heights correct ±1 mm: 1.00 mol/dm³ = 25 mm; 0.10 = 14 mm; 0.01 = 5 mm</span></div>
+          <div class="ans-note">⚠ Units MUST be in column headings (not in data cells). "mm" written next to each number = 0 for MP2. Higher concentration → faster diffusion → greater height of yellow region.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- end p6 panel -->
+
+<footer>
+  <div class="footer-logo">
+    <img src="https://huggingface.co/datasets/MidoSTM11/Mido/resolve/main/Final%20Logo.png" alt="Clairo">
+    <span class="footer-text">Powered by <a href="https://clairo.web.app" target="_blank">Clairo</a></span>
+  </div>
+  <div class="footer-text">
+    Cambridge IGCSE Biology 0610 · June &amp; November 2024 Series · © UCLES 2024
+  </div>
+</footer>
+
+<script>
+  // Tab switching
+  function showSection(id) {
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.className = 'tab-btn';
+    });
+    document.getElementById('panel-' + id).classList.add('active');
+
+    const btns = document.querySelectorAll('.tab-btn');
+    const map = { p1: 0, p3: 1, p6: 2 };
+    btns[map[id]].classList.add('active-' + id);
+  }
+
+  // Reveal answers
+  function toggleAnswer(btn, paper) {
+    const card = btn.closest('.q-card');
+    const panel = card.querySelector('.answer-panel');
+    const isOpen = panel.classList.contains('open');
+
+    if (isOpen) {
+      panel.classList.remove('open');
+      btn.classList.remove('revealed', 'revealed-p3', 'revealed-p6');
+      btn.querySelector('svg').style.transform = '';
+      btn.childNodes[btn.childNodes.length - 1].nodeValue = ' Reveal Mark Scheme';
+    } else {
+      panel.classList.add('open');
+      btn.classList.add('revealed-' + paper);
+      btn.querySelector('svg').style.transform = 'rotate(180deg)';
+      btn.childNodes[btn.childNodes.length - 1].nodeValue = ' Hide Answer';
+    }
+  }
+
+  // Scroll progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+</script>
+</body>
+</html>
